@@ -54,3 +54,32 @@ body{
 .card .author{font-size:13px;color:var(--dark);margin:0}
 .card .price{font-weight:700;margin-top:2px;color:var(--text_color);display:flex;align-items:center;gap:8px}
 .card .badge{display:inline-block;background:var(--light);border:1px solid var(--medium);border-radius:6px;padding:2px 6px;font-size:11px;color:var(--text_color)}
+
+/* Section-pair: newsletter + book reviews layout */
+.section-pair{margin: 18px; padding:8px 0;background:transparent}
+.split-grid{max-width:none;width:calc(100% - 12px);margin:0 6px;display:grid;grid-template-columns:1fr 340px;gap:8px;align-items:stretch;padding:0}
+
+.newsletter-panel .newsletter-panel-inner{background:var(--medium);padding:28px;border-radius:6px;display:flex;flex-direction:column;box-sizing:border-box}
+.newsletter-panel .newsletter-panel-inner h3{margin:0 0 12px 0;color:var(--text_color)}
+.newsletter-panel .newsletter-panel-inner .lead{color:var(--dark);margin-bottom:12px}
+.newsletter-panel .newsletter-panel-inner form{margin-top:12px}
+.newsletter-panel .newsletter-panel-inner input[type="text"],
+.newsletter-panel .newsletter-panel-inner input[type="email"]{
+  width:100%;padding:14px;border-radius:10px;border:0;background:var(--dark);color:var(--text_color);margin:10px 0;box-sizing:border-box
+}
+.newsletter-panel .newsletter-panel-inner .tos{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text_color);margin:8px 0}
+.newsletter-panel .newsletter-panel-inner .btn{padding:10px 14px;background:var(--dark);color:var(--text_color);border:0;border-radius:4px}
+
+.book-reviews-panel{background:var(--medium);padding:12px;border-radius:8px}
+.book-reviews-panel .book-reviews-inner{background:transparent;padding:0;border-radius:0;box-sizing:border-box;border:0;box-shadow:none}
+.book-reviews-panel .review-card{background:var(--bc);padding:16px;border-radius:8px;box-shadow:var(--shadow);border:1px solid var(--light)}
+
+.newsletter-panel .newsletter-panel-inner,
+.book-reviews-panel .book-reviews-inner{height:100%}
+.book-reviews-panel .thumb{width:120px;height:200px;background:var(--medium);border-radius:6px;margin:0 0 12px 0}
+.book-reviews-panel h4{margin:0 0 6px 0;font-size:16px;color:var(--text_color)}
+.book-reviews-panel .meta{font-size:13px;color:var(--dark);margin:0}
+.book-reviews-panel .excerpt{color:#777;font-size:13px;line-height:1.4;margin-bottom:12px}
+.book-reviews-panel .btn.ghost{border:0;padding:8px 12px;border-radius:4px;background:var(--medium);color:var(--text_color);display:block;width:100%;box-sizing:border-box}
+
+.site-footer{background:var(--medium);padding:40px 0;margin-top:20px; height:300px;}
