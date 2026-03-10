@@ -1,0 +1,29 @@
+:root{
+  --bc: white;
+  --light: #f0efef;
+  --middle: #d7d7d7;
+  --dark: #7c7c7c;
+  --text_color: black;
+  --font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+.html, html {box-sizing: border-box;}
+*, *::before, *::after {box-sizing: inherit;}
+body{
+  margin:0; background:var(--bc); color:var(--dark); font-family:var(--font-family); font-size:16px; line-height:1.45;
+}
+
+.debug{
+  border-style:solid;
+  border-color: red;
+  border-width: 3px;
+}   
+
+.header-inner{display:flex;height:120px;align-items:center;gap:20px;justify-content:space-between;background:var(--light);}
+.logo{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--middle);text-decoration:none;color:var(--text_color);font-weight:600;margin-left: 10px;}
+.main-nav{display:flex;flex:1;justify-content:flex-start;}
+.main-nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0;}
+.main-nav a{color:var(--text_color);text-decoration:none;font-size:14px;}
+.header-actions .icon{background:transparent;border:0;font-size:18px;margin-left:6px;}
+.header-actions {margin-right: 10px;}
+.username{display:inline-block;border-radius:5px;background:var(--dark);width:220px;height:18px}
