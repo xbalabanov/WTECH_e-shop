@@ -39,12 +39,12 @@ body{
 ::placeholder {color:var(--text_color); font-size: 18px;}
 .btn{display:inline-block;font-size:22px;margin-top: 30px;padding:8px 14px;background:#bdbdbd;border-radius:4px;border:0;cursor:pointer;background-color:var(--dark);}
 
-/*call to action*/
-.cta{margin:15px;}
-.cta-inner{display:flex;align-items:center;justify-content:center;background:var(--medium);height:132px;}
+/*call to action, shop desc*/
+.cta, .shop-desc{margin:15px;}
+.cta-inner, .desc-inner{display:flex;align-items:center;justify-content:center;background:var(--medium);height:132px;}
 
 /*products-section*/
-.section-products{margin:18px 0;padding:8px 0;background:var(--medium);display:flex;flex-direction:column;align-items:center}
+.section-products{margin:25px 18px;padding:8px 0;background:var(--medium);display:flex;flex-direction:column;align-items:center}
 .cards-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;padding:7px 0;margin:0}
 
 .trending-heading {margin:2px 0;padding:0; font-weight: normal;}
