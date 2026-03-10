@@ -1,7 +1,7 @@
 :root{
   --bc: white;
   --light: #f0efef;
-  --middle: #c3c3c3;
+  --medium: #dedddd;
   --dark: #8a8a8a;
   --text_color: black;
   --font-family: 'Segoe UI', Roboto, Arial, sans-serif;
@@ -10,7 +10,7 @@
 .html, html {box-sizing: border-box;}
 *, *::before, *::after {box-sizing: inherit;}
 body{
-  margin:0; background:var(--bc); color:var(--dark); font-family:var(--font-family); font-size:16px; line-height:1.45;
+  margin:0; background:var(--bc); color:var(--text_color); font-family:var(--font-family); font-size:20px; line-height:1.45;
 }
 
 .debug{
@@ -21,7 +21,7 @@ body{
 
 /*Header*/
 .header-inner{display:flex;height:120px;align-items:center;gap:20px;justify-content:space-between;background:var(--light);}
-.logo{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--middle);text-decoration:none;color:var(--text_color);font-weight:600;margin-left: 10px;}
+.logo{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--medium);text-decoration:none;color:var(--text_color);font-weight:600;margin-left: 10px;}
 .main-nav{display:flex;flex:1;justify-content:flex-start;}
 .main-nav ul{display:flex;gap:18px;list-style:none;padding:0;margin:0;}
 .main-nav a{color:var(--text_color);text-decoration:none;font-size:14px;}
@@ -31,10 +31,15 @@ body{
 
 /*Hero, search*/
 .hero-grid{display:grid;grid-template-columns:1fr 376px;align-items:start}
-.hero-image .placeholder{height:560px;background:var(--middle); margin:15px;}
-.search-box{background:var(--middle);padding:18px;margin:15px;height:560px;}
+.hero-image .placeholder{height:560px;background:var(--medium); margin:15px;}
+.search-box{background:var(--medium);padding:18px;margin:15px;height:560px;}
 .search-box h3{margin:0 0 12px 0;font-size:22px;color: var(--text_color);margin-bottom:40px;font-weight:normal;}
 .search-form label{display:block;margin-bottom:10px;font-size:20px;color:var(--text_color);margin-bottom:10px;}
 .search-form input{width:100%;padding:20px;border-radius:14px;border:none;background:#dcdcdc;color:var(--text_color);background-color:var(--dark);margin-bottom: 15px;margin-top: 10px;}
 ::placeholder {color:var(--text_color); font-size: 18px;}
 .btn{display:inline-block;font-size:22px;margin-top: 30px;padding:8px 14px;background:#bdbdbd;border-radius:4px;border:0;cursor:pointer;background-color:var(--dark);}
+
+/*call to action*/
+.cta{margin:15px;}
+.cta-inner{display:flex;align-items:center;justify-content:center;background:var(--medium);height:132px;}
+
