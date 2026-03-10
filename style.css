@@ -1,8 +1,8 @@
 :root{
   --bc: white;
   --light: #f0efef;
-  --middle: #d7d7d7;
-  --dark: #7c7c7c;
+  --middle: #c3c3c3;
+  --dark: #8a8a8a;
   --text_color: black;
   --font-family: 'Segoe UI', Roboto, Arial, sans-serif;
 }
@@ -19,6 +19,7 @@ body{
   border-width: 3px;
 }   
 
+/*Header*/
 .header-inner{display:flex;height:120px;align-items:center;gap:20px;justify-content:space-between;background:var(--light);}
 .logo{display:inline-block;padding:8px 12px;border-radius:10px;background:var(--middle);text-decoration:none;color:var(--text_color);font-weight:600;margin-left: 10px;}
 .main-nav{display:flex;flex:1;justify-content:flex-start;}
@@ -27,3 +28,13 @@ body{
 .header-actions .icon{background:transparent;border:0;font-size:18px;margin-left:6px;}
 .header-actions {margin-right: 10px;}
 .username{display:inline-block;border-radius:5px;background:var(--dark);width:220px;height:18px}
+
+/*Hero, search*/
+.hero-grid{display:grid;grid-template-columns:1fr 376px;align-items:start}
+.hero-image .placeholder{height:560px;background:var(--middle); margin:15px;}
+.search-box{background:var(--middle);padding:18px;margin:15px;height:560px;}
+.search-box h3{margin:0 0 12px 0;font-size:22px;color: var(--text_color);margin-bottom:40px;font-weight:normal;}
+.search-form label{display:block;margin-bottom:10px;font-size:20px;color:var(--text_color);margin-bottom:10px;}
+.search-form input{width:100%;padding:20px;border-radius:14px;border:none;background:#dcdcdc;color:var(--text_color);background-color:var(--dark);margin-bottom: 15px;margin-top: 10px;}
+::placeholder {color:var(--text_color); font-size: 18px;}
+.btn{display:inline-block;font-size:22px;margin-top: 30px;padding:8px 14px;background:#bdbdbd;border-radius:4px;border:0;cursor:pointer;background-color:var(--dark);}
