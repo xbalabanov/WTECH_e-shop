@@ -43,3 +43,14 @@ body{
 .cta{margin:15px;}
 .cta-inner{display:flex;align-items:center;justify-content:center;background:var(--medium);height:132px;}
 
+/*products-section*/
+.section-products{margin:18px 0;padding:8px 0;background:var(--medium);display:flex;flex-direction:column;align-items:center}
+.cards-row{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;padding:7px 0;margin:0}
+
+.trending-heading {margin:2px 0;padding:0; font-weight: normal;}
+.card{margin:12px;background:var(--bc);border-radius:10px;padding:14px;min-width:0;width:176px;display:flex;flex-direction:column;align-items:flex-start;text-align:left;flex:0 0 auto}
+.card .cover{width:96px;height:170px;background:var(--dark);border-radius:6px;margin:0 0 14px 0;background-size:cover;background-position:center;border:2px solid var(--dark);position:relative}
+.card .title{font-size:22px;margin:0;color:var(--text_color);font-weight:400}
+.card .author{font-size:13px;color:var(--dark);margin:0}
+.card .price{font-weight:700;margin-top:2px;color:var(--text_color);display:flex;align-items:center;gap:8px}
+.card .badge{display:inline-block;background:var(--light);border:1px solid var(--medium);border-radius:6px;padding:2px 6px;font-size:11px;color:var(--text_color)}
