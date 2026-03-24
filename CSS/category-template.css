@@ -424,8 +424,11 @@ main {
   }
 
   .category-cover {
-    width: 100%;
-    aspect-ratio: 120 / 150;
+    width: 120px;
+    min-width: 120px;
+    height: 213px;
+    max-width: none;
+    align-self: flex-start;
   }
 
   .category-title {
@@ -451,16 +454,18 @@ main {
   }
 
   .category-card-actions {
-    flex-direction: column;
+    flex-direction: row;
     width: 100%;
   }
 
   .category-card-cart-button {
-    width: 100%;
+    width: auto;
+    flex: 1;
   }
 
   .category-card-favourite-button {
-    width: 100%;
+    width: 48px;
+    flex: 0 0 48px;
   }
 
   .category-more-btn {

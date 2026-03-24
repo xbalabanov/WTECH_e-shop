@@ -167,10 +167,57 @@ body {
 }
 
 .header-actions .icon {
-  background: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   border: 0;
-  font-size: 18px;
+  background: transparent;
+  text-decoration: none;
   cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+}
+
+.header-actions .icon svg {
+  display: block;
+}
+
+.header-actions .icon:hover {
+  background: #f5f3f0;
+}
+
+.header-actions .icon:focus-visible {
+  outline: 2px solid rgba(236, 115, 87, 0.45);
+  outline-offset: 2px;
+}
+
+.header-actions .icon.cart-icon {
+  margin-right: 2px;
+}
+
+.header-actions .icon-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ec7357;
+  color: #fff;
+  font-family: Inter;
+  font-size: 10px;
+  line-height: 1;
+  font-weight: 800;
+  box-shadow: 0 6px 14px rgba(236, 115, 87, 0.35);
 }
 
 /* menu toggle - hidden by default on wide screens */
