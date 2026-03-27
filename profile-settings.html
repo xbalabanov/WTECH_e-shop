@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile</title>
+    <title>Profile · Edit Profile</title>
     <link rel="stylesheet" href="CSS/profile.css" />
     <link rel="stylesheet" href="CSS/style.css" />
   </head>
@@ -200,13 +200,16 @@
           <h1 class="profile-prename">Hi,</h1>
           <h1 class="profile-name">Jane Doe</h1>
         </div>
+        <p class="profile-meta">
+          Member since January 2024 · 6 orders · 12 books purchased
+        </p>
       </div>
     </div>
 
     <section class="profile-dashboard" aria-label="Profile orders overview">
       <div class="profile-dashboard-inner">
         <aside class="profile-sidebar" aria-label="Profile menu">
-          <a class="profile-sidebar-item active" href="profile.html">
+          <a class="profile-sidebar-item" href="profile.html">
             <span class="sidebar-item-icon" aria-hidden="true"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +272,7 @@
             <span>Wishlist</span>
             <span class="sidebar-item-count">12</span>
           </a>
-          <a class="profile-sidebar-item" href="profile-settings.html">
+          <a class="profile-sidebar-item active" href="profile-settings.html">
             <span class="sidebar-item-icon" aria-hidden="true"
               ><svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -335,332 +338,104 @@
         </aside>
 
         <div class="profile-main">
-          <div class="profile-stats-grid" aria-label="Order stats">
-            <article class="profile-stat-card">
-              <p class="profile-stat-value">6</p>
-              <p class="profile-stat-label">Total orders</p>
-            </article>
-            <article class="profile-stat-card">
-              <p class="profile-stat-value accent">2</p>
-              <p class="profile-stat-label">In transit</p>
-            </article>
-            <article class="profile-stat-card">
-              <p class="profile-stat-value">4</p>
-              <p class="profile-stat-label">Delivered</p>
-            </article>
-            <article class="profile-stat-card">
-              <p class="profile-stat-value">€157.90</p>
-              <p class="profile-stat-label">Total spent</p>
-            </article>
-          </div>
-
-          <section class="orders-section">
-            <div class="orders-section-header">
-              <svg
-                class="orders-section-header-icon"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-              >
-                <path
-                  d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M10 12H6"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
-                  stroke="white"
-                  stroke-width="1.33333"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              <h2 class="orders-section-title">Sent Orders <span>2</span></h2>
-            </div>
-            <article class="order-card">
-              <div class="order-card-top">
-                <div class="order-meta">
-                  <p class="order-number">#ORD-2847</p>
-                  <p class="order-date">Mar 18, 2026</p>
-                </div>
-                <div class="order-summary">
-                  <span class="order-status shipped"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M10 12H6"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Shipped</span
-                  >
-                  <strong>€47.97</strong>
-                </div>
-              </div>
-              <div class="order-items">
-                <div class="order-item">
-                  <div class="mini-book dark"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">The Silent Echo</p>
-                    <p class="order-book-author">Elena Morris</p>
-                  </div>
-                </div>
-                <div class="order-item">
-                  <div class="mini-book coral"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Midnight Garden</p>
-                    <p class="order-book-author">James Harper</p>
-                  </div>
-                </div>
-              </div>
-              <div class="order-card-bottom">
-                <span>2 items</span>
-                <a href="#">View details</a>
-              </div>
-            </article>
-
-            <article class="order-card">
-              <div class="order-card-top">
-                <div>
-                  <p class="order-number">#ORD-2831</p>
-                  <p class="order-date">Mar 12, 2026</p>
-                </div>
-                <div class="order-summary">
-                  <span class="order-status shipped"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M10 12H6"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                      <path
-                        d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
-                        stroke="currentColor"
-                        stroke-width="1.33333"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Shipped</span
-                  >
-                  <strong>€19.99</strong>
-                </div>
-              </div>
-              <div class="order-items">
-                <div class="order-item">
-                  <div class="mini-book walnut"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Paper Moon</p>
-                    <p class="order-book-author">Nora Vale</p>
-                  </div>
-                </div>
-              </div>
-              <div class="order-card-bottom">
-                <span>1 item</span>
-                <a href="#">View details</a>
-              </div>
-            </article>
-          </section>
-
-          <section class="orders-section delivered-section">
-            <h2 class="orders-section-title delivered">
-              Delivered Orders <span>2</span>
+          <section
+            class="profile-subpage-section"
+            aria-labelledby="settings-title"
+          >
+            <h2 id="settings-title" class="profile-subpage-title">
+              Profile Settings
             </h2>
 
-            <article class="order-card">
-              <div class="order-card-top">
-                <div>
-                  <p class="order-number">#ORD-2794</p>
-                  <p class="order-date">Feb 28, 2026</p>
-                </div>
-                <div class="order-summary">
-                  <span class="order-status delivered"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M13.5 4.5L6.5 11.5L2.5 7.5"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Delivered</span
-                  >
-                  <strong>€64.95</strong>
-                </div>
-              </div>
-              <div class="order-items">
-                <div class="order-item">
-                  <div class="mini-book slate"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Sea of Glass</p>
-                    <p class="order-book-author">Liam Porter</p>
-                  </div>
-                </div>
-                <div class="order-item">
-                  <div class="mini-book tan"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Autumn Light</p>
-                    <p class="order-book-author">Mila Stone</p>
-                  </div>
-                </div>
-                <div class="order-item">
-                  <div class="mini-book rust"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Red Horizon</p>
-                    <p class="order-book-author">Alex Reed</p>
-                  </div>
-                </div>
-              </div>
-              <div class="order-card-bottom">
-                <span>3 items</span>
-                <a href="#">View details</a>
-              </div>
-            </article>
+            <div class="settings-grid">
+              <article class="settings-card" aria-labelledby="account-title">
+                <h3 id="account-title" class="settings-card-title">
+                  Account Information
+                </h3>
 
-            <article class="order-card">
-              <div class="order-card-top">
-                <div>
-                  <p class="order-number">#ORD-2756</p>
-                  <p class="order-date">Feb 15, 2026</p>
-                </div>
-                <div class="order-summary">
-                  <span class="order-status delivered"
-                    ><svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M13.5 4.5L6.5 11.5L2.5 7.5"
-                        stroke="currentColor"
-                        stroke-width="1.6"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Delivered</span
+                <div class="settings-row">
+                  <label class="settings-label" for="full-name"
+                    >Full Name</label
                   >
-                  <strong>€24.99</strong>
+                  <input
+                    class="settings-input"
+                    id="full-name"
+                    type="text"
+                    value="Jane Doe"
+                  />
                 </div>
-              </div>
-              <div class="order-items">
-                <div class="order-item">
-                  <div class="mini-book dark"></div>
-                  <div class="order-book-meta">
-                    <p class="order-book-title">Quiet Forest</p>
-                    <p class="order-book-author">Emma Cole</p>
-                  </div>
+
+                <div class="settings-row">
+                  <label class="settings-label" for="email">Email</label>
+                  <input
+                    class="settings-input"
+                    id="email"
+                    type="email"
+                    value="jane.doe@email.com"
+                  />
                 </div>
-              </div>
-              <div class="order-card-bottom">
-                <span>1 item</span>
-                <a href="#">View details</a>
-              </div>
-            </article>
+
+                <div class="settings-row">
+                  <label class="settings-label" for="phone">Phone</label>
+                  <input
+                    class="settings-input"
+                    id="phone"
+                    type="tel"
+                    value="+421 900 000 000"
+                  />
+                </div>
+              </article>
+
+              <article class="settings-card" aria-labelledby="security-title">
+                <h3 id="security-title" class="settings-card-title">
+                  Security
+                </h3>
+
+                <div class="settings-row">
+                  <label class="settings-label" for="current-password"
+                    >Current Password</label
+                  >
+                  <input
+                    class="settings-input"
+                    id="current-password"
+                    type="password"
+                    value="password"
+                  />
+                </div>
+
+                <div class="settings-row">
+                  <label class="settings-label" for="new-password"
+                    >New Password</label
+                  >
+                  <input
+                    class="settings-input"
+                    id="new-password"
+                    type="password"
+                    value="newpassword"
+                  />
+                </div>
+
+                <div class="settings-row">
+                  <label class="settings-label" for="confirm-password"
+                    >Confirm Password</label
+                  >
+                  <input
+                    class="settings-input"
+                    id="confirm-password"
+                    type="password"
+                    value="newpassword"
+                  />
+                </div>
+              </article>
+            </div>
+
+            <div class="settings-actions">
+              <button class="settings-secondary-btn" type="button">
+                Cancel
+              </button>
+              <button class="settings-save-btn" type="button">
+                Save Changes
+              </button>
+            </div>
           </section>
         </div>
       </div>

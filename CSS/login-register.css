@@ -1,117 +1,119 @@
-/* Login, Register section styles */
 .login-section,
 .register-section {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 90px 20px;
-    background: #FEFCFB;
-    margin: auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 90px 20px;
+  background: #fefcfb;
+  margin: auto 0;
 }
 
 .register-section {
-    padding: 120px 20px;
+  padding: 120px 20px;
 }
 
 .login-container,
 .register-container {
-    width: 100%;
-    max-width: 720px;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  justify-content: center;
 }
 
 .login-card,
 .register-card {
-    width: 420px;
-    background: #FFF;
-    border-radius: 10px;
-    padding: 34px 32px;
-    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
+  width: 420px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 34px 32px;
+  box-shadow: 0 12px 30px rgba(16, 24, 40, 0.06);
 }
 
-.login-title, .register-title {
-    margin: 0 0 18px 0;
-    font-family: "DM Serif Display";
-    font-size: 34px;
-    color: #305252;
+.login-title,
+.register-title {
+  margin: 0 0 18px 0;
+  font-family: "DM Serif Display";
+  font-size: 34px;
+  color: #305252;
 }
 
 .form-label {
-    display: block;
-    font-family: Inter;
-    font-size: 15px;
-    color: #754F44;
-    margin-bottom: 14px;
+  display: block;
+  font-family: Inter;
+  font-size: 15px;
+  color: #754f44;
+  margin-bottom: 14px;
 }
 
 .form-label input {
-    width: 100%;
-    margin-top: 8px;
-    display: flex;
-    padding: 12px 16px;
-    align-items: center;
-    flex: 1 0 0;
-    border-radius: 14px;
-    border: 2px solid rgba(0, 0, 0, 0.00);
-    background: #F5F3F0;
+  width: 100%;
+  margin-top: 8px;
+  display: flex;
+  padding: 12px 16px;
+  align-items: center;
+  flex: 1 0 0;
+  border-radius: 14px;
+  border: 2px solid rgba(0, 0, 0, 0);
+  background: #f5f3f0;
 }
 
 .remember {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: #754F44;
-    font-size: 14px;
-    margin: 10px 0 22px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #754f44;
+  font-size: 14px;
+  margin: 10px 0 22px 0;
 }
 
-.login-btn, .register-btn {
-    display: inline-flex;
-    width: 100%;
-    padding: 14px 18px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 8px;
-    border: 0;
-    background: #305252;
-    color: #FEFCFB;
-    font-family: Inter;
-    font-weight: 700;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 8px 18px rgba(48, 82, 82, 0.12);
+.login-btn,
+.register-btn {
+  display: inline-flex;
+  width: 100%;
+  padding: 14px 18px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  border: 0;
+  background: #305252;
+  color: #fefcfb;
+  font-family: Inter;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(48, 82, 82, 0.12);
 }
 
 .register-btn {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .login-footer-links {
-    text-align: center;
-    margin-top: 16px;
-    color: #754F44;
-    font-size: 13px;
+  text-align: center;
+  margin-top: 16px;
+  font-family: "DM Serif Display";
+  color: #754f44;
+  font-size: 13px;
 }
 
 .login-footer-links a {
-    color: #305252;
-    text-decoration: underline;
+  color: #305252;
+  text-decoration: underline;
 }
 
 .login-footer-links .register {
-    margin: 8px 0 0 0;
-    color: rgba(117, 79, 68, 0.7);
+  margin: 8px 0 0 0;
+  color: rgba(117, 79, 68, 0.7);
 }
 
 @media (max-width: 520px) {
-    .login-card {
-        width: 100%;
-        padding: 24px;
-        border-radius: 8px;
-    }
+  .login-card {
+    width: 100%;
+    padding: 24px;
+    border-radius: 8px;
+  }
 
-    .login-title {
-        font-size: 28px;
-    }
+  .login-title {
+    font-size: 28px;
+  }
 }

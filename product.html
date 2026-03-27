@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Product</title>
-    <link rel="stylesheet" href="CSS/productpage.css" />
+    <link rel="stylesheet" href="CSS/product.css" />
     <link rel="stylesheet" href="CSS/style.css" />
   </head>
   <body>
@@ -187,31 +187,56 @@
             euismod mauris non et orci quis cras massa. Amet sed interdum
             accumsan phasellus volutpat fermentum orci.
           </p>
+          <p class="product-book-type">Hardcover · Fantasy</p>
           <p class="product-price">0,00€</p>
-          <button class="add-to-cart" type="button" aria-label="Add to cart">
-            <svg
-              class="icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
+          <div class="product-actions">
+            <button class="add-to-cart" type="button" aria-label="Add to cart">
+              <svg
+                class="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <path
+                  d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Add to Cart
+            </button>
+            <button
+              class="add-to-favourite"
+              type="button"
+              aria-label="Add to favourites"
             >
-              <path
-                d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
-                stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            Add to Cart
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="21"
+                viewBox="0 0 22 21"
+                fill="none"
+              >
+                <path
+                  d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                  stroke="#ec7357"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
       <section class="reviews-section" aria-labelledby="reviews-title">
         <h2 id="reviews-title" class="reviews-title">Reviews</h2>
+        <div class="reviews-empty"></div>
       </section>
 
       <section class="recomended" aria-labelledby="recommended-title">
@@ -220,33 +245,293 @@
         <div class="recomended-cards">
           <article class="card" role="group">
             <div class="cover" aria-hidden="true"></div>
-            <h3 class="title">Book Name</h3>
-            <p class="author">Author</p>
-            <div class="price">0,00€ <span class="badge">-0%</span></div>
+            <div class="card-elements">
+              <div class="card-title">
+                <h3 class="title">Book Name</h3>
+                <p class="author">Author</p>
+              </div>
+              <p class="card-description">
+                Lorem ipsum dolor sit amet consectetur. Ut at tellus aenean
+                tristique. Parturient pharetra id vitae ut volutpat mattis...
+              </p>
+              <div class="card-info-container">
+                <p class="card-book-type">Book Type</p>
+                <div class="price">0,00€ <span class="badge">-0%</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="card-cart-button" type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to cart
+                </button>
+                <button
+                  class="card-favourite-button"
+                  type="button"
+                  aria-label="Add to favourites"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
+                    fill="none"
+                  >
+                    <path
+                      d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                      stroke="#ec7357"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </article>
           <article class="card" role="group">
             <div class="cover" aria-hidden="true"></div>
-            <h3 class="title">Book Name</h3>
-            <p class="author">Author</p>
-            <div class="price">0,00€ <span class="badge">-0%</span></div>
+            <div class="card-elements">
+              <div class="card-title">
+                <h3 class="title">Book Name</h3>
+                <p class="author">Author</p>
+              </div>
+              <p class="card-description">
+                Lorem ipsum dolor sit amet consectetur. Ut at tellus aenean
+                tristique. Parturient pharetra id vitae ut volutpat mattis...
+              </p>
+              <div class="card-info-container">
+                <p class="card-book-type">Book Type</p>
+                <div class="price">0,00€ <span class="badge">-0%</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="card-cart-button" type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to cart
+                </button>
+                <button
+                  class="card-favourite-button"
+                  type="button"
+                  aria-label="Add to favourites"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
+                    fill="none"
+                  >
+                    <path
+                      d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                      stroke="#ec7357"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </article>
           <article class="card" role="group">
             <div class="cover" aria-hidden="true"></div>
-            <h3 class="title">Book Name</h3>
-            <p class="author">Author</p>
-            <div class="price">0,00€ <span class="badge">-0%</span></div>
+            <div class="card-elements">
+              <div class="card-title">
+                <h3 class="title">Book Name</h3>
+                <p class="author">Author</p>
+              </div>
+              <p class="card-description">
+                Lorem ipsum dolor sit amet consectetur. Ut at tellus aenean
+                tristique. Parturient pharetra id vitae ut volutpat mattis...
+              </p>
+              <div class="card-info-container">
+                <p class="card-book-type">Book Type</p>
+                <div class="price">0,00€ <span class="badge">-0%</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="card-cart-button" type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to cart
+                </button>
+                <button
+                  class="card-favourite-button"
+                  type="button"
+                  aria-label="Add to favourites"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
+                    fill="none"
+                  >
+                    <path
+                      d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                      stroke="#ec7357"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </article>
           <article class="card" role="group">
             <div class="cover" aria-hidden="true"></div>
-            <h3 class="title">Book Name</h3>
-            <p class="author">Author</p>
-            <div class="price">0,00€ <span class="badge">-0%</span></div>
+            <div class="card-elements">
+              <div class="card-title">
+                <h3 class="title">Book Name</h3>
+                <p class="author">Author</p>
+              </div>
+              <p class="card-description">
+                Lorem ipsum dolor sit amet consectetur. Ut at tellus aenean
+                tristique. Parturient pharetra id vitae ut volutpat mattis...
+              </p>
+              <div class="card-info-container">
+                <p class="card-book-type">Book Type</p>
+                <div class="price">0,00€ <span class="badge">-0%</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="card-cart-button" type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to cart
+                </button>
+                <button
+                  class="card-favourite-button"
+                  type="button"
+                  aria-label="Add to favourites"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
+                    fill="none"
+                  >
+                    <path
+                      d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                      stroke="#ec7357"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </article>
           <article class="card" role="group">
             <div class="cover" aria-hidden="true"></div>
-            <h3 class="title">Book Name</h3>
-            <p class="author">Author</p>
-            <div class="price">0,00€ <span class="badge">-0%</span></div>
+            <div class="card-elements">
+              <div class="card-title">
+                <h3 class="title">Book Name</h3>
+                <p class="author">Author</p>
+              </div>
+              <p class="card-description">
+                Lorem ipsum dolor sit amet consectetur. Ut at tellus aenean
+                tristique. Parturient pharetra id vitae ut volutpat mattis...
+              </p>
+              <div class="card-info-container">
+                <p class="card-book-type">Book Type</p>
+                <div class="price">0,00€ <span class="badge">-0%</span></div>
+              </div>
+              <div class="card-actions">
+                <button class="card-cart-button" type="button">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to cart
+                </button>
+                <button
+                  class="card-favourite-button"
+                  type="button"
+                  aria-label="Add to favourites"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="22"
+                    height="21"
+                    viewBox="0 0 22 21"
+                    fill="none"
+                  >
+                    <path
+                      d="M1.16211 8.64292C0.848859 8.35324 1.01902 7.82955 1.44271 7.77931L7.44629 7.06722C7.61897 7.04674 7.76896 6.93831 7.8418 6.7804L10.374 1.29061C10.5527 0.903178 11.1035 0.903104 11.2822 1.29054L13.8145 6.78029C13.8873 6.93819 14.0363 7.04692 14.209 7.0674L20.2129 7.77931C20.6366 7.82955 20.8063 8.35339 20.493 8.64308L16.0549 12.7481C15.9272 12.8661 15.8704 13.0419 15.9043 13.2124L17.0822 19.1421C17.1653 19.5606 16.7199 19.8848 16.3476 19.6764L11.0723 16.7228C10.9206 16.6378 10.7362 16.6382 10.5845 16.7232L5.30859 19.6757C4.93628 19.8841 4.49009 19.5606 4.57324 19.1421L5.75129 13.2128C5.78518 13.0422 5.72848 12.8661 5.60082 12.748L1.16211 8.64292Z"
+                      stroke="#ec7357"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
           </article>
         </div>
       </section>

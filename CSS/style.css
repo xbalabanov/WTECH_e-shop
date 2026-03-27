@@ -1,5 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&display=swap");
 
+:root {
+  /* Core palette */
+  --color-primary: #305252;
+  --color-accent: #ec7357;
+  --color-text: #1a1a1a;
+  --color-light-text: rgba(117, 79, 68, 0.7);
+  --color-border: #f3f4f6;
+  --color-background: #fff;
+  --color-light-background: #f5f3f0;
+  --color-surface-muted: #ececec;
+  --color-border-strong: #e7e3df;
+  --color-success: #22c55e;
+
+  /* Typography */
+  --font-serif: "DM Serif Display", serif;
+  --font-sans: Inter, sans-serif;
+  --text-2xs: 10px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-display: 36px;
+  --line-tight: 1;
+  --line-normal: 1.2;
+  --line-relaxed: 1.5;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+}
+
 .html,
 html {
   box-sizing: border-box;
