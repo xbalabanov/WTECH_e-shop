@@ -82,12 +82,11 @@
 
 main {
   background: var(--color-light-background);
-  
 }
 
 .profile-dashboard {
   background: var(--color-light-background);
-  padding: 28px 0 56px; 
+  padding: 28px 0 56px;
   margin: auto 0;
 }
 
