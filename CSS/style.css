@@ -50,6 +50,7 @@ html {
 
 body {
   margin: 0;
+  padding-top: 68px;
 }
 
 /*Header*/
@@ -67,7 +68,11 @@ body {
 }
 
 .site-header {
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   z-index: 50;
 }
 
