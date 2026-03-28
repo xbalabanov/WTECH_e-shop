@@ -21,7 +21,7 @@ body {
 
 body {
 	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-family: var(--font-sans);
 	background: #FEFCFB;
 	color: #222;
 }
@@ -36,7 +36,7 @@ body {
 }
 
 .checkout-title {
-	font-size: 20px;
+	font-size: var(--text-xl);
 	color: #305252;
 	margin: 0 0 30px;
 	font-weight: 600;
@@ -64,14 +64,14 @@ body {
 
 .section-title {
 	margin: 0 0 18px;
-	font-size: 16px;
+	font-size: var(--text-lg);
 	color: #305252;
 	font-weight: 600;
 }
 
 .section-subtitle {
 	margin: 20px 0 12px;
-	font-size: 14px;
+	font-size: var(--text-base);
 	color: #305252;
 	font-weight: 600;
 }
@@ -79,7 +79,7 @@ body {
 .same-address-toggle {
 	display: flex;
 	align-items: center;
-	font-size: 14px;
+	font-size: var(--text-base);
 	color: #305252;
 	font-weight: 500;
 	line-height: 1.35;
@@ -120,7 +120,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	font-size: 13px;
+	font-size: var(--text-md);
 	color: #305252;
 	font-weight: 500;
 }
@@ -132,11 +132,11 @@ body {
 .field-input {
 	width: 100%;
 	border: 1px solid rgba(0, 0, 0, 0.09);
-	border-radius: 8px;
+	border-radius: var(--radius-sm);
 	background: #FFF;
 	height: 44px;
 	padding: 10px 12px;
-	font-size: 14px;
+	font-size: var(--text-base);
 	color: #1A1A1A;
 }
 
@@ -162,10 +162,10 @@ body {
 	align-items: center;
 	gap: 10px;
 	border: 1px solid rgba(0, 0, 0, 0.08);
-	border-radius: 8px;
+	border-radius: var(--radius-sm);
 	padding: 10px 12px;
 	color: #1A1A1A;
-	font-size: 14px;
+	font-size: var(--text-base);
 }
 
 .radio-option span {
@@ -175,7 +175,7 @@ body {
 }
 
 .option-meta {
-	font-size: 12px;
+	font-size: var(--text-sm);
 	font-weight: 400;
 	color: #6C6C6C;
 	line-height: 1.35;
@@ -187,7 +187,7 @@ body {
 
 .payment-note {
 	margin: 2px 0 0;
-	font-size: 13px;
+	font-size: var(--text-md);
 	line-height: 1.45;
 	color: #6C6C6C;
 }
@@ -208,7 +208,7 @@ body {
 
 .summary-title {
 	margin: 0;
-	font-size: 16px;
+	font-size: var(--text-lg);
 	color: #305252;
 	font-weight: 600;
 }
@@ -218,7 +218,7 @@ body {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	font-size: 14px;
+	font-size: var(--text-base);
 	color: #1A1A1A;
 }
 
@@ -240,10 +240,10 @@ body {
 	background: #305252;
 	color: #FEFCFB;
 	border: none;
-	border-radius: 8px;
+	border-radius: var(--radius-sm);
 	padding: 14px 18px;
-	font-size: 16px;
-	font-family: Inter;
+	font-size: var(--text-lg);
+	font-family: var(--font-sans);
 	font-weight: 500;
 	cursor: pointer;
 }
