@@ -3,22 +3,6 @@ body {
 	height: 100%;
 }
 
-.checkout-page-layout {
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-}
-
-.checkout-page-layout main {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
-
-.checkout-page-layout .checkout-page {
-	margin: auto 0;
-}
-
 body {
 	margin: 0;
 	font-family: var(--font-sans);
@@ -28,6 +12,7 @@ body {
 
 .checkout-page {
 	padding: 40px 60px;
+	margin: auto 0;
 }
 
 .checkout-inner {
@@ -37,7 +22,7 @@ body {
 
 .checkout-title {
 	font-size: var(--text-xl);
-	color: #305252;
+	color: var(--color-primary);
 	margin: 0 0 30px;
 	font-weight: 600;
 }

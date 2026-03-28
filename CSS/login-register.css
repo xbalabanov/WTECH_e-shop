@@ -1,18 +1,4 @@
-.register-page, .login-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
 
-.register-page main, .login-page main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.register-page .register-section, .login-page .login-section {
-  flex: 1;
-}
 
 .login-section,
 .register-section {
@@ -22,6 +8,7 @@
   padding: 90px 20px;
   background: #fefcfb;
   margin: 0;
+  flex: 1;
 }
 
 .register-section {
