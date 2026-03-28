@@ -80,9 +80,14 @@
   line-height: 19.5px; /* 150% */
 }
 
+main {
+  background: var(--color-light-background);
+}
+
 .profile-dashboard {
   background: var(--color-light-background);
   padding: 28px 0 56px;
+  margin: auto 0;
 }
 
 .profile-dashboard-inner {
@@ -209,7 +214,7 @@
 }
 
 .orders-section-header-icon path {
-  stroke: #fff;
+  stroke: var(--color-background);
 }
 
 .orders-section-title {
@@ -222,7 +227,7 @@
   font-size: var(--text-xl);
   font-style: normal;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: var(--line-normal);
 }
 
 .orders-section-header {
@@ -239,7 +244,7 @@
   font-size: var(--text-sm);
   font-style: normal;
   font-weight: 700;
-  line-height: 1;
+  line-height: var(--line-tight);
   display: inline-flex;
   min-width: 24px;
   height: 24px;
@@ -305,7 +310,7 @@
   margin: 0;
   grid-column: 2;
   grid-row: 1;
-  line-height: 1;
+  line-height: var(--line-tight);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
@@ -317,7 +322,7 @@
   margin: 0;
   grid-column: 2;
   grid-row: 2;
-  line-height: 1;
+  line-height: var(--line-tight);
   color: rgba(117, 79, 68, 0.5);
   font-family: var(--font-sans);
   font-size: var(--text-sm);
@@ -410,11 +415,11 @@
 }
 
 .mini-book.dark {
-  background: #305252;
+  background: var(--color-primary);
 }
 
 .mini-book.coral {
-  background: #ec7357;
+  background: var(--color-accent);
 }
 
 .mini-book.brown {
@@ -460,14 +465,14 @@
   font-family: var(--font-sans);
   font-size: 17px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--line-normal);
 }
 
 .order-card-bottom a::after {
   content: "›";
   margin-left: 0;
-  font-size: 20px;
-  line-height: 1;
+  font-size: var(--text-xl);
+  line-height: var(--line-tight);
   transform: translateY(-1px);
 }
 
@@ -506,7 +511,7 @@
   .order-card-top > div:first-child::before {
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: var(--radius-lg);
     background-size: 28px 28px;
   }
 }
@@ -521,7 +526,7 @@
 
   .profile-name-block {
     font-size: 28px;
-    line-height: 1.2;
+    line-height: var(--line-normal);
     flex-wrap: wrap;
     gap: 6px;
   }
@@ -566,7 +571,7 @@
   .mini-book {
     width: 44px;
     height: 62px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
   }
 
   .order-book-title {
@@ -575,7 +580,7 @@
 
   .order-book-author {
     margin-top: 6px;
-    font-size: 13px;
+    font-size: var(--text-md);
   }
 }
 
@@ -589,7 +594,7 @@
   font-family: var(--font-serif);
   font-size: 30px;
   font-weight: 400;
-  line-height: 1.2;
+  line-height: var(--line-normal);
 }
 
 .wishlist-grid {
