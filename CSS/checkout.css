@@ -76,6 +76,37 @@ body {
 	font-weight: 600;
 }
 
+.same-address-toggle {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: #305252;
+	font-weight: 500;
+	line-height: 1.35;
+}
+
+.delivery-address-block {
+	padding-top: 4px;
+}
+
+.same-address-checkbox {
+	accent-color: #EC7357;
+	width: 16px;
+	height: 16px;
+	flex: 0 0 auto;
+	margin: 0 10px 0 0;
+}
+
+.delivery-address-fields {
+	padding-top: 16px;
+	margin-top: 16px;
+	border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.same-address-checkbox:checked ~ .delivery-address-fields {
+	display: none;
+}
+
 .form-grid {
 	display: grid;
 	gap: 14px;
