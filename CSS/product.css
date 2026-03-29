@@ -187,21 +187,6 @@ main {
   line-height: var(--line-normal);
 }
 
-.reviews-empty {
-  margin-top: 16px;
-  min-height: 140px;
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  border-radius: var(--radius-xl);
-  border: 1px dashed rgba(48, 82, 82, 0.3);
-  background: var(--color-background);
-  color: var(--color-light-text);
-  font-family: var(--font-sans);
-  font-size: var(--text-base);
-  line-height: 1.65;
-}
-
 .reviews-list {
   display: flex;
   flex-direction: column;
@@ -523,11 +508,6 @@ main {
   .recomended {
     padding-left: 16px;
     padding-right: 16px;
-  }
-
-  .reviews-empty {
-    padding: 18px;
-    font-size: var(--text-base);
   }
 
   .review-card {
