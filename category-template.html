@@ -172,7 +172,146 @@
 
     <main class="page-main">
       <section class="category-main">
-        <div class="category-filter"></div>
+        <aside class="category-filter" aria-label="Filters">
+          <h2 class="filter-title">Filters</h2>
+
+          <section class="filter-group" aria-labelledby="filter-language-title">
+            <button class="filter-group-header" type="button">
+              <h3 id="filter-language-title" class="filter-group-title">
+                Language
+              </h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4.58301 8.25L11.0001 14.6667L17.4163 8.25"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>English</span></label
+            >
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>Slovak</span></label
+            >
+          </section>
+
+          <hr class="filter-divider" />
+
+          <section class="filter-group" aria-labelledby="filter-author-title">
+            <button class="filter-group-header" type="button">
+              <h3 id="filter-author-title" class="filter-group-title">
+                Author
+              </h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4.58301 8.25L11.0001 14.6667L17.4163 8.25"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>A B</span></label
+            >
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>B C</span></label
+            >
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>C D</span></label
+            >
+            <label class="filter-option filter-option-muted"
+              ><input type="checkbox" /> <span>D E</span></label
+            >
+            <p class="filter-more">+ More</p>
+          </section>
+
+          <hr class="filter-divider" />
+
+          <section class="filter-group" aria-labelledby="filter-genre-title">
+            <button class="filter-group-header" type="button">
+              <h3 id="filter-genre-title" class="filter-group-title">Genre</h3>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 22 22"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M4.58301 8.25L11.0001 14.6667L17.4163 8.25"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>Fantasy</span></label
+            >
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>Science Fiction</span></label
+            >
+            <label class="filter-option"
+              ><input type="checkbox" /> <span>Dystopian</span></label
+            >
+            <label class="filter-option filter-option-muted"
+              ><input type="checkbox" /> <span>Adventure</span></label
+            >
+            <p class="filter-more">+ More</p>
+          </section>
+
+          <hr class="filter-divider" />
+
+          <section
+            class="filter-group filter-price"
+            aria-labelledby="filter-price-title"
+          >
+            <h3 id="filter-price-title" class="filter-group-title">
+              Price range
+            </h3>
+            <div class="filter-price-values">
+              <span>0€</span>
+              <span>100€</span>
+            </div>
+            <div class="filter-price-track">
+              <input
+                class="filter-range filter-range-min"
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+              />
+              <input
+                class="filter-range filter-range-max"
+                type="range"
+                min="0"
+                max="100"
+                value="100"
+              />
+            </div>
+          </section>
+        </aside>
         <div class="category-main-content">
           <div class="category-main-title-container">
             <h1 class="category-main-title">TITLE</h1>
@@ -190,8 +329,8 @@
           <div class="category-main-sort-container">
             <label for="sort-select" class="sort-label">Sort by:</label>
             <select id="sort-select" class="sort-select">
-              <option value="popularity">Popularity</option>
               <option value="newest">Newest Arrivals</option>
+              <option value="oldest">Oldest Arrivals</option>
               <option value="price-low-high">Price: Low to High</option>
               <option value="price-high-low">Price: High to Low</option>
             </select>
@@ -200,48 +339,7 @@
           <div class="category-main-products-container">
             <div class="category-main-products-row">
               <article class="category-card" role="group">
-                <div class="category-cover" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="120"
-                    height="213"
-                    viewBox="0 0 120 213"
-                    fill="none"
-                  >
-                    <g clip-path="url(#clip0_239_565)">
-                      <rect width="120" height="213" fill="#C0C0C0" />
-                      <line
-                        x1="-0.557028"
-                        y1="217.496"
-                        x2="122.443"
-                        y2="0.964827"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                      <line
-                        x1="0.557028"
-                        y1="0.964832"
-                        x2="123.557"
-                        y2="217.496"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                    </g>
-                    <rect
-                      x="0.639373"
-                      y="0.639373"
-                      width="118.721"
-                      height="211.721"
-                      stroke="black"
-                      stroke-width="1.27875"
-                    />
-                    <defs>
-                      <clipPath id="clip0_239_565">
-                        <rect width="120" height="213" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </div>
+                <div class="category-cover" aria-hidden="true"></div>
                 <div class="category-card-elements">
                   <div class="category-card-title">
                     <h3 class="category-title">Book Name</h3>
@@ -254,7 +352,7 @@
                     faucibus quam fermentum tempor. Placerat in adipiscing ...
                   </p>
                   <div class="category-card-info-container">
-                    <p class="category-card-book-type">Book Type</p>
+                    <p class="category-card-book-genre">Book Genre</p>
 
                     <div class="category-card-price-container">
                       <p class="category-card-book-price">0,00€</p>
@@ -303,48 +401,7 @@
                 </div>
               </article>
               <article class="category-card" role="group">
-                <div class="category-cover" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="120"
-                    height="213"
-                    viewBox="0 0 120 213"
-                    fill="none"
-                  >
-                    <g clip-path="url(#clip0_239_565)">
-                      <rect width="120" height="213" fill="#C0C0C0" />
-                      <line
-                        x1="-0.557028"
-                        y1="217.496"
-                        x2="122.443"
-                        y2="0.964827"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                      <line
-                        x1="0.557028"
-                        y1="0.964832"
-                        x2="123.557"
-                        y2="217.496"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                    </g>
-                    <rect
-                      x="0.639373"
-                      y="0.639373"
-                      width="118.721"
-                      height="211.721"
-                      stroke="black"
-                      stroke-width="1.27875"
-                    />
-                    <defs>
-                      <clipPath id="clip0_239_565">
-                        <rect width="120" height="213" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </div>
+                <div class="category-cover" aria-hidden="true"></div>
                 <div class="category-card-elements">
                   <div class="category-card-title">
                     <h3 class="category-title">Book Name</h3>
@@ -357,7 +414,7 @@
                     faucibus quam fermentum tempor. Placerat in adipiscing ...
                   </p>
                   <div class="category-card-info-container">
-                    <p class="category-card-book-type">Book Type</p>
+                    <p class="category-card-book-genre">Book Genre</p>
 
                     <div class="category-card-price-container">
                       <p class="category-card-book-price">0,00€</p>
@@ -410,48 +467,7 @@
             <div class="category-main-products-row-break"></div>
             <div class="category-main-products-row">
               <article class="category-card" role="group">
-                <div class="category-cover" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="120"
-                    height="213"
-                    viewBox="0 0 120 213"
-                    fill="none"
-                  >
-                    <g clip-path="url(#clip0_239_565)">
-                      <rect width="120" height="213" fill="#C0C0C0" />
-                      <line
-                        x1="-0.557028"
-                        y1="217.496"
-                        x2="122.443"
-                        y2="0.964827"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                      <line
-                        x1="0.557028"
-                        y1="0.964832"
-                        x2="123.557"
-                        y2="217.496"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                    </g>
-                    <rect
-                      x="0.639373"
-                      y="0.639373"
-                      width="118.721"
-                      height="211.721"
-                      stroke="black"
-                      stroke-width="1.27875"
-                    />
-                    <defs>
-                      <clipPath id="clip0_239_565">
-                        <rect width="120" height="213" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </div>
+                <div class="category-cover" aria-hidden="true"></div>
                 <div class="category-card-elements">
                   <div class="category-card-title">
                     <h3 class="category-title">Book Name</h3>
@@ -464,7 +480,7 @@
                     faucibus quam fermentum tempor. Placerat in adipiscing ...
                   </p>
                   <div class="category-card-info-container">
-                    <p class="category-card-book-type">Book Type</p>
+                    <p class="category-card-book-genre">Book Genre</p>
 
                     <div class="category-card-price-container">
                       <p class="category-card-book-price">0,00€</p>
@@ -513,48 +529,7 @@
                 </div>
               </article>
               <article class="category-card" role="group">
-                <div class="category-cover" aria-hidden="true">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="120"
-                    height="213"
-                    viewBox="0 0 120 213"
-                    fill="none"
-                  >
-                    <g clip-path="url(#clip0_239_565)">
-                      <rect width="120" height="213" fill="#C0C0C0" />
-                      <line
-                        x1="-0.557028"
-                        y1="217.496"
-                        x2="122.443"
-                        y2="0.964827"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                      <line
-                        x1="0.557028"
-                        y1="0.964832"
-                        x2="123.557"
-                        y2="217.496"
-                        stroke="black"
-                        stroke-width="1.28125"
-                      />
-                    </g>
-                    <rect
-                      x="0.639373"
-                      y="0.639373"
-                      width="118.721"
-                      height="211.721"
-                      stroke="black"
-                      stroke-width="1.27875"
-                    />
-                    <defs>
-                      <clipPath id="clip0_239_565">
-                        <rect width="120" height="213" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </div>
+                <div class="category-cover" aria-hidden="true"></div>
                 <div class="category-card-elements">
                   <div class="category-card-title">
                     <h3 class="category-title">Book Name</h3>
@@ -567,7 +542,7 @@
                     faucibus quam fermentum tempor. Placerat in adipiscing ...
                   </p>
                   <div class="category-card-info-container">
-                    <p class="category-card-book-type">Book Type</p>
+                    <p class="category-card-book-genre">Book Genre</p>
 
                     <div class="category-card-price-container">
                       <p class="category-card-book-price">0,00€</p>
@@ -618,7 +593,51 @@
             </div>
           </div>
           <div class="category-pager">
-            <button class="category-more-btn" type="button">More</button>
+            <button class="category-to-top-btn" type="button">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="14"
+                viewBox="0 0 12 14"
+                fill="none"
+              >
+                <path
+                  d="M6 13V1M6 1L1 6.14286M6 1L11 6.14286"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+              Go Up
+            </button>
+            <button class="category-more-btn" type="button">
+              More
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="14"
+                viewBox="0 0 12 14"
+                fill="none"
+              >
+                <path
+                  d="M6 1L6 13M6 13L11 7.85714M6 13L1 7.85714"
+                  stroke="black"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <div class="category-pager-pages">
+              <button class="category-pager-page category-pager-page-active">
+                1
+              </button>
+              <button class="category-pager-page">2</button>
+              <button class="category-pager-page">3</button>
+              <span class="category-pager-ellipsis">...</span>
+              <button class="category-pager-page">10</button>
+            </div>
           </div>
         </div>
       </section>
