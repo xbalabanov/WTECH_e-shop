@@ -199,8 +199,9 @@ body.admin-body {
 .admin-cover {
   width: 44px;
   min-width: 44px;
-  height: 66px;
-  min-height: 66px;
+  aspect-ratio: 6 / 9;
+  height: auto;
+  min-height: 0;
   border-radius: var(--radius-sm);
 }
 

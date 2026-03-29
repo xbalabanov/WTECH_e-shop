@@ -565,9 +565,7 @@ main {
   aspect-ratio: 2 / 3;
   border-radius: var(--radius-md);
   border: 1px solid rgba(48, 82, 82, 0.25);
-  background:
-    linear-gradient(145deg, rgba(236, 115, 87, 0.2), rgba(48, 82, 82, 0.24)),
-    #d8d4ce;
+  background: var(--color-primary);
 }
 
 .wishlist-card-content {
