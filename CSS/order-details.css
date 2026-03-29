@@ -124,34 +124,6 @@
   border-radius: 6px;
 }
 
-.cover-placeholder-orange {
-  width: 80px;
-  height: 110px;
-  background: var(--color-accent);
-  border-radius: 6px;
-}
-
-.cover-placeholder-wire {
-  width: 80px;
-  height: 110px;
-  border: 1px solid #9b9b9b;
-  background:
-    linear-gradient(
-      45deg,
-      transparent calc(50% - 0.5px),
-      #9b9b9b calc(50% - 0.5px),
-      #9b9b9b calc(50% + 0.5px),
-      transparent calc(50% + 0.5px)
-    ),
-    linear-gradient(
-      -45deg,
-      transparent calc(50% - 0.5px),
-      #9b9b9b calc(50% - 0.5px),
-      #9b9b9b calc(50% + 0.5px),
-      transparent calc(50% + 0.5px)
-    );
-}
-
 .item-details {
   flex: 1;
   min-width: 0;
