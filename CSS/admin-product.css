@@ -132,7 +132,7 @@ body.admin-product-body {
 
 .cover-preview {
   width: 96px;
-  aspect-ratio: 7 / 12;
+  aspect-ratio: 6 / 9;
   border-radius: var(--radius-sm);
   border: 1px solid var(--color-border-strong);
   background: var(--color-background);

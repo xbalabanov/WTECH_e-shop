@@ -904,7 +904,7 @@ input::placeholder {
 
 .cover-plate {
   width: 84px;
-  height: 120px;
+  height: 126px;
   border-radius: var(--radius-sm);
   background: var(--color-primary);
   margin: 0 0 15px 0;
