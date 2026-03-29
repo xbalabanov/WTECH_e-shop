@@ -239,6 +239,36 @@ body.admin-product-body {
   grid-column: 1 / -1;
 }
 
+.categories-field {
+  margin-top: 12px;
+}
+
+.categories-field > span {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.categories-list {
+  margin: 0;
+  padding: 0;
+}
+
+.category-option {
+  display: block;
+  margin: 0 0 6px;
+  font-size: var(--text-md);
+  color: var(--color-text);
+  line-height: 1.35;
+}
+
+.category-option input {
+  margin: 0 7px 0 0;
+  vertical-align: middle;
+}
+
 .author-field {
   gap: 8px;
 }
@@ -286,7 +316,7 @@ body.admin-product-body {
   background: rgba(48, 82, 82, 0.06);
 }
 
-.field-grid input,
+.field-grid input:not([type="checkbox"]),
 .field-grid select,
 .field-grid textarea {
   width: 100%;
