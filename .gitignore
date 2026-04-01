@@ -1,10 +1,41 @@
-# Default ignored files
-/shelf/
-/.idea
-# Ignored default folder with query files
-/queries/
-# Datasource local storage ignored files
-/dataSources/
-/dataSources.local.xml
-# Editor-based HTTP Client requests
-/httpRequests/
+/vendor/
+/node_modules/
+
+# Environment files
+/.env
+/.env.*
+!/.env.example
+
+# Frontend build artifacts
+/public/build/
+/public/hot
+
+# Laravel runtime files
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/pail/*
+
+# Laravel cache artifacts
+/bootstrap/cache/*.php
+
+# Testing and quality tool caches
+/.phpunit.cache/
+/.php-cs-fixer.cache
+/.pest.cache
+
+# Optional local database files
+/database/*.sqlite
+/database/*.sqlite-journal
+
+# IDE/editor files
+/.idea/
+/.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
