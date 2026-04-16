@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Product</title>
-    <link rel="stylesheet" href="CSS/product.css" />
-    <link rel="stylesheet" href="CSS/style.css" />
+    <title>{{ $book->title ?? 'Product' }}</title>
+    @vite(['resources/css/style.css', 'resources/css/product.css', 'resources/js/app.js'])
   </head>
   <body>
     <header class="site-header">
@@ -16,7 +15,7 @@
         aria-hidden="true"
       />
       <div class="header-inner">
-        <a href="homepage.html" class="logo" aria-label="Eunoia home">
+        <a href="/homepage.html" class="logo" aria-label="Eunoia home">
           <div class="logo-icon" aria-hidden="true">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -47,15 +46,15 @@
         <div class="center">
           <nav class="main-nav" aria-label="Main navigation">
             <ul>
-              <li><a href="category-template.html">Categories</a></li>
-              <li><a href="homepage.html">Trending</a></li>
-              <li><a href="homepage.html">New Arrivals</a></li>
-              <li><a href="homepage.html">Coming Soon</a></li>
-              <li><a href="category-template.html">Sale</a></li>
+              <li><a href="/category-template.html">Categories</a></li>
+              <li><a href="/homepage.html">Trending</a></li>
+              <li><a href="/homepage.html">New Arrivals</a></li>
+              <li><a href="/homepage.html">Coming Soon</a></li>
+              <li><a href="/category-template.html">Sale</a></li>
             </ul>
           </nav>
 
-          <form class="header-search" role="search" aria-label="Search books">
+          <form class="header-search" role="search" aria-label="Search books" method="GET" action="/category-template.html">
             <button class="search-icon" type="submit" aria-label="Search">
               <svg
                 width="16"
@@ -76,14 +75,16 @@
             <input
               class="search-input"
               type="search"
+              name="q"
               placeholder="Search books..."
               aria-label="Search books"
+              value="{{ request('q', '') }}"
             />
           </form>
         </div>
 
         <div class="header-actions">
-          <a class="icon" href="profile.html" aria-label="Profile">
+          <a class="icon" href="/profile.html" aria-label="Profile">
             <svg
               width="18"
               height="20"
@@ -100,7 +101,7 @@
               />
             </svg>
           </a>
-          <a class="icon cart-icon" href="cart.html" aria-label="Cart">
+          <a class="icon cart-icon" href="/cart.html" aria-label="Cart">
             <svg
               width="20"
               height="20"
@@ -116,7 +117,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="icon-badge" aria-hidden="true">2</span>
+            <span class="icon-badge" data-cart-count aria-hidden="true">{{ collect((array) session('cart', []))->sum(fn($q) => max(0, (int) $q)) }}</span>
           </a>
           <label
             for="nav-toggle"
@@ -160,11 +161,11 @@
       <div id="mobile-nav" class="mobile-nav-panel" aria-hidden="false">
         <nav class="mobile-nav" aria-label="Mobile navigation">
           <ul>
-            <li><a href="category-template.html">Categories</a></li>
-            <li><a href="homepage.html">Trending</a></li>
-            <li><a href="homepage.html">New Arrivals</a></li>
-            <li><a href="homepage.html">Coming Soon</a></li>
-            <li><a href="category-template.html">Sale</a></li>
+            <li><a href="/category-template.html">Categories</a></li>
+            <li><a href="/homepage.html">Trending</a></li>
+            <li><a href="/homepage.html">New Arrivals</a></li>
+            <li><a href="/homepage.html">Coming Soon</a></li>
+            <li><a href="/category-template.html">Sale</a></li>
           </ul>
         </nav>
       </div>
@@ -172,45 +173,66 @@
 
     <main>
       <div class="main-product-section">
-        <div class="product-image"></div>
+        <div
+          class="product-image"
+          @if (!empty($book?->cover_image_url))
+            style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+          @endif
+        ></div>
         <div class="product-details">
-          <h1 class="product-title">Product Title</h1>
-          <p class="product-author">Author Name</p>
+          <h1 class="product-title">{{ $book->title }}</h1>
+          <p class="product-author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
           <p class="product-description">
-            Lorem ipsum dolor sit amet consectetur. Vestibulum consectetur
-            viverra in tempus a nisl integer. Euismod adipiscing gravida enim
-            venenatis dis ultrices. Nulla lacus ac semper odio sit viverra
-            adipiscing facilisis pellentesque. Cras netus elementum urna odio
-            pharetra nunc. Tortor sollicitudin viverra in tincidunt bibendum
-            consequat leo. Ut pharetra placerat nam ac ornare. Aenean convallis
-            morbi nunc nulla consequat vitae tellus scelerisque. Lectus turpis
-            euismod mauris non et orci quis cras massa. Amet sed interdum
-            accumsan phasellus volutpat fermentum orci.
+            {{ $book->description ?: 'No description available for this book yet.' }}
           </p>
-          <p class="product-book-type">Fantasy</p>
+          <p class="product-book-type">{{ $book->genre ?? 'General' }}</p>
           <p class="product-price">
-            0,00€ <span class="product-discount-badge">-0%</span>
+            {{ number_format((float) $book->discounted_price, 2, ',', '.') }}€
+            <span class="product-discount-badge">-{{ (int) ($book->discount ?? 0) }}%</span>
           </p>
           <div class="product-actions">
-            <button class="add-to-cart" type="button" aria-label="Add to cart">
-              <svg
-                class="icon"
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
-                  stroke="white"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-              Add to Cart
-            </button>
+            @if (($cartQty ?? 0) > 0)
+              <div class="product-qty" aria-label="Cart quantity controls">
+                <form method="POST" action="{{ route('cart.update') }}">
+                  @csrf
+                  <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                  <input type="hidden" name="quantity" value="{{ max(0, (int) $cartQty - 1) }}" />
+                  <button type="submit" class="product-qty-btn" aria-label="Decrease quantity">−</button>
+                </form>
+                <span class="product-qty-count" aria-live="polite">{{ (int) $cartQty }}</span>
+                <form method="POST" action="{{ route('cart.update') }}">
+                  @csrf
+                  <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                  <input type="hidden" name="quantity" value="{{ min(99, (int) $cartQty + 1) }}" />
+                  <button type="submit" class="product-qty-btn" aria-label="Increase quantity">+</button>
+                </form>
+              </div>
+            @else
+              <form method="POST" action="{{ route('cart.add') }}">
+                @csrf
+                <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                <input type="hidden" name="quantity" value="1" />
+                <button class="add-to-cart" type="submit" aria-label="Add to cart">
+                  <svg
+                    class="icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16084 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30727L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95515 18.9644 4.69238C18.8888 4.46182 18.7297 4.26634 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                  Add to Cart
+                </button>
+              </form>
+            @endif
             <button
               class="add-to-favourite"
               type="button"
@@ -649,7 +671,7 @@
             <div class="nav-col">
               <div class="nav-heading">Shop</div>
               <ul>
-                <li><a href="category-template.html">Categories</a></li>
+                <li><a href="/category-template.html">Categories</a></li>
                 <li><a href="#">Bestsellers</a></li>
                 <li><a href="#">New Arrivals</a></li>
                 <li><a href="#">Sale</a></li>

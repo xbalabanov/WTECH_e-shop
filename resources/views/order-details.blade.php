@@ -1,14 +1,14 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Cart</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Details · #ORD-0000</title>
     <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="stylesheet" href="CSS/cart.css" />
+    <link rel="stylesheet" href="CSS/profile.css" />
+    <link rel="stylesheet" href="CSS/order-details.css" />
   </head>
-
-  <body class="page-layout">
+  <body>
     <header class="site-header">
       <input
         type="checkbox"
@@ -44,6 +44,7 @@
           </div>
           <div class="logo-text">Eunoia</div>
         </a>
+
         <div class="center">
           <nav class="main-nav" aria-label="Main navigation">
             <ul>
@@ -81,6 +82,7 @@
             />
           </form>
         </div>
+
         <div class="header-actions">
           <a class="icon" href="profile.html" aria-label="Profile">
             <svg
@@ -115,7 +117,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="icon-badge" aria-hidden="true">2</span>
+            <span class="icon-badge" data-cart-count aria-hidden="true">{{ collect((array) session('cart', []))->sum(fn($q) => max(0, (int) $q)) }}</span>
           </a>
           <label
             for="nav-toggle"
@@ -155,6 +157,7 @@
           </label>
         </div>
       </div>
+
       <div id="mobile-nav" class="mobile-nav-panel" aria-hidden="false">
         <nav class="mobile-nav" aria-label="Mobile navigation">
           <ul>
@@ -167,78 +170,121 @@
         </nav>
       </div>
     </header>
-    <main class="page-main">
-      <section class="cart-page">
-        <div class="cart-inner">
-          <h1 class="cart-title">Your Cart</h1>
 
-          <div class="cart-container">
-            <div class="cart-list">
-              <article class="cart-item">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="item-info">
-                  <div class="item-title">Book name</div>
-                  <div class="item-author">Author</div>
-                </div>
-                <div class="item-controls">
-                  <div class="qty">
-                    <button class="qty-btn" aria-label="Increase quantity">
-                      +
-                    </button>
-                    <input
-                      class="qty-count"
-                      type="number"
-                      min="0"
-                      value="0"
-                      aria-label="Quantity"
-                    />
-                    <button class="qty-btn" aria-label="Decrease quantity">
-                      -
-                    </button>
-                  </div>
-                  <div class="item-price">0,00€</div>
-                </div>
-              </article>
+    <main class="order-details-container">
+      <section class="order-details-wrapper">
+        <a href="profile.html" class="back-link">← Back to orders</a>
 
-              <article class="cart-item">
-                <div class="cover" aria-hidden="true"></div>
-                <div class="item-info">
-                  <div class="item-title">Book name</div>
-                  <div class="item-author">Author</div>
-                </div>
-                <div class="item-controls">
-                  <div class="qty">
-                    <button class="qty-btn" aria-label="Increase quantity">
-                      +
-                    </button>
-                    <input
-                      class="qty-count"
-                      type="number"
-                      min="0"
-                      value="2"
-                      aria-label="Quantity"
-                    />
-                    <button class="qty-btn" aria-label="Decrease quantity">
-                      -
-                    </button>
-                  </div>
-                  <div class="item-price">0,00€</div>
-                </div>
-              </article>
-            </div>
-
-            <aside class="cart-summary" aria-labelledby="summary-heading">
-              <div id="summary-heading" class="summary-title">Total</div>
-              <div class="summary-amount">0,00€</div>
-              <button
-                class="checkout-btn"
-                onclick="location.href = 'checkout.html'"
-              >
-                Proceed to checkout
-              </button>
-            </aside>
+        <div class="order-header">
+          <div class="order-info">
+            <h1 class="order-title">#ORD-0000</h1>
+            <p class="order-date">Placed on 00.00.2000</p>
+          </div>
+          <div class="order-status">
+            <span class="status-badge delivered">Delivered</span>
           </div>
         </div>
+
+        <section class="order-items-section">
+          <h2>Order Items (2)</h2>
+          <div class="order-items-list">
+            <div class="order-item">
+              <div class="item-cover">
+                <div class="cover-placeholder" aria-hidden="true"></div>
+              </div>
+              <div class="item-details">
+                <h3 class="item-title">BOOK NAME</h3>
+                <p class="item-author">Author</p>
+                <div class="item-meta">
+                  <span class="item-isbn">ISBN:</span>
+                </div>
+              </div>
+              <div class="item-price">0,00€</div>
+            </div>
+
+            <div class="order-item">
+              <div class="item-cover">
+                <div class="cover-placeholder" aria-hidden="true"></div>
+              </div>
+              <div class="item-details">
+                <h3 class="item-title">BOOK NAME</h3>
+                <p class="item-author">Author</p>
+                <div class="item-meta">
+                  <span class="item-isbn">ISBN:</span>
+                </div>
+              </div>
+              <div class="item-price">0,00€</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="order-summary-section">
+          <h2>Order Summary</h2>
+          <div class="summary-grid">
+            <div class="summary-row">
+              <span class="summary-label">Subtotal</span>
+              <span class="summary-value">0,00€</span>
+            </div>
+            <div class="summary-row">
+              <span class="summary-label">Shipping</span>
+              <span class="summary-value">0,00€</span>
+            </div>
+            <div class="summary-row total">
+              <span class="summary-label">Total</span>
+              <span class="summary-value">0,00€</span>
+            </div>
+          </div>
+        </section>
+
+        <div class="shipping-billing-grid">
+          <section class="info-section">
+            <div class="address-box">
+              <h3>Shipping Details</h3>
+              <p class="address-name">Ján Novák</p>
+              <p class="address-line">Hlavná 123/45</p>
+              <p class="address-line">811 01 Bratislava</p>
+              <p class="address-line">Slovensko</p>
+              <p class="address-phone">+421 900 000 000</p>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <div class="address-box">
+              <h3>Billing Details</h3>
+              <p class="address-name">Ján Novák</p>
+              <p class="address-line">Hlavná 123/45</p>
+              <p class="address-line">811 01 Bratislava</p>
+              <p class="address-line">Slovensko</p>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <div class="payment-box">
+              <h3>Payment Method</h3>
+              <p class="payment-type">External Payment Gateway</p>
+            </div>
+          </section>
+        </div>
+
+        <section class="info-section tracking-section">
+          <div class="tracking-box">
+            <h3>Order Tracking</h3>
+            <div class="tracking-box-row">
+              <div>
+                <p class="tracking-carrier">Carrier: DPD</p>
+                <p class="tracking-number">
+                  Tracking Number: #00000000000000000000
+                </p>
+              </div>
+              <div class="tracking-actions">
+                <span class="order-status delivered">Delivered</span>
+                <button class="btn-secondary" type="button">
+                  Track the Order
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
 

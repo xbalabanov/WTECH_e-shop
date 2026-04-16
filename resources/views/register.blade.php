@@ -114,7 +114,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="icon-badge" aria-hidden="true">2</span>
+            <span class="icon-badge" data-cart-count aria-hidden="true">{{ collect((array) session('cart', []))->sum(fn($q) => max(0, (int) $q)) }}</span>
           </a>
           <label
             for="nav-toggle"
