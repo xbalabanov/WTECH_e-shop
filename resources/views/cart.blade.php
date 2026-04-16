@@ -3,9 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login</title>
-    <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="stylesheet" href="CSS/login-register.css" />
+    <title>Cart</title>
+    @vite(['resources/css/style.css', 'resources/css/cart.css', 'resources/js/app.js'])
   </head>
 
   <body class="page-layout">
@@ -115,7 +114,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <span class="icon-badge" aria-hidden="true">2</span>
+            <span class="icon-badge" data-cart-count aria-hidden="true">{{ $itemCount ?? 0 }}</span>
           </a>
           <label
             for="nav-toggle"
@@ -168,44 +167,102 @@
       </div>
     </header>
     <main class="page-main">
-      <section class="login-section">
-        <div class="login-container">
-          <form class="login-card" action="#" method="post" novalidate>
-            <h2 class="login-title">Log in</h2>
+      <section class="cart-page">
+        <div class="cart-inner">
+          <h1 class="cart-title">Your Cart</h1>
 
-            <label class="form-label"
-              >Email
-              <input
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                required
-              />
-            </label>
+          <div class="cart-container">
+            <div class="cart-list">
+              @forelse($items as $item)
+                @php
+                  /** @var \App\Models\Book $book */
+                  $book = $item['book'];
+                  $quantity = (int) $item['quantity'];
+                  $lineTotal = (float) $item['line_total'];
+                @endphp
+                <article class="cart-item">
+                  <div
+                    class="cover"
+                    aria-hidden="true"
+                    @if ($book->cover_image_url)
+                      style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+                    @endif
+                  ></div>
 
-            <label class="form-label"
-              >Password
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                required
-              />
-            </label>
+                  <div class="item-info">
+                    <div class="item-title">{{ $book->title }}</div>
+                    <div class="item-author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</div>
+                  </div>
 
-            <label class="remember"
-              ><input type="checkbox" name="remember" /> Remember me</label
-            >
+                  <div class="item-controls">
+                    <div class="qty">
+                      <form method="POST" action="{{ route('cart.update') }}">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                        <input type="hidden" name="quantity" value="{{ max(0, $quantity - 1) }}" />
+                        <button class="qty-btn" type="submit" aria-label="Decrease quantity">-</button>
+                      </form>
 
-            <button class="login-btn" type="submit">Log In</button>
+                      <form method="POST" action="{{ route('cart.update') }}">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                        <input
+                          class="qty-count"
+                          type="number"
+                          name="quantity"
+                          min="0"
+                          max="99"
+                          value="{{ $quantity }}"
+                          aria-label="Quantity"
+                          onchange="this.form.submit()"
+                        />
+                      </form>
 
-            <div class="login-footer-links">
-              <a href="#" class="forgot">Forgot the password?</a>
-              <p class="register">
-                Don't have an account? <a href="#">Register</a>
-              </p>
+                      <form method="POST" action="{{ route('cart.update') }}">
+                        @csrf
+                        <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                        <input type="hidden" name="quantity" value="{{ min(99, $quantity + 1) }}" />
+                        <button class="qty-btn" type="submit" aria-label="Increase quantity">+</button>
+                      </form>
+                    </div>
+
+                    <div class="item-price">{{ number_format($lineTotal, 2, ',', '.') }}€</div>
+
+                    <form method="POST" action="{{ route('cart.remove') }}">
+                      @csrf
+                      <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                      <button class="qty-btn" type="submit" aria-label="Remove item">×</button>
+                    </form>
+                  </div>
+                </article>
+              @empty
+                <article class="cart-item">
+                  <div class="item-info">
+                    <div class="item-title">Your cart is empty</div>
+                    <div class="item-author">Add books from the categories page.</div>
+                  </div>
+                </article>
+              @endforelse
             </div>
-          </form>
+
+            <aside class="cart-summary" aria-labelledby="summary-heading">
+              <div id="summary-heading" class="summary-title">Total ({{ $itemCount }} items)</div>
+              <div class="summary-amount">{{ number_format($total, 2, ',', '.') }}€</div>
+
+              <button class="checkout-btn" onclick="location.href = '/checkout.html'">
+                Proceed to checkout
+              </button>
+
+              @if($itemCount > 0)
+                <form method="POST" action="{{ route('cart.clear') }}">
+                  @csrf
+                  <button class="checkout-btn" type="submit" style="background:#6b7280; margin-top:8px;">
+                    Clear cart
+                  </button>
+                </form>
+              @endif
+            </aside>
+          </div>
         </div>
       </section>
     </main>
