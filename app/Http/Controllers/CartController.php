@@ -11,7 +11,8 @@ class CartController extends Controller
 {
     public function index(Request $request): View
     {
-        $cart = $this->getCart($request);
+        $cart = $this->normalizeCart($this->getCart($request));
+        $this->storeCart($request, $cart);
         $bookIds = array_keys($cart);
 
         $books = Book::query()
@@ -53,14 +54,21 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
-            'quantity' => ['nullable', 'integer', 'min:1', 'max:99'],
+            'quantity' => ['nullable', 'integer', 'min:1'],
         ]);
 
         $bookId = (int) $validated['book_id'];
         $quantityToAdd = (int) ($validated['quantity'] ?? 1);
+        $book = Book::query()->find($bookId);
+
+        if (! $book || (int) $book->stock <= 0) {
+            return back();
+        }
+
+        $quantityToAdd = min($quantityToAdd, (int) $book->stock);
 
         $cart = $this->getCart($request);
-        $cart[$bookId] = min(99, ($cart[$bookId] ?? 0) + $quantityToAdd);
+        $cart[$bookId] = min((int) $book->stock, ($cart[$bookId] ?? 0) + $quantityToAdd);
 
         $this->storeCart($request, $cart);
 
@@ -71,11 +79,22 @@ class CartController extends Controller
     {
         $validated = $request->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
-            'quantity' => ['required', 'integer', 'min:0', 'max:99'],
+            'quantity' => ['required', 'integer', 'min:0'],
         ]);
 
         $bookId = (int) $validated['book_id'];
         $quantity = (int) $validated['quantity'];
+        $book = Book::query()->find($bookId);
+
+        if (! $book || (int) $book->stock <= 0) {
+            $cart = $this->getCart($request);
+            unset($cart[$bookId]);
+            $this->storeCart($request, $cart);
+
+            return back();
+        }
+
+        $quantity = min($quantity, (int) $book->stock);
 
         $cart = $this->getCart($request);
 
@@ -131,6 +150,37 @@ class CartController extends Controller
 
             if ($id > 0 && $qty > 0) {
                 $normalized[$id] = min(99, $qty);
+            }
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * @param  array<int, int>  $cart
+     * @return array<int, int>
+     */
+    private function normalizeCart(array $cart): array
+    {
+        if ($cart === []) {
+            return [];
+        }
+
+        $stocks = Book::query()
+            ->whereIn('id', array_keys($cart))
+            ->pluck('stock', 'id')
+            ->map(fn ($stock) => max(0, (int) $stock))
+            ->all();
+
+        $normalized = [];
+
+        foreach ($cart as $bookId => $quantity) {
+            $id = (int) $bookId;
+            $qty = max(0, (int) $quantity);
+            $stock = (int) ($stocks[$id] ?? 0);
+
+            if ($id > 0 && $qty > 0 && $stock > 0) {
+                $normalized[$id] = min($qty, $stock);
             }
         }
 

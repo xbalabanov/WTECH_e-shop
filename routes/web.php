@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +14,20 @@ Route::get('/', function () {
     return redirect('/homepage.html');
 });
 
-Route::view('/homepage.html', 'homepage')->name('home');
+Route::get('/homepage.html', function () {
+    $books = Book::query()
+        ->with('authors')
+        ->orderByDesc('publication_date')
+        ->get();
+
+    return view('homepage', [
+        'trendingBooks' => $books->sortByDesc(fn (Book $book) => (float) $book->discount)->values()->take(6),
+        'newArrivalBooks' => $books->take(6)->values(),
+        'comingSoonBooks' => $books->reverse()->values()->take(6),
+        'recommendedBooks' => $books->sortBy('price')->values()->take(6),
+        'bookOfWeek' => $books->isNotEmpty() ? $books->random() : null,
+    ]);
+})->name('home');
 Route::get('/category-template.html', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/product/{book}.html', [ProductController::class, 'show'])->name('products.show');
 Route::get('/cart.html', [CartController::class, 'index'])->name('cart.index');

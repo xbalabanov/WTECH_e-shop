@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Book extends Model
 {
@@ -50,5 +51,24 @@ class Book extends Model
     public function getDiscountedPriceAttribute(): float
     {
         return max(0, (float) $this->price - ((float) $this->price * ((float) $this->discount / 100)));
+    }
+
+    public function getCoverImageUrlAttribute(?string $value): ?string
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        if (Str::startsWith($value, ['http://', 'https://'])) {
+            return $value;
+        }
+
+        $normalizedValue = ltrim($value, '/');
+
+        if (Str::startsWith($normalizedValue, 'img/')) {
+            return asset($normalizedValue);
+        }
+
+        return asset('img/' . $normalizedValue);
     }
 }

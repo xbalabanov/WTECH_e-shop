@@ -12,27 +12,26 @@ class ProductController extends Controller
     {
         $book->loadMissing(['authors', 'categories', 'publisher']);
 
-        $relatedBooks = Book::query()
+        // Fetch 5 books from the trending category
+        $recommendedBooks = Book::query()
             ->with('authors')
+            ->whereHas('categories', fn ($q) => $q->where('slug', 'trending'))
             ->where('id', '!=', $book->id)
-            ->when(
-                filled($book->genre),
-                fn ($query) => $query->where('genre', $book->genre)
-            )
             ->inRandomOrder()
-            ->limit(6)
+            ->limit(5)
             ->get();
 
-        if ($relatedBooks->count() < 6) {
+        // If not enough trending books, fill with any other books
+        if ($recommendedBooks->count() < 5) {
             $fallbackBooks = Book::query()
                 ->with('authors')
                 ->where('id', '!=', $book->id)
-                ->whereNotIn('id', $relatedBooks->pluck('id'))
+                ->whereNotIn('id', $recommendedBooks->pluck('id'))
                 ->inRandomOrder()
-                ->limit(6 - $relatedBooks->count())
+                ->limit(5 - $recommendedBooks->count())
                 ->get();
 
-            $relatedBooks = $relatedBooks->concat($fallbackBooks);
+            $recommendedBooks = $recommendedBooks->concat($fallbackBooks);
         }
 
         $cart = collect((array) $request->session()->get('cart', []))
@@ -40,7 +39,7 @@ class ProductController extends Controller
 
         return view('product', [
             'book' => $book,
-            'relatedBooks' => $relatedBooks,
+            'recommendedBooks' => $recommendedBooks,
             'cartQty' => (int) ($cart[$book->id] ?? 0),
         ]);
     }

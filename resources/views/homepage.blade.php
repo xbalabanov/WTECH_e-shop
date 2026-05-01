@@ -10,6 +10,12 @@
 
   <body>
     <div data-site-header></div>
+    @php
+      $trendingBooks = collect($trendingBooks ?? []);
+      $newArrivalBooks = collect($newArrivalBooks ?? []);
+      $comingSoonBooks = collect($comingSoonBooks ?? []);
+      $recommendedBooks = collect($recommendedBooks ?? []);
+    @endphp
     <main>
       <section class="hero-section">
         <div class="hero-grid">
@@ -250,42 +256,18 @@
             <a class="view-all" href="#">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @forelse ($trendingBooks->take(6) as $book)
+              <article class="card" role="group">
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
+              </article>
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -309,42 +291,18 @@
             <a class="view-all" href="#">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @forelse ($newArrivalBooks->take(6) as $book)
+              <article class="card" role="group">
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
+              </article>
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -355,46 +313,22 @@
             <a class="view-all" href="#">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @forelse ($comingSoonBooks->take(6) as $book)
+              <article class="card" role="group">
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
+              </article>
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
-      <section class="shop-desc">
+       <section class="shop-desc">
         <div class="desc-inner">
           <div class="about-card">
             <div class="about-grid">
@@ -446,36 +380,18 @@
             <a class="view-all" href="#">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @forelse ($recommendedBooks->take(6) as $book)
+              <article class="card" role="group">
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
+              </article>
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -556,9 +472,9 @@
               </div>
 
               <article class="review-card">
-                <div class="cover-plate"></div>
-                <div class="book-title">The Silent Echo</div>
-                <div class="book-author">Elena Morris</div>
+                <div class="cover-plate" @if ($bookOfWeek?->cover_image_url) style="background-image: url('{{ $bookOfWeek->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                <div class="book-title">{{ $bookOfWeek?->title ?? 'No book selected' }}</div>
+                <div class="book-author">{{ $bookOfWeek?->authors?->pluck('full_name')->join(', ') ?? 'Unknown author' }}</div>
                 <div class="rating">
                   <span class="stars">
                     <!-- four filled stars -->
@@ -630,10 +546,13 @@
                   <span class="rating-number">4.0</span>
                 </div>
                 <p class="excerpt">
-                  "A captivating journey through silence and sound. Morris
-                  crafts a world that lingers long after the last page..."
+                  "{{ substr($bookOfWeek?->description ?? 'A captivating story from our collection...', 0, 150) }}..."
                 </p>
-                <button class="btn buy full">Buy now — €9.99</button>
+                @if ($bookOfWeek)
+                  <a href="{{ route('products.show', $bookOfWeek) }}" class="btn buy full">Buy now — {{ number_format((float) $bookOfWeek->discounted_price, 2, ',', '.') }}€</a>
+                @else
+                  <button class="btn buy full" disabled>No book available</button>
+                @endif
               </article>
             </section>
           </aside>

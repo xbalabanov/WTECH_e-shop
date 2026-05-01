@@ -297,13 +297,19 @@
                           <span class="category-badge">-{{ (int) ($book->discount ?? 0) }}%</span>
                         </div>
                       </div>
+                      <p class="category-author">{{ (int) ($book->stock ?? 0) }} in stock</p>
 
                       <div class="category-card-actions">
                         @php
                           $cartQty = (int) ($cartQuantities[$book->id] ?? 0);
+                          $stock = (int) ($book->stock ?? 0);
                         @endphp
 
-                        @if ($cartQty > 0)
+                        @if ($stock <= 0)
+                          <button class="category-card-cart-button" type="button" disabled aria-disabled="true">
+                            Out of stock
+                          </button>
+                        @elseif ($cartQty > 0)
                           <div class="category-card-qty" aria-label="Cart quantity controls">
                             <form method="POST" action="{{ route('cart.update') }}">
                               @csrf
@@ -314,12 +320,16 @@
 
                             <span class="category-card-qty-count" aria-live="polite">{{ $cartQty }}</span>
 
-                            <form method="POST" action="{{ route('cart.update') }}">
-                              @csrf
-                              <input type="hidden" name="book_id" value="{{ $book->id }}" />
-                              <input type="hidden" name="quantity" value="{{ min(99, $cartQty + 1) }}" />
-                              <button type="submit" class="category-card-qty-btn" aria-label="Increase quantity">+</button>
-                            </form>
+                            @if ($cartQty < $stock)
+                              <form method="POST" action="{{ route('cart.update') }}">
+                                @csrf
+                                <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                                <input type="hidden" name="quantity" value="{{ min($stock, $cartQty + 1) }}" />
+                                <button type="submit" class="category-card-qty-btn" aria-label="Increase quantity">+</button>
+                              </form>
+                            @else
+                              <button type="button" class="category-card-qty-btn" aria-label="Maximum stock reached" disabled>+</button>
+                            @endif
                           </div>
                         @else
                           <form method="POST" action="{{ route('cart.add') }}">
