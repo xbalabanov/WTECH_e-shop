@@ -48,6 +48,11 @@ class Book extends Model
         return $this->belongsToMany(Category::class, 'book_category');
     }
 
+    public function wishlistedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'wishlist_items');
+    }
+
     public function getDiscountedPriceAttribute(): float
     {
         return max(0, (float) $this->price - ((float) $this->price * ((float) $this->discount / 100)));

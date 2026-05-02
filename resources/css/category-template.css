@@ -575,6 +575,10 @@ main {
     stroke: var(--color-accent);
 }
 
+.category-card-favourite-button.wishlisted {
+    background: rgba(236, 115, 87, 0.15);
+}
+
 .category-pager {
     display: flex;
     justify-content: center;

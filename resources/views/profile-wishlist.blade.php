@@ -88,7 +88,7 @@
               </span>
               <span>My Orders</span>
             </a>
-            <a class="profile-sidebar-item active" href="profile-wishlist.html">
+            <a class="profile-sidebar-item active" href="{{ route('profile.wishlist') }}">
               <span class="sidebar-item-icon" aria-hidden="true"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -108,9 +108,9 @@
                 </svg>
               </span>
               <span>Wishlist</span>
-              <span class="sidebar-item-count">12</span>
+              <span class="sidebar-item-count">{{ $wishlistBooks->count() }}</span>
             </a>
-            <a class="profile-sidebar-item" href="profile-settings.html">
+            <a class="profile-sidebar-item" href="{{ route('profile.settings') }}">
               <span class="sidebar-item-icon" aria-hidden="true"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -176,69 +176,47 @@
           </aside>
 
           <div class="profile-main">
-            <section
-              class="profile-subpage-section"
-              aria-labelledby="wishlist-title"
-            >
-              <h2 id="wishlist-title" class="profile-subpage-title">
-                Wishlist
-              </h2>
+            <section class="profile-subpage-section" aria-labelledby="wishlist-title">
+              <h2 id="wishlist-title" class="profile-subpage-title">Wishlist</h2>
 
-              <div class="wishlist-grid">
-                <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
-                  <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">The Silent Echo</h3>
-                    <p class="wishlist-card-author">Elena Morris</p>
-                    <p class="wishlist-card-meta">Fantasy</p>
-                    <p class="wishlist-card-price">€22.99</p>
-                    <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
-                  <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">Red Horizon</h3>
-                    <p class="wishlist-card-author">Alex Reed</p>
-                    <p class="wishlist-card-meta">Sci-Fi</p>
-                    <p class="wishlist-card-price">€14.50</p>
-                    <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </article>
-
-                <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
-                  <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">Sea of Glass</h3>
-                    <p class="wishlist-card-author">Liam Porter</p>
-                    <p class="wishlist-card-meta">Mystery</p>
-                    <p class="wishlist-card-price">€27.40</p>
-                    <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </article>
-              </div>
+              @if ($wishlistBooks->isEmpty())
+                <p class="profile-empty-state">Your wishlist is empty right now.</p>
+              @else
+                <div class="wishlist-grid">
+                  @foreach ($wishlistBooks as $book)
+                    <article class="wishlist-card" role="group">
+                      <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                        <div
+                          class="wishlist-cover"
+                          aria-hidden="true"
+                          @if ($book->cover_image_url)
+                            style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+                          @endif
+                        ></div>
+                      </a>
+                      <div class="wishlist-card-content">
+                        <h3 class="wishlist-card-title">{{ $book->title }}</h3>
+                        <p class="wishlist-card-author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                        <p class="wishlist-card-meta">{{ $book->genre ?? 'General' }}</p>
+                        <p class="wishlist-card-price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}&euro;</p>
+                        <div class="wishlist-card-actions">
+                          <form method="POST" action="{{ route('cart.add') }}">
+                            @csrf
+                            <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                            <input type="hidden" name="quantity" value="1" />
+                            <button class="wishlist-cart-btn" type="submit">Add to Cart</button>
+                          </form>
+                          <form method="POST" action="{{ route('wishlist.destroy', $book) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="wishlist-remove-btn" type="submit">Remove</button>
+                          </form>
+                        </div>
+                      </div>
+                    </article>
+                  @endforeach
+                </div>
+              @endif
             </section>
           </div>
         </div>

@@ -210,6 +210,14 @@ main {
     outline-offset: 3px;
 }
 
+.main-product-section .add-to-favourite.wishlisted {
+    background: rgba(236, 115, 87, 0.15);
+}
+
+.main-product-section .add-to-favourite.wishlisted:hover {
+    background: rgba(236, 115, 87, 0.25);
+}
+
 .reviews-section {
     max-width: 1280px;
     margin: 0 auto;
@@ -493,6 +501,10 @@ main {
     width: 18px;
     height: 18px;
     flex-shrink: 0;
+}
+
+.card .card-favourite-button.wishlisted {
+    background: rgba(236, 115, 87, 0.15);
 }
 
 @media (max-width: 1200px) {

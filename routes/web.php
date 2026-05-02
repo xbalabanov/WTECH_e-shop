@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
 use App\Http\Controllers\CategoryController;
@@ -62,7 +63,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::view('/profile.html', 'profile')->name('profile');
+    Route::get('/profile-wishlist.html', [WishlistController::class, 'index'])->name('profile.wishlist');
     Route::get('/profile-settings.html', [ProfileSettingsController::class, 'edit'])->name('profile.settings');
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
+    Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 
 });

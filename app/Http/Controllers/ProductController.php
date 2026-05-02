@@ -37,10 +37,15 @@ class ProductController extends Controller
         $cart = collect((array) $request->session()->get('cart', []))
             ->mapWithKeys(fn ($quantity, $bookId) => [(int) $bookId => max(0, (int) $quantity)]);
 
+        $isWishlisted = $request->user()
+            ? $request->user()->wishlistBooks()->where('book_id', $book->id)->exists()
+            : false;
+
         return view('product', [
             'book' => $book,
             'recommendedBooks' => $recommendedBooks,
             'cartQty' => (int) ($cart[$book->id] ?? 0),
+            'isWishlisted' => $isWishlisted,
         ]);
     }
 }

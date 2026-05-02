@@ -87,7 +87,7 @@
               </span>
               <span>My Orders</span>
             </a>
-            <a class="profile-sidebar-item" href="profile-wishlist.html">
+            <a class="profile-sidebar-item" href="{{ route('profile.wishlist') }}">
               <span class="sidebar-item-icon" aria-hidden="true"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -107,9 +107,9 @@
                 </svg>
               </span>
               <span>Wishlist</span>
-              <span class="sidebar-item-count">12</span>
+              <span class="sidebar-item-count">{{ auth()->user()->wishlistBooks()->count() }}</span>
             </a>
-            <a class="profile-sidebar-item active" href="profile-settings.html">
+            <a class="profile-sidebar-item active" href="{{ route('profile.settings') }}">
               <span class="sidebar-item-icon" aria-hidden="true"
                 ><svg
                   xmlns="http://www.w3.org/2000/svg"

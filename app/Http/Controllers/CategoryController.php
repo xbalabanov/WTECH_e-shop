@@ -109,6 +109,10 @@ class CategoryController extends Controller
             ->mapWithKeys(fn ($quantity, $bookId) => [(int) $bookId => max(0, (int) $quantity)])
             ->all();
 
+        $wishlistBookIds = $request->user()
+            ? $request->user()->wishlistBooks()->pluck('book_id')->toArray()
+            : [];
+
         return view('category-template', [
             'books' => $books,
             'categoryTitle' => $category?->name ?? 'All Books',
@@ -130,6 +134,7 @@ class CategoryController extends Controller
             'selectedMaxPrice' => $selectedMaxPrice,
             'cartQuantities' => $cartQuantities,
             'searchQuery' => $searchQuery,
+            'wishlistBookIds' => $wishlistBookIds,
         ]);
     }
 }
