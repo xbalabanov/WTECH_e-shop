@@ -66,18 +66,18 @@
             <div class="search-panel">
               <p class="kicker">QUICK FIND</p>
               <h3 id="search-heading">Search for Books</h3>
-              <form class="search-form">
+              <form class="search-form" method="GET" action="{{ route('categories.index') }}">
                 <label>
                   <span>Author</span>
-                  <input type="text" placeholder="Enter author name" />
+                  <input type="text" name="author" placeholder="Enter author name" />
                 </label>
                 <label>
                   <span>Title</span>
-                  <input type="text" placeholder="Enter book title" />
+                  <input type="text" name="title" placeholder="Enter book title" />
                 </label>
                 <label>
                   <span>ISBN</span>
-                  <input type="text" placeholder="Enter ISBN number" />
+                  <input type="text" name="isbn" placeholder="Enter ISBN number" />
                 </label>
                 <button type="submit" class="search-btn">
                   <svg
@@ -109,6 +109,28 @@
           </aside>
         </div>
       </section>
+      <script>
+        const quickFindForm = document.querySelector('.search-form');
+
+        if (quickFindForm) {
+          quickFindForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const author = quickFindForm.querySelector('input[name="author"]')?.value.trim() || '';
+            const title = quickFindForm.querySelector('input[name="title"]')?.value.trim() || '';
+            const isbn = quickFindForm.querySelector('input[name="isbn"]')?.value.trim() || '';
+            const parts = [author, title, isbn].filter(Boolean);
+            const params = new URLSearchParams();
+
+            if (parts.length) {
+              params.set('q', parts.join(' '));
+            }
+
+            const target = `${quickFindForm.action}${params.toString() ? `?${params.toString()}` : ''}`;
+            window.location.href = target;
+          });
+        }
+      </script>
       <section class="cta">
         <div class="cta-inner">
           <div class="cta-grid">
