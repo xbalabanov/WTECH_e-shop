@@ -252,21 +252,27 @@
                     Security
                   </h3>
 
-                  <div class="settings-row">
-                    <label class="settings-label" for="current-password"
-                      >Current Password</label
-                    >
-                    <input
-                      class="settings-input"
-                      id="current-password"
-                      type="password"
-                      name="current_password"
-                    />
-                  </div>
+                  @if (empty($user->password))
+                    <p class="settings-helper">
+                      Set a password to create a new account.
+                    </p>
+                  @else
+                    <div class="settings-row">
+                      <label class="settings-label" for="current-password"
+                        >Current Password</label
+                      >
+                      <input
+                        class="settings-input"
+                        id="current-password"
+                        type="password"
+                        name="current_password"
+                      />
+                    </div>
+                  @endif
 
                   <div class="settings-row">
                     <label class="settings-label" for="new-password"
-                      >New Password</label
+                      >{{ empty($user->password) ? 'Set Password' : 'New Password' }}</label
                     >
                     <input
                       class="settings-input"

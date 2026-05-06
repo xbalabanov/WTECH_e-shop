@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
@@ -51,6 +53,9 @@ Route::get('/cart-summary.json', function () {
     ]);
 });
 
+Route::get('/checkout.html', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login.html', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store'])->name('login.store');
@@ -62,11 +67,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-    Route::view('/profile.html', 'profile')->name('profile');
+    Route::get('/profile.html', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/order/{order}', [ProfileController::class, 'show'])->name('order.show');
     Route::get('/profile-wishlist.html', [WishlistController::class, 'index'])->name('profile.wishlist');
     Route::get('/profile-settings.html', [ProfileSettingsController::class, 'edit'])->name('profile.settings');
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
     Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
-
 });

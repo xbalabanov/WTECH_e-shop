@@ -293,8 +293,22 @@
                         <p class="category-card-book-genre">{{ $book->genre ?? '—' }}</p>
 
                         <div class="category-card-price-container">
-                          <p class="category-card-book-price">{{ number_format((float) $book->price, 2, ',', '.') }}€</p>
-                          <span class="category-badge">-{{ (int) ($book->discount ?? 0) }}%</span>
+                          @php
+                            $basePrice = (float) ($book->price ?? 0);
+                            $discount = (float) ($book->discount ?? 0);
+                            $discountedPrice = $discount > 0 ? ($basePrice * (1 - ($discount / 100))) : $basePrice;
+                          @endphp
+                          <p class="category-card-book-price">
+                            {{ number_format($discountedPrice, 2, ',', '.') }}€
+                            @if ($discount > 0)
+                              <span style="text-decoration: line-through; color: #9a9a9a; margin-left: 6px; font-weight: 500;">
+                                {{ number_format($basePrice, 2, ',', '.') }}€
+                              </span>
+                            @endif
+                          </p>
+                          @if ($discount > 0)
+                            <span class="category-badge">-{{ (int) $discount }}%</span>
+                          @endif
                         </div>
                       </div>
                       <p class="category-author">{{ (int) ($book->stock ?? 0) }} in stock</p>

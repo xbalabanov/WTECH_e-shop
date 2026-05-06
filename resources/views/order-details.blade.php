@@ -11,48 +11,40 @@
 
     <main class="order-details-container">
       <section class="order-details-wrapper">
-        <a href="profile.html" class="back-link">← Back to orders</a>
+        <a href="{{ route('profile') }}" class="back-link">← Back to orders</a>
 
         <div class="order-header">
           <div class="order-info">
-            <h1 class="order-title">#ORD-0000</h1>
-            <p class="order-date">Placed on 00.00.2000</p>
+            <h1 class="order-title">#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</h1>
+            <p class="order-date">Placed on {{ $order->placed_at->format('d.m.Y') }}</p>
           </div>
           <div class="order-status">
-            <span class="status-badge delivered">Delivered</span>
+            <span class="status-badge {{ strtolower($order->status) }}">{{ ucfirst($order->status) }}</span>
           </div>
         </div>
 
         <section class="order-items-section">
-          <h2>Order Items (2)</h2>
+          <h2>Order Items ({{ $order->items->count() }})</h2>
           <div class="order-items-list">
-            <div class="order-item">
-              <div class="item-cover">
-                <div class="cover-placeholder" aria-hidden="true"></div>
-              </div>
-              <div class="item-details">
-                <h3 class="item-title">BOOK NAME</h3>
-                <p class="item-author">Author</p>
-                <div class="item-meta">
-                  <span class="item-isbn">ISBN:</span>
+            @foreach($order->items as $item)
+              <div class="order-item">
+                <div class="item-cover">
+                  @if($item->book->cover_image_url)
+                    <img src="{{ $item->book->cover_image_url }}" alt="Cover of {{ $item->book->title }}" />
+                  @else
+                    <div class="cover-placeholder" aria-hidden="true"></div>
+                  @endif
                 </div>
-              </div>
-              <div class="item-price">0,00€</div>
-            </div>
-
-            <div class="order-item">
-              <div class="item-cover">
-                <div class="cover-placeholder" aria-hidden="true"></div>
-              </div>
-              <div class="item-details">
-                <h3 class="item-title">BOOK NAME</h3>
-                <p class="item-author">Author</p>
-                <div class="item-meta">
-                  <span class="item-isbn">ISBN:</span>
+                <div class="item-details">
+                  <h3 class="item-title">{{ $item->book->title }}</h3>
+                  <p class="item-author">{{ $item->book->author?->full_name ?? $item->book->authors->first()?->full_name ?? 'Unknown Author' }}</p>
+                  <div class="item-meta">
+                    <span class="item-isbn">ISBN: {{ $item->book->isbn ?? 'N/A' }}</span>
+                  </div>
                 </div>
+                <div class="item-price">€{{ number_format($item->price / $item->quantity, 2, ',', '') }} × {{ $item->quantity }}</div>
               </div>
-              <div class="item-price">0,00€</div>
-            </div>
+            @endforeach
           </div>
         </section>
 
@@ -61,15 +53,15 @@
           <div class="summary-grid">
             <div class="summary-row">
               <span class="summary-label">Subtotal</span>
-              <span class="summary-value">0,00€</span>
+              <span class="summary-value">€{{ number_format($order->subtotal, 2, ',', '') }}</span>
             </div>
             <div class="summary-row">
               <span class="summary-label">Shipping</span>
-              <span class="summary-value">0,00€</span>
+              <span class="summary-value">€{{ number_format($order->shipping_fee, 2, ',', '') }}</span>
             </div>
             <div class="summary-row total">
               <span class="summary-label">Total</span>
-              <span class="summary-value">0,00€</span>
+              <span class="summary-value">€{{ number_format($order->total, 2, ',', '') }}</span>
             </div>
           </div>
         </section>
@@ -78,28 +70,27 @@
           <section class="info-section">
             <div class="address-box">
               <h3>Shipping Details</h3>
-              <p class="address-name">Ján Novák</p>
-              <p class="address-line">Hlavná 123/45</p>
-              <p class="address-line">811 01 Bratislava</p>
-              <p class="address-line">Slovensko</p>
-              <p class="address-phone">+421 900 000 000</p>
+              <p class="address-name">{{ auth()->user()->name }}</p>
+              <p class="address-line">{{ $order->shippingAddress->street }}</p>
+              <p class="address-line">{{ $order->shippingAddress->postal_code }} {{ $order->shippingAddress->city }}</p>
+              <p class="address-line">{{ $order->shippingAddress->country }}</p>
             </div>
           </section>
 
           <section class="info-section">
             <div class="address-box">
               <h3>Billing Details</h3>
-              <p class="address-name">Ján Novák</p>
-              <p class="address-line">Hlavná 123/45</p>
-              <p class="address-line">811 01 Bratislava</p>
-              <p class="address-line">Slovensko</p>
+              <p class="address-name">{{ auth()->user()->name }}</p>
+              <p class="address-line">{{ $order->billingAddress->street }}</p>
+              <p class="address-line">{{ $order->billingAddress->postal_code }} {{ $order->billingAddress->city }}</p>
+              <p class="address-line">{{ $order->billingAddress->country }}</p>
             </div>
           </section>
 
           <section class="info-section">
             <div class="payment-box">
               <h3>Payment Method</h3>
-              <p class="payment-type">External Payment Gateway</p>
+              <p class="payment-type">{{ ucfirst(str_replace('_', ' ', $order->payment?->method ?? 'N/A')) }}</p>
             </div>
           </section>
         </div>
@@ -109,16 +100,18 @@
             <h3>Order Tracking</h3>
             <div class="tracking-box-row">
               <div>
-                <p class="tracking-carrier">Carrier: DPD</p>
+                <p class="tracking-carrier">Carrier: {{ $order->tracking_number ? 'DPD' : 'N/A' }}</p>
                 <p class="tracking-number">
-                  Tracking Number: #00000000000000000000
+                  Tracking Number: {{ $order->tracking_number ? '#' . $order->tracking_number : 'Not available yet' }}
                 </p>
               </div>
               <div class="tracking-actions">
-                <span class="order-status delivered">Delivered</span>
-                <button class="btn-secondary" type="button">
-                  Track the Order
-                </button>
+                <span class="order-status {{ strtolower($order->status) }}">{{ ucfirst($order->status) }}</span>
+                @if($order->tracking_number)
+                  <button class="btn-secondary" type="button">
+                    Track the Order
+                  </button>
+                @endif
               </div>
             </div>
           </div>

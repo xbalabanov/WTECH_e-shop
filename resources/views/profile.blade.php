@@ -181,19 +181,19 @@
           <div class="profile-main">
             <div class="profile-stats-grid" aria-label="Order stats">
               <article class="profile-stat-card">
-                <p class="profile-stat-value">6</p>
+                <p class="profile-stat-value">{{ $totalOrders }}</p>
                 <p class="profile-stat-label">Total orders</p>
               </article>
               <article class="profile-stat-card">
-                <p class="profile-stat-value accent">2</p>
+                <p class="profile-stat-value accent">{{ $inTransit }}</p>
                 <p class="profile-stat-label">In transit</p>
               </article>
               <article class="profile-stat-card">
-                <p class="profile-stat-value">4</p>
+                <p class="profile-stat-value">{{ $delivered }}</p>
                 <p class="profile-stat-label">Delivered</p>
               </article>
               <article class="profile-stat-card">
-                <p class="profile-stat-value">€157.90</p>
+                <p class="profile-stat-value">€{{ number_format($totalSpent, 2, ',', '') }}</p>
                 <p class="profile-stat-label">Total spent</p>
               </article>
             </div>
@@ -245,307 +245,95 @@
                     stroke-linejoin="round"
                   />
                 </svg>
-                <h2 class="orders-section-title">Sent Orders <span>2</span></h2>
+                <h2 class="orders-section-title">Recent Orders <span>{{ $orders->count() }}</span></h2>
               </div>
-              <article class="order-card">
-                <div class="order-card-top">
-                  <div class="order-meta">
-                    <p class="order-number">#ORD-2847</p>
-                    <p class="order-date">Mar 18, 2026</p>
-                  </div>
-                  <div class="order-summary">
-                    <span class="order-status shipped"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M10 12H6"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      Shipped</span
-                    >
-                    <strong>€47.97</strong>
-                  </div>
-                </div>
-                <div class="order-items">
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">The Silent Echo</p>
-                      <p class="order-book-author">Elena Morris</p>
+              @if($orders->isEmpty())
+                <p style="padding: 20px; text-align: center; color: #666;">No orders yet. Start shopping today!</p>
+              @else
+                @foreach($orders as $order)
+                  <article class="order-card">
+                    <div class="order-card-top">
+                      <div class="order-meta">
+                        <p class="order-number">#ORD-{{ str_pad($order->id, 4, '0', STR_PAD_LEFT) }}</p>
+                        <p class="order-date">{{ $order->placed_at->format('M d, Y') }}</p>
+                      </div>
+                      <div class="order-summary">
+                        <span class="order-status {{ strtolower($order->status) }}"
+                          ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
+                              stroke="currentColor"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M10 12H6"
+                              stroke="currentColor"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
+                              stroke="currentColor"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
+                              stroke="currentColor"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                            <path
+                              d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
+                              stroke="currentColor"
+                              stroke-width="1.33333"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            />
+                          </svg>
+                          {{ ucfirst($order->status) }}</span
+                        >
+                        <strong>€{{ number_format($order->total, 2, ',', '') }}</strong>
+                      </div>
                     </div>
-                  </div>
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Midnight Garden</p>
-                      <p class="order-book-author">James Harper</p>
+                    <div class="order-items">
+                      @foreach($order->items->take(2) as $item)
+                        <div class="order-item">
+                          <div class="mini-book">
+                            @if($item->book->cover_image_url)
+                              <img src="{{ $item->book->cover_image_url }}" alt="Cover of {{ $item->book->title }}" />
+                            @else
+                              <div class="cover-placeholder" aria-hidden="true"></div>
+                            @endif
+                          </div>
+                          <div class="order-book-meta">
+                            <p class="order-book-title">{{ $item->book->title }}</p>
+                            <p class="order-book-author">{{ $item->book->author?->full_name ?? $item->book->authors->first()?->full_name ?? 'Unknown Author' }}</p>
+                          </div>
+                        </div>
+                      @endforeach
                     </div>
-                  </div>
-                </div>
-                <div class="order-card-bottom">
-                  <span>2 items</span>
-                  <a href="#">View details</a>
-                </div>
-              </article>
-
-              <article class="order-card">
-                <div class="order-card-top">
-                  <div>
-                    <p class="order-number">#ORD-2831</p>
-                    <p class="order-date">Mar 12, 2026</p>
-                  </div>
-                  <div class="order-summary">
-                    <span class="order-status shipped"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="18"
-                        height="18"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M9.33301 12.0001V4.00008C9.33301 3.64646 9.19253 3.30732 8.94248 3.05727C8.69243 2.80722 8.3533 2.66675 7.99967 2.66675H2.66634C2.31272 2.66675 1.97358 2.80722 1.72353 3.05727C1.47348 3.30732 1.33301 3.64646 1.33301 4.00008V11.3334C1.33301 11.5102 1.40325 11.6798 1.52827 11.8048C1.65329 11.9298 1.82286 12.0001 1.99967 12.0001H3.33301"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M10 12H6"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M12.6663 11.9999H13.9997C14.1765 11.9999 14.3461 11.9297 14.4711 11.8047C14.5961 11.6796 14.6663 11.5101 14.6663 11.3333V8.89992C14.6661 8.74863 14.6144 8.60193 14.5197 8.48392L12.1997 5.58392C12.1373 5.50584 12.0582 5.44277 11.9682 5.39938C11.8782 5.356 11.7796 5.33339 11.6797 5.33325H9.33301"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M11.3333 13.3334C12.0697 13.3334 12.6667 12.7365 12.6667 12.0001C12.6667 11.2637 12.0697 10.6667 11.3333 10.6667C10.597 10.6667 10 11.2637 10 12.0001C10 12.7365 10.597 13.3334 11.3333 13.3334Z"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                        <path
-                          d="M4.66634 13.3334C5.40272 13.3334 5.99967 12.7365 5.99967 12.0001C5.99967 11.2637 5.40272 10.6667 4.66634 10.6667C3.92996 10.6667 3.33301 11.2637 3.33301 12.0001C3.33301 12.7365 3.92996 13.3334 4.66634 13.3334Z"
-                          stroke="currentColor"
-                          stroke-width="1.33333"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      Shipped</span
-                    >
-                    <strong>€19.99</strong>
-                  </div>
-                </div>
-                <div class="order-items">
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Paper Moon</p>
-                      <p class="order-book-author">Nora Vale</p>
+                    <div class="order-card-bottom">
+                      <span>{{ $order->items->count() }} {{ $order->items->count() === 1 ? 'item' : 'items' }}</span>
+                      <a href="{{ route('order.show', $order->id) }}">View details</a>
                     </div>
-                  </div>
-                </div>
-                <div class="order-card-bottom">
-                  <span>1 item</span>
-                  <a href="#">View details</a>
-                </div>
-              </article>
+                  </article>
+                @endforeach
+              @endif
             </section>
 
-            <section class="orders-section delivered-section">
-              <div class="orders-section-header">
-                <svg
-                  class="orders-section-header-icon delivered"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 20 20"
-                  fill="none"
-                >
-                  <path
-                    d="M9.16667 18.1084C9.42003 18.2547 9.70744 18.3317 10 18.3317C10.2926 18.3317 10.58 18.2547 10.8333 18.1084L16.6667 14.7751C16.9198 14.6289 17.13 14.4188 17.2763 14.1658C17.4225 13.9127 17.4997 13.6257 17.5 13.3334V6.66675C17.4997 6.37448 17.4225 6.08742 17.2763 5.83438C17.13 5.58134 16.9198 5.37122 16.6667 5.22508L10.8333 1.89175C10.58 1.74547 10.2926 1.66846 10 1.66846C9.70744 1.66846 9.42003 1.74547 9.16667 1.89175L3.33333 5.22508C3.08022 5.37122 2.86998 5.58134 2.72372 5.83438C2.57745 6.08742 2.5003 6.37448 2.5 6.66675V13.3334C2.5003 13.6257 2.57745 13.9127 2.72372 14.1658C2.86998 14.4188 3.08022 14.6289 3.33333 14.7751L9.16667 18.1084Z"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M10 18.3333V10"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M2.74121 5.83325L9.99954 9.99992L17.2579 5.83325"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M6.25 3.55835L13.75 7.85002"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <h2 class="orders-section-title delivered">
-                  Delivered Orders <span>2</span>
-                </h2>
-              </div>
-
-              <article class="order-card">
-                <div class="order-card-top">
-                  <div>
-                    <p class="order-number">#ORD-2794</p>
-                    <p class="order-date">Feb 28, 2026</p>
-                  </div>
-                  <div class="order-summary">
-                    <span class="order-status delivered"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M13.5 4.5L6.5 11.5L2.5 7.5"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      Delivered</span
-                    >
-                    <strong>€64.95</strong>
-                  </div>
-                </div>
-                <div class="order-items">
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Sea of Glass</p>
-                      <p class="order-book-author">Liam Porter</p>
-                    </div>
-                  </div>
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Autumn Light</p>
-                      <p class="order-book-author">Mila Stone</p>
-                    </div>
-                  </div>
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Red Horizon</p>
-                      <p class="order-book-author">Alex Reed</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="order-card-bottom">
-                  <span>3 items</span>
-                  <a href="#">View details</a>
-                </div>
-              </article>
-
-              <article class="order-card">
-                <div class="order-card-top">
-                  <div>
-                    <p class="order-number">#ORD-2756</p>
-                    <p class="order-date">Feb 15, 2026</p>
-                  </div>
-                  <div class="order-summary">
-                    <span class="order-status delivered"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M13.5 4.5L6.5 11.5L2.5 7.5"
-                          stroke="currentColor"
-                          stroke-width="1.6"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                        />
-                      </svg>
-                      Delivered</span
-                    >
-                    <strong>€24.99</strong>
-                  </div>
-                </div>
-                <div class="order-items">
-                  <div class="order-item">
-                    <div class="mini-book"></div>
-                    <div class="order-book-meta">
-                      <p class="order-book-title">Quiet Forest</p>
-                      <p class="order-book-author">Emma Cole</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="order-card-bottom">
-                  <span>1 item</span>
-                  <a href="#">View details</a>
-                </div>
-              </article>
-            </section>
           </div>
         </div>
       </section>

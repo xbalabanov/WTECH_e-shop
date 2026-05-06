@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class Book extends Model
 {
     protected $fillable = [
+        'author_id',
         'isbn',
         'title',
         'description',
@@ -36,6 +37,11 @@ class Book extends Model
     public function publisher(): BelongsTo
     {
         return $this->belongsTo(Publisher::class);
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class, 'author_id');
     }
 
     public function authors(): BelongsToMany

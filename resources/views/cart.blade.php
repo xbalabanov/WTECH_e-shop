@@ -98,9 +98,9 @@
               <div id="summary-heading" class="summary-title">Total ({{ $itemCount }} items)</div>
               <div class="summary-amount">{{ number_format($total, 2, ',', '.') }}€</div>
 
-              <button class="checkout-btn" onclick="location.href = '/checkout.html'">
+              <a href="{{ route('checkout.show') }}" class="checkout-btn">
                 Proceed to checkout
-              </button>
+              </a>
 
               @if($itemCount > 0)
                 <form method="POST" action="{{ route('cart.clear') }}">
