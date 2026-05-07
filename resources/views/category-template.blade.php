@@ -254,7 +254,7 @@
               <input type="hidden" name="max_price" value="{{ (int) $selectedMaxPrice }}" />
 
               <label for="sort-select" class="sort-label">Sort by:</label>
-              <select id="sort-select" class="sort-select" name="sort" onchange="this.form.submit()">
+              <select id="sort-select" class="sort-select" name="sort">
                 <option value="newest" @selected($sort === 'newest')>Newest Arrivals</option>
                 <option value="oldest" @selected($sort === 'oldest')>Oldest Arrivals</option>
                 <option value="price-low-high" @selected($sort === 'price-low-high')>Price: Low to High</option>
@@ -325,7 +325,7 @@
                           </button>
                         @elseif ($cartQty > 0)
                           <div class="category-card-qty" aria-label="Cart quantity controls">
-                            <form method="POST" action="{{ route('cart.update') }}">
+                            <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                               @csrf
                               <input type="hidden" name="book_id" value="{{ $book->id }}" />
                               <input type="hidden" name="quantity" value="{{ max(0, $cartQty - 1) }}" />
@@ -335,7 +335,7 @@
                             <span class="category-card-qty-count" aria-live="polite">{{ $cartQty }}</span>
 
                             @if ($cartQty < $stock)
-                              <form method="POST" action="{{ route('cart.update') }}">
+                              <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                                 @csrf
                                 <input type="hidden" name="book_id" value="{{ $book->id }}" />
                                 <input type="hidden" name="quantity" value="{{ min($stock, $cartQty + 1) }}" />
@@ -346,7 +346,7 @@
                             @endif
                           </div>
                         @else
-                          <form method="POST" action="{{ route('cart.add') }}">
+                          <form method="POST" action="{{ route('cart.add') }}" data-ajax-form>
                             @csrf
                             <input type="hidden" name="book_id" value="{{ $book->id }}" />
                             <input type="hidden" name="quantity" value="1" />
@@ -375,7 +375,7 @@
                           @php
                             $bookWishlisted = in_array($book->id, $wishlistBookIds);
                           @endphp
-                          <form method="POST" action="{{ $bookWishlisted ? route('wishlist.destroy', $book) : route('wishlist.store', $book) }}">
+                          <form method="POST" action="{{ $bookWishlisted ? route('wishlist.destroy', $book) : route('wishlist.store', $book) }}" data-ajax-form>
                             @csrf
                             @if ($bookWishlisted)
                               @method('DELETE')
@@ -507,145 +507,6 @@
         </div>
       </section>
     </main>
-
-    <script>
-      (() => {
-        const filterForm = document.getElementById('category-filter-form');
-        const minRange = document.getElementById('filter-min-price');
-        const maxRange = document.getElementById('filter-max-price');
-        const minLabel = document.getElementById('price-min-label');
-        const maxLabel = document.getElementById('price-max-label');
-        const resetPriceBtn = document.getElementById('filter-price-reset-btn');
-
-        const collapsibleGroups = Array.from(document.querySelectorAll('.filter-group'))
-          .filter((group) => group.querySelector('.filter-group-header'));
-
-        const applyCollapseState = (group, collapsed) => {
-          group.classList.toggle('is-collapsed', collapsed);
-
-          Array.from(group.children).forEach((child) => {
-            if (!child.classList.contains('filter-group-header')) {
-              child.hidden = collapsed;
-            }
-          });
-
-          group.querySelector('.filter-group-header')?.setAttribute('aria-expanded', String(!collapsed));
-        };
-
-        if (collapsibleGroups.length) {
-          collapsibleGroups.forEach((group, index) => {
-            const header = group.querySelector('.filter-group-header');
-            const hasSelectedOption = !!group.querySelector('input[type="checkbox"]:checked');
-            const startsCollapsed = !hasSelectedOption && index !== 0;
-
-            applyCollapseState(group, startsCollapsed);
-
-            header?.addEventListener('click', () => {
-              const isCollapsed = group.classList.contains('is-collapsed');
-
-              collapsibleGroups.forEach((otherGroup) => {
-                if (otherGroup !== group) {
-                  applyCollapseState(otherGroup, true);
-                }
-              });
-
-              applyCollapseState(group, !isCollapsed);
-            });
-          });
-        }
-
-        if (filterForm) {
-          filterForm.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-            checkbox.addEventListener('change', () => filterForm.submit());
-          });
-        }
-
-        if (minRange && maxRange && minLabel && maxLabel && filterForm) {
-          const syncLabels = () => {
-            let min = Number(minRange.value);
-            let max = Number(maxRange.value);
-
-            if (min > max) {
-              [min, max] = [max, min];
-              minRange.value = String(min);
-              maxRange.value = String(max);
-            }
-
-            minLabel.textContent = `${min}€`;
-            maxLabel.textContent = `${max}€`;
-          };
-
-          minRange.addEventListener('input', syncLabels);
-          maxRange.addEventListener('input', syncLabels);
-          minRange.addEventListener('change', () => filterForm.submit());
-          maxRange.addEventListener('change', () => filterForm.submit());
-
-          resetPriceBtn?.addEventListener('click', () => {
-            minRange.value = minRange.min;
-            maxRange.value = maxRange.max;
-            syncLabels();
-            filterForm.submit();
-          });
-
-          syncLabels();
-        }
-
-        const moreBtn = document.getElementById('category-more-btn');
-        const productsContainer = document.getElementById('category-products-container');
-        const pagerPages = document.getElementById('category-pager-pages');
-
-        if (!moreBtn || !productsContainer || !pagerPages) {
-          return;
-        }
-
-        moreBtn.addEventListener('click', async () => {
-          const nextUrl = moreBtn.dataset.nextUrl;
-
-          if (!nextUrl) {
-            return;
-          }
-
-          moreBtn.disabled = true;
-
-          try {
-            const response = await fetch(nextUrl, {
-              headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-              },
-            });
-
-            if (!response.ok) {
-              throw new Error('Failed to load next page');
-            }
-
-            const html = await response.text();
-            const doc = new DOMParser().parseFromString(html, 'text/html');
-
-            const newRows = doc.querySelectorAll('#category-products-container .category-main-products-row');
-            newRows.forEach((row) => productsContainer.appendChild(row));
-
-            const newPagerPages = doc.getElementById('category-pager-pages');
-            if (newPagerPages) {
-              pagerPages.innerHTML = newPagerPages.innerHTML;
-            }
-
-            const newMoreBtn = doc.getElementById('category-more-btn');
-            const newNextUrl = newMoreBtn?.dataset?.nextUrl ?? '';
-
-            if (newNextUrl) {
-              moreBtn.dataset.nextUrl = newNextUrl;
-              moreBtn.disabled = false;
-            } else {
-              moreBtn.dataset.nextUrl = '';
-              moreBtn.style.display = 'none';
-            }
-          } catch (error) {
-            console.error(error);
-            moreBtn.disabled = false;
-          }
-        });
-      })();
-    </script>
 
     <div data-site-footer></div>
     

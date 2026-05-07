@@ -34,7 +34,7 @@
               <button class="add-to-cart" type="button" disabled aria-disabled="true">Out of stock</button>
             @elseif (($cartQty ?? 0) > 0)
               <div class="product-qty" aria-label="Cart quantity controls">
-                <form method="POST" action="{{ route('cart.update') }}">
+                <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                   @csrf
                   <input type="hidden" name="book_id" value="{{ $book->id }}" />
                   <input type="hidden" name="quantity" value="{{ max(0, (int) $cartQty - 1) }}" />
@@ -42,7 +42,7 @@
                 </form>
                 <span class="product-qty-count" aria-live="polite">{{ (int) $cartQty }}</span>
                 @if ((int) $cartQty < (int) ($book->stock ?? 0))
-                  <form method="POST" action="{{ route('cart.update') }}">
+                  <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                     @csrf
                     <input type="hidden" name="book_id" value="{{ $book->id }}" />
                     <input type="hidden" name="quantity" value="{{ min((int) ($book->stock ?? 0), (int) $cartQty + 1) }}" />
@@ -53,7 +53,7 @@
                 @endif
               </div>
             @else
-              <form method="POST" action="{{ route('cart.add') }}">
+              <form method="POST" action="{{ route('cart.add') }}" data-ajax-form>
                 @csrf
                 <input type="hidden" name="book_id" value="{{ $book->id }}" />
                 <input type="hidden" name="quantity" value="1" />
@@ -79,7 +79,7 @@
               </form>
             @endif
             @auth
-              <form method="POST" action="{{ $isWishlisted ? route('wishlist.destroy', $book) : route('wishlist.store', $book) }}">
+              <form method="POST" action="{{ $isWishlisted ? route('wishlist.destroy', $book) : route('wishlist.store', $book) }}" data-ajax-form>
                 @csrf
                 @if ($isWishlisted)
                   @method('DELETE')
@@ -226,7 +226,7 @@
                   <div class="price">{{ number_format((float) $recBook->discounted_price, 2, ',', '.') }}&euro; <span class="badge">-{{ (int) ($recBook->discount ?? 0) }}%</span></div>
                 </div>
                 <div class="card-actions">
-                  <form method="POST" action="{{ route('cart.add') }}" style="width: 100%;">
+                  <form method="POST" action="{{ route('cart.add') }}" style="width: 100%;" data-ajax-form>
                     @csrf
                     <input type="hidden" name="book_id" value="{{ $recBook->id }}" />
                     <input type="hidden" name="quantity" value="1" />
@@ -253,7 +253,7 @@
                     @php
                       $recBookWishlisted = in_array($recBook->id, collect($recommendedBooks)->pluck('wishlist_state')->toArray(), true) || (auth()->user() && auth()->user()->wishlistBooks()->where('book_id', $recBook->id)->exists());
                     @endphp
-                    <form method="POST" action="{{ $recBookWishlisted ? route('wishlist.destroy', $recBook) : route('wishlist.store', $recBook) }}">
+                    <form method="POST" action="{{ $recBookWishlisted ? route('wishlist.destroy', $recBook) : route('wishlist.store', $recBook) }}" data-ajax-form>
                       @csrf
                       @if ($recBookWishlisted)
                         @method('DELETE')

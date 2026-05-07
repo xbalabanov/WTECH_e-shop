@@ -41,14 +41,14 @@
 
                   <div class="item-controls">
                     <div class="qty">
-                      <form method="POST" action="{{ route('cart.update') }}">
+                      <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                         @csrf
                         <input type="hidden" name="book_id" value="{{ $book->id }}" />
                         <input type="hidden" name="quantity" value="{{ max(0, $quantity - 1) }}" />
                         <button class="qty-btn" type="submit" aria-label="Decrease quantity">-</button>
                       </form>
 
-                      <form method="POST" action="{{ route('cart.update') }}">
+                      <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                         @csrf
                         <input type="hidden" name="book_id" value="{{ $book->id }}" />
                         <input
@@ -59,12 +59,12 @@
                           max="{{ $stock > 0 ? $stock : 0 }}"
                           value="{{ $quantity }}"
                           aria-label="Quantity"
-                          onchange="this.form.submit()"
+                          data-auto-submit
                         />
                       </form>
 
                       @if ($quantity < $stock)
-                        <form method="POST" action="{{ route('cart.update') }}">
+                        <form method="POST" action="{{ route('cart.update') }}" data-ajax-form>
                           @csrf
                           <input type="hidden" name="book_id" value="{{ $book->id }}" />
                           <input type="hidden" name="quantity" value="{{ min($stock, $quantity + 1) }}" />
@@ -77,7 +77,7 @@
 
                     <div class="item-price">{{ number_format($lineTotal, 2, ',', '.') }}€</div>
 
-                    <form method="POST" action="{{ route('cart.remove') }}">
+                    <form method="POST" action="{{ route('cart.remove') }}" data-ajax-form>
                       @csrf
                       <input type="hidden" name="book_id" value="{{ $book->id }}" />
                       <button class="qty-btn" type="submit" aria-label="Remove item">×</button>
@@ -103,7 +103,7 @@
               </a>
 
               @if($itemCount > 0)
-                <form method="POST" action="{{ route('cart.clear') }}">
+                <form method="POST" action="{{ route('cart.clear') }}" data-ajax-form>
                   @csrf
                   <button class="checkout-btn" type="submit" style="background:#6b7280; margin-top:8px;">
                     Clear cart
