@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Book extends Model
 {
     protected $fillable = [
+        'author_id',
         'isbn',
         'title',
         'description',
@@ -37,6 +39,11 @@ class Book extends Model
         return $this->belongsTo(Publisher::class);
     }
 
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(Author::class, 'author_id');
+    }
+
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class, 'book_author');
@@ -49,11 +56,30 @@ class Book extends Model
 
     public function wishlistedByUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'wishlist_item');
+        return $this->belongsToMany(User::class, 'wishlist_items');
     }
 
     public function getDiscountedPriceAttribute(): float
     {
         return max(0, (float) $this->price - ((float) $this->price * ((float) $this->discount / 100)));
+    }
+
+    public function getCoverImageUrlAttribute(?string $value): ?string
+    {
+        if (blank($value)) {
+            return null;
+        }
+
+        if (Str::startsWith($value, ['http://', 'https://'])) {
+            return $value;
+        }
+
+        $normalizedValue = ltrim($value, '/');
+
+        if (Str::startsWith($normalizedValue, 'img/')) {
+            return asset($normalizedValue);
+        }
+
+        return asset('img/' . $normalizedValue);
     }
 }

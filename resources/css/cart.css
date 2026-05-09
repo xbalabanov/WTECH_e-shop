@@ -192,6 +192,9 @@ input[type="number"].qty-count {
   font-family: var(--font-sans);
   font-weight: 500;
   font-size: var(--text-lg);
+  display: inline-block; 
+  text-align: center; 
+  text-decoration: none;
 }
 
 .checkout-btn:hover {

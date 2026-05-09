@@ -646,6 +646,10 @@ input::placeholder {
     background: #754f44;
 }
 
+.stat-badge.brown {
+  background: var(--color-light-text);
+}
+
 .stat-number,
 .stat-label {
     color: var(--color-background);

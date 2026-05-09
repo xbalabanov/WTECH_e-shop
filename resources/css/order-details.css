@@ -117,6 +117,14 @@
   flex-shrink: 0;
 }
 
+.item-cover img {
+  width: 80px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
 .cover-placeholder {
   width: 80px;
   height: 110px;

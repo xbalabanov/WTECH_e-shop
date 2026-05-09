@@ -10,6 +10,12 @@
 
   <body>
     <div data-site-header></div>
+    @php
+      $trendingBooks = collect($trendingBooks ?? []);
+      $newArrivalBooks = collect($newArrivalBooks ?? []);
+      $comingSoonBooks = collect($comingSoonBooks ?? []);
+      $recommendedBooks = collect($recommendedBooks ?? []);
+    @endphp
     <main>
       <section class="hero-section">
         <div class="hero-grid">
@@ -63,15 +69,15 @@
               <form class="search-form" method="GET" action="{{ route('categories.index') }}">
                 <label>
                   <span>Author</span>
-                  <input type="text" name="author" value="{{ request('author') }}" placeholder="Enter author name" />
+                  <input type="text" name="author" placeholder="Enter author name" />
                 </label>
                 <label>
-                  <span>Name</span>
-                  <input type="text" name="name" value="{{ request('name') }}" placeholder="Enter book name" />
+                  <span>Title</span>
+                  <input type="text" name="title" placeholder="Enter book title" />
                 </label>
                 <label>
                   <span>ISBN</span>
-                  <input type="text" name="isbn" value="{{ request('isbn') }}" placeholder="Enter ISBN number" />
+                  <input type="text" name="isbn" placeholder="Enter ISBN number" />
                 </label>
                 <button type="submit" class="search-btn">
                   <svg
@@ -103,6 +109,28 @@
           </aside>
         </div>
       </section>
+      <script>
+        const quickFindForm = document.querySelector('.search-form');
+
+        if (quickFindForm) {
+          quickFindForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const author = quickFindForm.querySelector('input[name="author"]')?.value.trim() || '';
+            const title = quickFindForm.querySelector('input[name="title"]')?.value.trim() || '';
+            const isbn = quickFindForm.querySelector('input[name="isbn"]')?.value.trim() || '';
+            const parts = [author, title, isbn].filter(Boolean);
+            const params = new URLSearchParams();
+
+            if (parts.length) {
+              params.set('q', parts.join(' '));
+            }
+
+            const target = `${quickFindForm.action}${params.toString() ? `?${params.toString()}` : ''}`;
+            window.location.href = target;
+          });
+        }
+      </script>
       <section class="cta">
         <div class="cta-inner">
           <div class="cta-grid">
@@ -250,14 +278,18 @@
             <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            @foreach(($trending ?? collect()) as $book)
+            @forelse ($trendingBooks->take(6) as $book)
               <article class="card" role="group">
-                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
                 <h3 class="title">{{ $book->title }}</h3>
                 <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
-                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
               </article>
-            @endforeach
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -281,14 +313,18 @@
             <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            @foreach(($newArrivals ?? collect()) as $book)
+            @forelse ($newArrivalBooks->take(6) as $book)
               <article class="card" role="group">
-                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
                 <h3 class="title">{{ $book->title }}</h3>
                 <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
-                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
               </article>
-            @endforeach
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -299,18 +335,22 @@
             <a class="view-all" href="{{ route('categories.index') }}">View all ›</a>
           </div>
           <div class="cards-row">
-            @foreach(($comingSoon ?? collect()) as $book)
+            @forelse ($comingSoonBooks->take(6) as $book)
               <article class="card" role="group">
-                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
                 <h3 class="title">{{ $book->title }}</h3>
                 <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
-                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
               </article>
-            @endforeach
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
-      <section class="shop-desc">
+       <section class="shop-desc">
         <div class="desc-inner">
           <div class="about-card">
             <div class="about-grid">
@@ -362,14 +402,18 @@
             <a class="view-all" href="{{ route('categories.index', ['category' => 'coming-soon']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            @foreach(($recommended ?? collect()) as $book)
+            @forelse ($recommendedBooks->take(6) as $book)
               <article class="card" role="group">
-                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                  <div class="cover" aria-hidden="true" @if ($book->cover_image_url) style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                </a>
                 <h3 class="title">{{ $book->title }}</h3>
                 <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
-                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+                <div class="price">{{ number_format((float) $book->discounted_price, 2, ',', '.') }}€ <span class="badge">-{{ (int) ($book->discount ?? 0) }}%</span></div>
               </article>
-            @endforeach
+            @empty
+              <p>No books available yet.</p>
+            @endforelse
           </div>
         </div>
       </section>
@@ -450,9 +494,9 @@
               </div>
 
               <article class="review-card">
-                <div class="cover-plate"></div>
-                <div class="book-title">The Silent Echo</div>
-                <div class="book-author">Elena Morris</div>
+                <div class="cover-plate" @if ($bookOfWeek?->cover_image_url) style="background-image: url('{{ $bookOfWeek->cover_image_url }}'); background-size: cover; background-position: center;" @endif></div>
+                <div class="book-title">{{ $bookOfWeek?->title ?? 'No book selected' }}</div>
+                <div class="book-author">{{ $bookOfWeek?->authors?->pluck('full_name')->join(', ') ?? 'Unknown author' }}</div>
                 <div class="rating">
                   <span class="stars">
                     <!-- four filled stars -->
@@ -524,10 +568,13 @@
                   <span class="rating-number">4.0</span>
                 </div>
                 <p class="excerpt">
-                  "A captivating journey through silence and sound. Morris
-                  crafts a world that lingers long after the last page..."
+                  "{{ substr($bookOfWeek?->description ?? 'A captivating story from our collection...', 0, 150) }}..."
                 </p>
-                <button class="btn buy full">Buy now — €9.99</button>
+                @if ($bookOfWeek)
+                  <a href="{{ route('products.show', $bookOfWeek) }}" class="btn buy full">Buy now — {{ number_format((float) $bookOfWeek->discounted_price, 2, ',', '.') }}€</a>
+                @else
+                  <button class="btn buy full" disabled>No book available</button>
+                @endif
               </article>
             </section>
           </aside>

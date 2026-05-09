@@ -3,10 +3,13 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Models\Book;
 use App\Models\Category;
 use App\Models\Book;
 use App\Models\Author;
@@ -18,46 +21,18 @@ Route::get('/', function () {
 });
 
 Route::get('/homepage.html', function () {
-    $trending = Book::query()
-        ->whereHas('categories', fn ($q) => $q->where('slug', 'trending'))
-        ->with(['authors'])
-        ->latest()
-        ->take(6)
-        ->get();
-
-    $sale = Book::query()
-        ->where('discount', '>', 0)
-        ->with(['authors'])
-        ->orderByDesc('discount')
-        ->take(6)
-        ->get();
-
-    $newArrivals = Book::query()
-        ->with(['authors'])
+    $books = Book::query()
+        ->with('authors')
         ->orderByDesc('publication_date')
-        ->take(6)
         ->get();
 
-    $comingSoon = Book::query()
-        ->where('publication_date', '>', now())
-        ->with(['authors'])
-        ->orderBy('publication_date')
-        ->take(6)
-        ->get();
-
-    $recommended = Book::query()
-        ->with(['authors'])
-        ->inRandomOrder()
-        ->take(6)
-        ->get();
-
-    $stats = [
-        'books' => Book::query()->count(),
-        'authors' => Author::query()->count(),
-        'genres' => Book::query()->whereNotNull('genre')->where('genre', '!=', '')->distinct('genre')->count('genre'),
-    ];
-
-    return view('homepage', compact('trending', 'sale', 'newArrivals', 'comingSoon', 'recommended', 'stats'));
+    return view('homepage', [
+        'trendingBooks' => $books->sortByDesc(fn (Book $book) => (float) $book->discount)->values()->take(6),
+        'newArrivalBooks' => $books->take(6)->values(),
+        'comingSoonBooks' => $books->reverse()->values()->take(6),
+        'recommendedBooks' => $books->sortBy('price')->values()->take(6),
+        'bookOfWeek' => $books->isNotEmpty() ? $books->random() : null,
+    ]);
 })->name('home');
 Route::get('/category-template.html', [CategoryController::class, 'index'])->name('categories.index');
 Route::get('/product/{book}.html', [ProductController::class, 'show'])->name('products.show');
@@ -97,6 +72,9 @@ Route::get('/cart-summary.json', function () {
     ]);
 });
 
+Route::get('/checkout.html', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login.html', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store'])->name('login.store');
@@ -108,11 +86,11 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
-    Route::view('/profile.html', 'profile')->name('profile');
-    Route::get('/profile-wishlist.html', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/{book}.html', [WishlistController::class, 'store'])->name('wishlist.store');
-    Route::delete('/wishlist/{book}.html', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::get('/profile.html', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/order/{order}', [ProfileController::class, 'show'])->name('order.show');
+    Route::get('/profile-wishlist.html', [WishlistController::class, 'index'])->name('profile.wishlist');
     Route::get('/profile-settings.html', [ProfileSettingsController::class, 'edit'])->name('profile.settings');
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
-
+    Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
 });

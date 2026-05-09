@@ -4,176 +4,37 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Checkout</title>
-    <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="stylesheet" href="CSS/checkout.css" />
+    @vite(['resources/css/style.css', 'resources/css/checkout.css', 'resources/js/app.js'])
   </head>
 
   <body class="page-layout">
-    <header class="site-header">
-      <input
-        type="checkbox"
-        id="nav-toggle"
-        class="nav-toggle"
-        aria-hidden="true"
-      />
-      <div class="header-inner">
-        <a href="homepage.html" class="logo" aria-label="Eunoia home">
-          <div class="logo-icon" aria-hidden="true">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <path
-                d="M10 5.83325V17.4999"
-                stroke="white"
-                stroke-width="1.66667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M2.50008 15C2.27907 15 2.06711 14.9122 1.91083 14.7559C1.75455 14.5996 1.66675 14.3877 1.66675 14.1667V3.33333C1.66675 3.11232 1.75455 2.90036 1.91083 2.74408C2.06711 2.5878 2.27907 2.5 2.50008 2.5H6.66675C7.5508 2.5 8.39865 2.85119 9.02377 3.47631C9.64889 4.10143 10.0001 4.94928 10.0001 5.83333C10.0001 4.94928 10.3513 4.10143 10.9764 3.47631C11.6015 2.85119 12.4494 2.5 13.3334 2.5H17.5001C17.7211 2.5 17.9331 2.5878 18.0893 2.74408C18.2456 2.90036 18.3334 3.11232 18.3334 3.33333V14.1667C18.3334 14.3877 18.2456 14.5996 18.0893 14.7559C17.9331 14.9122 17.7211 15 17.5001 15H12.5001C11.837 15 11.2012 15.2634 10.7323 15.7322C10.2635 16.2011 10.0001 16.837 10.0001 17.5C10.0001 16.837 9.73669 16.2011 9.26785 15.7322C8.79901 15.2634 8.16312 15 7.50008 15H2.50008Z"
-                stroke="white"
-                stroke-width="1.66667"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
-          <div class="logo-text">Eunoia</div>
-        </a>
-        <div class="center">
-          <nav class="main-nav" aria-label="Main navigation">
-            <ul>
-              <li><a href="category-template.html">Categories</a></li>
-              <li><a href="homepage.html#trending">Trending</a></li>
-              <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
-              <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
-              <li><a href="homepage.html#sale">Sale</a></li>
-            </ul>
-          </nav>
-
-          <form class="header-search" role="search" aria-label="Search books">
-            <button class="search-icon" type="submit" aria-label="Search">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zm8.707 15.293-4.386-4.386"
-                  stroke="#777"
-                  stroke-width="1.6"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </button>
-            <input
-              class="search-input"
-              type="search"
-              placeholder="Search books..."
-              aria-label="Search books"
-            />
-          </form>
-        </div>
-        <div class="header-actions">
-          <a class="icon" href="profile.html" aria-label="Profile">
-            <svg
-              width="18"
-              height="20"
-              viewBox="0 0 18 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.75 19C16.75 16.2386 13.2242 14 8.875 14C4.52576 14 1 16.2386 1 19M8.875 11C6.15672 11 3.95312 8.76142 3.95312 6C3.95312 3.23858 6.15672 1 8.875 1C11.5933 1 13.7969 3.23858 13.7969 6C13.7969 8.76142 11.5933 11 8.875 11Z"
-                stroke="black"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </a>
-          <a class="icon cart-icon" href="cart.html" aria-label="Cart">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1 1H1.27244C1.75344 1 1.99436 1 2.19054 1.08548C2.36351 1.16085 2.5114 1.28218 2.61804 1.43604C2.7388 1.61026 2.7824 1.8429 2.86944 2.30728L5.06101 14L15.6416 14C16.1017 14 16.3325 14 16.5231 13.9199C16.6914 13.8492 16.8366 13.7346 16.9444 13.5889C17.0664 13.4242 17.118 13.2037 17.2213 12.7631L17.2221 12.76L18.8152 5.95996L18.8155 5.95854C18.9721 5.29016 19.0506 4.95516 18.9644 4.69239C18.8888 4.46183 18.7297 4.26635 18.5186 4.14192C18.2778 4 17.93 4 17.2324 4H3.5381M16.2286 19C15.6679 19 15.2134 18.5523 15.2134 18C15.2134 17.4477 15.6679 17 16.2286 17C16.7893 17 17.2439 17.4477 17.2439 18C17.2439 18.5523 16.7893 19 16.2286 19ZM6.07621 19C5.51551 19 5.06097 18.5523 5.06097 18C5.06097 17.4477 5.51551 17 6.07621 17C6.63691 17 7.09145 17.4477 7.09145 18C7.09145 18.5523 6.63691 19 6.07621 19Z"
-                stroke="black"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-            <span class="icon-badge" data-cart-count aria-hidden="true">{{ collect((array) session('cart', []))->sum(fn($q) => max(0, (int) $q)) }}</span>
-          </a>
-          <label
-            for="nav-toggle"
-            class="menu-toggle"
-            aria-controls="mobile-nav"
-            aria-label="Toggle menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-            >
-              <path
-                d="M3.33252 9.99805H16.6633"
-                stroke="#0A0A0A"
-                stroke-width="1.66635"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M3.33252 4.99902H16.6633"
-                stroke="#0A0A0A"
-                stroke-width="1.66635"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M3.33252 14.9971H16.6633"
-                stroke="#0A0A0A"
-                stroke-width="1.66635"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </label>
-        </div>
-      </div>
-      <div id="mobile-nav" class="mobile-nav-panel" aria-hidden="false">
-        <nav class="mobile-nav" aria-label="Mobile navigation">
-          <ul>
-            <li><a href="category-template.html">Categories</a></li>
-            <li><a href="homepage.html#trending">Trending</a></li>
-            <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
-            <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
-            <li><a href="homepage.html#sale">Sale</a></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <div data-site-header></div>
     <main class="page-main">
       <section class="checkout-page">
         <div class="checkout-inner">
           <h1 class="checkout-title">Checkout</h1>
 
           <div class="checkout-layout">
-            <div class="checkout-forms">
+            <form method="POST" action="{{ route('checkout.store') }}" class="checkout-forms" id="checkout-form">
+              @csrf
+
+              @if (session('error'))
+                <div class="error">
+                  <strong>{{ session('error') }}</strong>
+                </div>
+              @endif
+              
+              @if ($errors->any())
+                <div class="error">
+                  <strong>Please fix the following errors:</strong>
+                  <ul style="margin-top: 0.5rem;">
+                    @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                    @endforeach
+                  </ul>
+                </div>
+              @endif
+
               <section
                 class="checkout-section"
                 aria-labelledby="billing-details-heading"
@@ -186,8 +47,10 @@
                     Full name
                     <input
                       type="text"
-                      class="field-input"
+                      name="billing_full_name"
+                      class="field-input @error('billing_full_name') error @enderror"
                       placeholder="John Doe"
+                      value="{{ old('billing_full_name', auth()->user()->name ?? '') }}"
                       required
                     />
                   </label>
@@ -196,8 +59,10 @@
                     Email address
                     <input
                       type="email"
-                      class="field-input"
+                      name="billing_email"
+                      class="field-input @error('billing_email') error @enderror"
                       placeholder="name@example.com"
+                      value="{{ old('billing_email', auth()->user()->email ?? '') }}"
                       required
                     />
                   </label>
@@ -206,8 +71,10 @@
                     Phone number
                     <input
                       type="tel"
-                      class="field-input"
+                      name="billing_phone"
+                      class="field-input @error('billing_phone') error @enderror"
                       placeholder="+421 900 000 000"
+                      value="{{ old('billing_phone', auth()->user()->phone ?? '') }}"
                       required
                     />
                   </label>
@@ -216,8 +83,11 @@
                     Street address
                     <input
                       type="text"
-                      class="field-input"
+                      id="billing_street"
+                      name="billing_street"
+                      class="field-input @error('billing_street') error @enderror"
                       placeholder="Street and house number"
+                      value="{{ old('billing_street') }}"
                       required
                     />
                   </label>
@@ -226,8 +96,11 @@
                     City
                     <input
                       type="text"
-                      class="field-input"
+                      id="billing_city"
+                      name="billing_city"
+                      class="field-input @error('billing_city') error @enderror"
                       placeholder="Bratislava"
+                      value="{{ old('billing_city') }}"
                       required
                     />
                   </label>
@@ -236,20 +109,23 @@
                     Postal code
                     <input
                       type="text"
-                      class="field-input"
+                      id="billing_postal_code"
+                      name="billing_postal_code"
+                      class="field-input @error('billing_postal_code') error @enderror"
                       placeholder="811 01"
+                      value="{{ old('billing_postal_code') }}"
                       required
                     />
                   </label>
 
                   <label class="field-label full-width">
                     Country
-                    <select class="field-input" required>
+                    <select id="billing_country" name="billing_country" class="field-input @error('billing_country') error @enderror" required>
                       <option value="">Select country</option>
-                      <option value="sk">Slovakia</option>
-                      <option value="cz">Czech Republic</option>
-                      <option value="at">Austria</option>
-                      <option value="hu">Hungary</option>
+                      <option value="sk" {{ old('billing_country') === 'sk' ? 'selected' : '' }}>Slovakia</option>
+                      <option value="cz" {{ old('billing_country') === 'cz' ? 'selected' : '' }}>Czech Republic</option>
+                      <option value="at" {{ old('billing_country') === 'at' ? 'selected' : '' }}>Austria</option>
+                      <option value="hu" {{ old('billing_country') === 'hu' ? 'selected' : '' }}>Hungary</option>
                     </select>
                   </label>
                 </div>
@@ -270,7 +146,7 @@
                   aria-label="Shipping methods"
                 >
                   <label class="radio-option">
-                    <input type="radio" name="shipping" checked />
+                    <input type="radio" name="delivery_type" value="standard" {{ old('delivery_type', 'standard') === 'standard' ? 'checked' : '' }} />
                     <span
                       >Standard Delivery
                       <small class="option-meta"
@@ -279,7 +155,7 @@
                     >
                   </label>
                   <label class="radio-option">
-                    <input type="radio" name="shipping" />
+                    <input type="radio" name="delivery_type" value="express" {{ old('delivery_type') === 'express' ? 'checked' : '' }} />
                     <span
                       >Express Delivery
                       <small class="option-meta"
@@ -295,7 +171,8 @@
                     id="same-delivery-address"
                     class="same-address-checkbox"
                     name="same_delivery_address"
-                    checked
+                    value="1"
+                    {{ old('same_delivery_address', true) ? 'checked' : '' }}
                   />
                   <label
                     class="same-address-toggle"
@@ -312,8 +189,12 @@
                       Delivery street address
                       <input
                         type="text"
-                        class="field-input"
+                        id="shipping_street"
+                        name="shipping_street"
+                        class="field-input @error('shipping_street') error @enderror"
                         placeholder="Street and house number"
+                        value="{{ old('shipping_street') }}"
+                        required
                       />
                     </label>
 
@@ -321,8 +202,12 @@
                       Delivery city
                       <input
                         type="text"
-                        class="field-input"
+                        id="shipping_city"
+                        name="shipping_city"
+                        class="field-input @error('shipping_city') error @enderror"
                         placeholder="Bratislava"
+                        value="{{ old('shipping_city') }}"
+                        required
                       />
                     </label>
 
@@ -330,19 +215,23 @@
                       Delivery postal code
                       <input
                         type="text"
-                        class="field-input"
+                        id="shipping_postal_code"
+                        name="shipping_postal_code"
+                        class="field-input @error('shipping_postal_code') error @enderror"
                         placeholder="811 01"
+                        value="{{ old('shipping_postal_code') }}"
+                        required
                       />
                     </label>
 
                     <label class="field-label full-width">
                       Delivery country
-                      <select class="field-input">
+                      <select id="shipping_country" name="shipping_country" class="field-input @error('shipping_country') error @enderror" required>
                         <option value="">Select country</option>
-                        <option value="sk">Slovakia</option>
-                        <option value="cz">Czech Republic</option>
-                        <option value="at">Austria</option>
-                        <option value="hu">Hungary</option>
+                        <option value="sk" {{ old('shipping_country') === 'sk' ? 'selected' : '' }}>Slovakia</option>
+                        <option value="cz" {{ old('shipping_country') === 'cz' ? 'selected' : '' }}>Czech Republic</option>
+                        <option value="at" {{ old('shipping_country') === 'at' ? 'selected' : '' }}>Austria</option>
+                        <option value="hu" {{ old('shipping_country') === 'hu' ? 'selected' : '' }}>Hungary</option>
                       </select>
                     </label>
                   </div>
@@ -363,15 +252,15 @@
                   aria-label="Payment methods"
                 >
                   <label class="radio-option">
-                    <input type="radio" name="payment" checked />
+                    <input type="radio" name="payment_method" value="card" {{ old('payment_method', 'card') === 'card' ? 'checked' : '' }} />
                     <span>Credit or Debit Card</span>
                   </label>
                   <label class="radio-option">
-                    <input type="radio" name="payment" />
+                    <input type="radio" name="payment_method" value="paypal" {{ old('payment_method') === 'paypal' ? 'checked' : '' }} />
                     <span>PayPal</span>
                   </label>
                   <label class="radio-option">
-                    <input type="radio" name="payment" />
+                    <input type="radio" name="payment_method" value="cash_on_delivery" {{ old('payment_method') === 'cash_on_delivery' ? 'checked' : '' }} />
                     <span>Cash on Delivery</span>
                   </label>
                 </div>
@@ -381,7 +270,7 @@
                   external payment gateway after clicking Place Order.
                 </p>
               </section>
-            </div>
+            </form>
 
             <aside
               class="checkout-summary"
@@ -391,32 +280,127 @@
                 Order Summary
               </h2>
 
+              @foreach($items as $item)
+                @php
+                  $book = $item['book'];
+                  $quantity = $item['quantity'];
+                  $lineTotal = $item['line_total'];
+                @endphp
+                <div class="summary-item">
+                  <span>{{ $book->title }} x{{ $quantity }}</span>
+                  <span>{{ number_format($lineTotal, 2) }}€</span>
+                </div>
+              @endforeach
+
               <div class="summary-item">
-                <span>Book 1 </span>
-                <span>20,00€</span>
+                <span>Subtotal</span>
+                <span>{{ number_format($subtotal, 2) }}€</span>
               </div>
-              <div class="summary-item">
-                <span>Book 2</span>
-                <span>14,00€</span>
-              </div>
-              <div class="summary-item">
+
+              <div class="summary-item" id="shipping-fee-display">
                 <span>Shipping</span>
-                <span>3,99€</span>
+                <span id="shipping-fee">3,99€</span>
               </div>
 
               <div class="summary-divider"></div>
 
               <div class="summary-total">
                 <span>Total</span>
-                <span>39,99€</span>
+                <span id="total-amount">{{ number_format($subtotal + 3.99, 2) }}€</span>
               </div>
 
-              <button class="place-order-btn" type="button">Place Order</button>
+              <button class="place-order-btn" type="submit" form="checkout-form">Place Order</button>
             </aside>
           </div>
         </div>
       </section>
     </main>
+
+    <script>
+      const subtotal = {{ $subtotal }};
+      const standardShipping = 3.99;
+      const expressShipping = 6.99;
+
+      function updateTotal() {
+        const deliveryType = document.querySelector('input[name="delivery_type"]:checked').value;
+        const shippingFee = deliveryType === 'express' ? expressShipping : standardShipping;
+        const total = subtotal + shippingFee;
+        
+        document.getElementById('shipping-fee').textContent = shippingFee.toFixed(2) + '€';
+        document.getElementById('total-amount').textContent = total.toFixed(2) + '€';
+      }
+
+      function updateAddressRequiredState() {
+        const sameDeliveryCheckbox = document.getElementById('same-delivery-address');
+        const deliveryFieldsWrapper = document.getElementById('delivery-address-fields');
+        const billingStreet = document.getElementById('billing_street');
+        const billingCity = document.getElementById('billing_city');
+        const billingPostal = document.getElementById('billing_postal_code');
+        const billingCountry = document.getElementById('billing_country');
+        const shippingStreet = document.getElementById('shipping_street');
+        const shippingCity = document.getElementById('shipping_city');
+        const shippingPostal = document.getElementById('shipping_postal_code');
+        const shippingCountry = document.getElementById('shipping_country');
+
+        const shouldUseBilling = sameDeliveryCheckbox.checked;
+
+        if (deliveryFieldsWrapper) {
+          deliveryFieldsWrapper.style.display = shouldUseBilling ? 'none' : 'grid';
+        }
+
+        if (shouldUseBilling) {
+          if (shippingStreet && billingStreet) {
+            shippingStreet.value = billingStreet.value;
+          }
+          if (shippingCity && billingCity) {
+            shippingCity.value = billingCity.value;
+          }
+          if (shippingPostal && billingPostal) {
+            shippingPostal.value = billingPostal.value;
+          }
+          if (shippingCountry && billingCountry) {
+            shippingCountry.value = billingCountry.value;
+          }
+        }
+      }
+
+      function bindBillingSync() {
+        const sameDeliveryCheckbox = document.getElementById('same-delivery-address');
+        const billingFields = [
+          document.getElementById('billing_street'),
+          document.getElementById('billing_city'),
+          document.getElementById('billing_postal_code'),
+          document.getElementById('billing_country'),
+        ];
+
+        billingFields.forEach((field) => {
+          if (!field) {
+            return;
+          }
+
+          field.addEventListener('input', () => {
+            if (sameDeliveryCheckbox.checked) {
+              updateAddressRequiredState();
+            }
+          });
+          field.addEventListener('change', () => {
+            if (sameDeliveryCheckbox.checked) {
+              updateAddressRequiredState();
+            }
+          });
+        });
+      }
+
+      document.querySelectorAll('input[name="delivery_type"]').forEach(radio => {
+        radio.addEventListener('change', updateTotal);
+      });
+
+      document.getElementById('same-delivery-address').addEventListener('change', updateAddressRequiredState);
+
+      updateTotal();
+      updateAddressRequiredState();
+      bindBillingSync();
+    </script>
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-top">

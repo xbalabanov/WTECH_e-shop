@@ -11,8 +11,14 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
-    public function create(): View
+    public function create(Request $request): View
     {
+        $redirect = $request->string('redirect')->toString();
+
+        if ($redirect !== '' && str_starts_with($redirect, url('/'))) {
+            $request->session()->put('url.intended', $redirect);
+        }
+
         return view('login');
     }
 

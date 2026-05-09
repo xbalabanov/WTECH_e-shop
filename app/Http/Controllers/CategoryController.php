@@ -144,9 +144,8 @@ class CategoryController extends Controller
             ->all();
 
         $wishlistBookIds = $request->user()
-            ?->wishlistedBooks()
-            ->pluck('books.id')
-            ->all() ?? [];
+            ? $request->user()->wishlistBooks()->pluck('book_id')->toArray()
+            : [];
 
         return view('category-template', [
             'books' => $books,
@@ -176,9 +175,7 @@ class CategoryController extends Controller
             'cartQuantities' => $cartQuantities,
             'wishlistBookIds' => $wishlistBookIds,
             'searchQuery' => $searchQuery,
-            'searchName' => $searchName,
-            'searchAuthor' => $searchAuthor,
-            'searchIsbn' => $searchIsbn,
+            'wishlistBookIds' => $wishlistBookIds,
         ]);
     }
 }

@@ -11,32 +11,26 @@ class WishlistController extends Controller
 {
     public function index(Request $request): View
     {
-        $user = $request->user();
-
-        $books = $user
-            ?->wishlistedBooks()
-            ->with(['authors', 'publisher'])
-            ->orderBy('title')
-            ->get() ?? collect();
-
         return view('profile-wishlist', [
-            'books' => $books,
-            'wishlistBookIds' => $books->pluck('id')->all(),
-            'wishlistCount' => $books->count(),
+            'wishlistBooks' => $request->user()
+                ->wishlistBooks()
+                ->with('authors')
+                ->orderBy('title')
+                ->get(),
         ]);
     }
 
     public function store(Request $request, Book $book): RedirectResponse
     {
-        $request->user()->wishlistedBooks()->syncWithoutDetaching([$book->id]);
+        $request->user()->wishlistBooks()->syncWithoutDetaching([$book->id]);
 
-        return back();
+        return back()->with('status', 'Added to your wishlist.');
     }
 
     public function destroy(Request $request, Book $book): RedirectResponse
     {
-        $request->user()->wishlistedBooks()->detach($book->id);
+        $request->user()->wishlistBooks()->detach($book->id);
 
-        return back();
+        return back()->with('status', 'Removed from your wishlist.');
     }
 }

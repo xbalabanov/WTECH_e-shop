@@ -104,6 +104,7 @@ main {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .main-product-section .product-qty {
@@ -207,6 +208,14 @@ main {
 .main-product-section .add-to-favourite:focus-visible {
     outline: 2px solid rgba(236, 115, 87, 0.4);
     outline-offset: 3px;
+}
+
+.main-product-section .add-to-favourite.wishlisted {
+    background: rgba(236, 115, 87, 0.15);
+}
+
+.main-product-section .add-to-favourite.wishlisted:hover {
+    background: rgba(236, 115, 87, 0.25);
 }
 
 .reviews-section {
@@ -361,7 +370,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 0 0 auto;
+    flex: 1;
 }
 
 .card .card-title {
@@ -441,7 +450,7 @@ main {
 }
 
 .card .card-actions {
-    margin-top: 6px;
+    margin-top: auto;
     display: flex;
     gap: 8px;
     align-items: center;
@@ -494,6 +503,10 @@ main {
     flex-shrink: 0;
 }
 
+.card .card-favourite-button.wishlisted {
+    background: rgba(236, 115, 87, 0.15);
+}
+
 @media (max-width: 1200px) {
     .recomended .recomended-cards {
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -512,7 +525,7 @@ main {
     }
 
     .main-product-section .add-to-cart {
-        width: calc(100% - 62px);
+        min-width: 150;
     }
 
     .reviews-section,
@@ -535,10 +548,8 @@ main {
         width: 100%;
     }
 
-    .main-product-section .add-to-cart {
-        width: calc(100% - 62px);
-        padding-left: 16px;
-        padding-right: 16px;
+    .main-product-section .add-to-favourite {
+        flex: 0 0 52px;
     }
 
     .reviews-section,

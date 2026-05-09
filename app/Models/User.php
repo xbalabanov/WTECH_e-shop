@@ -7,6 +7,8 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
@@ -31,8 +33,18 @@ class User extends Authenticatable
         ];
     }
 
-    public function wishlistedBooks(): BelongsToMany
+    public function wishlistItems(): HasMany
     {
-        return $this->belongsToMany(Book::class, 'wishlist_item');
+        return $this->hasMany(WishlistItem::class);
+    }
+
+    public function wishlistBooks(): BelongsToMany
+    {
+        return $this->belongsToMany(Book::class, 'wishlist_items');
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }
