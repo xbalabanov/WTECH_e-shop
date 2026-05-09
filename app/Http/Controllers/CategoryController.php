@@ -13,6 +13,9 @@ class CategoryController extends Controller
     {
         $categorySlug = $request->query('category');
         $searchQuery = trim((string) $request->query('q', ''));
+        $searchName = trim((string) $request->query('name', ''));
+        $searchAuthor = trim((string) $request->query('author', ''));
+        $searchIsbn = trim((string) $request->query('isbn', ''));
         $selectedLanguages = array_values(array_filter((array) $request->query('languages', [])));
         $selectedAuthorIds = array_map('intval', array_filter((array) $request->query('authors', [])));
         $selectedCategoryIds = array_map('intval', array_filter((array) $request->query('categories', [])));
@@ -63,23 +66,54 @@ class CategoryController extends Controller
 
         $books = Book::query()
             ->with(['authors', 'categories', 'publisher'])
-            ->when($searchQuery !== '', function ($query) use ($searchQuery) {
-                $query->where(function ($inner) use ($searchQuery) {
-                    $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $searchQuery) . '%';
+            ->when($searchQuery !== '' || $searchName !== '' || $searchAuthor !== '' || $searchIsbn !== '', function ($query) use ($searchQuery, $searchName, $searchAuthor, $searchIsbn) {
+                $query->where(function ($inner) use ($searchQuery, $searchName, $searchAuthor, $searchIsbn) {
+                    $appliedCondition = false;
 
-                    $inner
-                        ->where('title', 'ILIKE', $like)
-                        ->orWhere('description', 'ILIKE', $like)
-                        ->orWhere('isbn', 'ILIKE', $like)
-                        ->orWhere('genre', 'ILIKE', $like)
-                        ->orWhere('language', 'ILIKE', $like)
-                        ->orWhereHas('authors', fn ($q) => $q->where('full_name', 'ILIKE', $like))
-                        ->orWhereHas('publisher', fn ($q) => $q->where('name', 'ILIKE', $like));
+                    $addTextCondition = function (string $column, string $value) use (&$inner, &$appliedCondition) {
+                        $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $value) . '%';
+
+                        if ($appliedCondition) {
+                            $inner->orWhere($column, 'ILIKE', $like);
+                        } else {
+                            $inner->where($column, 'ILIKE', $like);
+                            $appliedCondition = true;
+                        }
+                    };
+
+                    $addAuthorCondition = function (string $value) use (&$inner, &$appliedCondition) {
+                        $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $value) . '%';
+
+                        if ($appliedCondition) {
+                            $inner->orWhereHas('authors', fn ($q) => $q->where('full_name', 'ILIKE', $like));
+                        } else {
+                            $inner->whereHas('authors', fn ($q) => $q->where('full_name', 'ILIKE', $like));
+                            $appliedCondition = true;
+                        }
+                    };
+
+                    if ($searchName !== '') {
+                        $addTextCondition('title', $searchName);
+                    } elseif ($searchQuery !== '') {
+                        $addTextCondition('title', $searchQuery);
+                    }
+
+                    if ($searchIsbn !== '') {
+                        $addTextCondition('isbn', $searchIsbn);
+                    }
+
+                    if ($searchAuthor !== '') {
+                        $addAuthorCondition($searchAuthor);
+                    }
                 });
             })
             ->when(
                 $category,
                 fn ($query) => $query->whereHas('categories', fn ($q) => $q->where('slug', $categorySlug))
+            )
+            ->when(
+                $categorySlug === 'sale',
+                fn ($query) => $query->where('discount', '>', 0)
             )
             ->when(
                 !empty($selectedLanguages),
@@ -109,11 +143,22 @@ class CategoryController extends Controller
             ->mapWithKeys(fn ($quantity, $bookId) => [(int) $bookId => max(0, (int) $quantity)])
             ->all();
 
+        $wishlistBookIds = $request->user()
+            ?->wishlistedBooks()
+            ->pluck('books.id')
+            ->all() ?? [];
+
         return view('category-template', [
             'books' => $books,
             'categoryTitle' => $category?->name ?? 'All Books',
-            'categorySubtitle' => $searchQuery !== ''
-                ? 'Results for "' . $searchQuery . '"'
+            'categorySubtitle' => ($searchName !== '' || $searchAuthor !== '' || $searchIsbn !== '' || $searchQuery !== '')
+                ? trim(sprintf(
+                    'Results%s%s%s%s',
+                    $searchName !== '' ? ' for name "' . $searchName . '"' : '',
+                    $searchAuthor !== '' ? ' by author "' . $searchAuthor . '"' : '',
+                    $searchIsbn !== '' ? ' for ISBN "' . $searchIsbn . '"' : '',
+                    $searchQuery !== '' && $searchName === '' ? ' matching "' . $searchQuery . '"' : '',
+                ))
                 : 'Browse books from the database.',
             'languages' => $languages,
             'authors' => $authors,
@@ -129,7 +174,11 @@ class CategoryController extends Controller
             'selectedMinPrice' => $selectedMinPrice,
             'selectedMaxPrice' => $selectedMaxPrice,
             'cartQuantities' => $cartQuantities,
+            'wishlistBookIds' => $wishlistBookIds,
             'searchQuery' => $searchQuery,
+            'searchName' => $searchName,
+            'searchAuthor' => $searchAuthor,
+            'searchIsbn' => $searchIsbn,
         ]);
     }
 }

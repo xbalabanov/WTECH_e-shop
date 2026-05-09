@@ -47,10 +47,10 @@
           <nav class="main-nav" aria-label="Main navigation">
             <ul>
               <li><a href="category-template.html">Categories</a></li>
-              <li><a href="homepage.html">Trending</a></li>
-              <li><a href="homepage.html">New Arrivals</a></li>
-              <li><a href="homepage.html">Coming Soon</a></li>
-              <li><a href="category-template.html">Sale</a></li>
+              <li><a href="homepage.html#trending">Trending</a></li>
+              <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
+              <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
+              <li><a href="homepage.html#sale">Sale</a></li>
             </ul>
           </nav>
 
@@ -158,10 +158,10 @@
         <nav class="mobile-nav" aria-label="Mobile navigation">
           <ul>
             <li><a href="category-template.html">Categories</a></li>
-            <li><a href="homepage.html">Trending</a></li>
-            <li><a href="homepage.html">New Arrivals</a></li>
-            <li><a href="homepage.html">Coming Soon</a></li>
-            <li><a href="category-template.html">Sale</a></li>
+            <li><a href="homepage.html#trending">Trending</a></li>
+            <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
+            <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
+            <li><a href="homepage.html#sale">Sale</a></li>
           </ul>
         </nav>
       </div>

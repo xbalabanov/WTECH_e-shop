@@ -25,7 +25,7 @@
               curated collection and find the perfect story waiting for you.
             </p>
             <div class="hero-cta">
-              <a href="#" class="btn primary"
+              <a href="{{ route('categories.index') }}" class="btn primary"
                 >Browse Collection
                 <span class="arrow">
                   <svg
@@ -52,7 +52,7 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="btn ghost">Top Picks</a>
+              <a href="{{ route('categories.index', ['sort' => 'price-high-low']) }}" class="btn ghost">Top Picks</a>
             </div>
           </div>
 
@@ -60,18 +60,18 @@
             <div class="search-panel">
               <p class="kicker">QUICK FIND</p>
               <h3 id="search-heading">Search for Books</h3>
-              <form class="search-form">
+              <form class="search-form" method="GET" action="{{ route('categories.index') }}">
                 <label>
                   <span>Author</span>
-                  <input type="text" placeholder="Enter author name" />
+                  <input type="text" name="author" value="{{ request('author') }}" placeholder="Enter author name" />
                 </label>
                 <label>
-                  <span>Title</span>
-                  <input type="text" placeholder="Enter book title" />
+                  <span>Name</span>
+                  <input type="text" name="name" value="{{ request('name') }}" placeholder="Enter book name" />
                 </label>
                 <label>
                   <span>ISBN</span>
-                  <input type="text" placeholder="Enter ISBN number" />
+                  <input type="text" name="isbn" value="{{ request('isbn') }}" placeholder="Enter ISBN number" />
                 </label>
                 <button type="submit" class="search-btn">
                   <svg
@@ -243,53 +243,25 @@
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="trending">
         <div>
           <div class="section-header">
             <h2 class="products-heading">Trending Now</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @foreach(($trending ?? collect()) as $book)
+              <article class="card" role="group">
+                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+              </article>
+            @endforeach
           </div>
         </div>
       </section>
-      <section class="page-breaker">
+      <section class="page-breaker" id="sale">
         <div class="breaker-inner">
           <div class="breaker-content">
             <div class="breaker-text">
@@ -298,99 +270,43 @@
               </h3>
               <p>Grab your favorites before the deals end Sunday midnight.</p>
             </div>
-            <a class="sale-btn" href="#">Shop Sale →</a>
+            <a class="sale-btn" href="{{ route('categories.index', ['category' => 'sale']) }}">Shop Sale →</a>
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="new-arrivals">
         <div>
           <div class="section-header">
             <h2 class="products-heading">New Arrivals</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @foreach(($newArrivals ?? collect()) as $book)
+              <article class="card" role="group">
+                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+              </article>
+            @endforeach
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="coming-soon">
         <div>
           <div class="section-header">
             <h2 class="products-heading">Coming Soon</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index') }}">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @foreach(($comingSoon ?? collect()) as $book)
+              <article class="card" role="group">
+                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+              </article>
+            @endforeach
           </div>
         </div>
       </section>
@@ -443,39 +359,17 @@
         <div>
           <div class="section-header">
             <h2 class="products-heading">Recommended</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'coming-soon']) }}">View all ›</a>
           </div>
           <div class="cards-row">
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
-            <article class="card" role="group">
-              <div class="cover" aria-hidden="true"></div>
-              <h3 class="title">Book Name</h3>
-              <p class="author">Author</p>
-              <div class="price">0,00€ <span class="badge">-0%</span></div>
-            </article>
+            @foreach(($recommended ?? collect()) as $book)
+              <article class="card" role="group">
+                <a class="cover" href="{{ route('products.show', $book) }}" aria-hidden="true" style="{{ $book->cover_image_url ? "background-image: url('{$book->cover_image_url}'); background-size: cover; background-position: center;" : '' }}"></a>
+                <h3 class="title">{{ $book->title }}</h3>
+                <p class="author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
+                <div class="price">{{ number_format((float) $book->price, 2, ',', '.') }}€ @if((int)($book->discount ?? 0) > 0)<span class="badge">-{{ (int) $book->discount }}%</span>@endif</div>
+              </article>
+            @endforeach
           </div>
         </div>
       </section>

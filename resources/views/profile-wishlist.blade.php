@@ -4,8 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profile · Wishlist</title>
-    <link rel="stylesheet" href="CSS/profile.css" />
-    <link rel="stylesheet" href="CSS/style.css" />
+    @vite(['resources/css/style.css', 'resources/css/profile.css'])
   </head>
   <body class="page-layout">
     <header class="site-header">
@@ -48,10 +47,10 @@
           <nav class="main-nav" aria-label="Main navigation">
             <ul>
               <li><a href="category-template.html">Categories</a></li>
-              <li><a href="homepage.html">Trending</a></li>
-              <li><a href="homepage.html">New Arrivals</a></li>
-              <li><a href="homepage.html">Coming Soon</a></li>
-              <li><a href="category-template.html">Sale</a></li>
+              <li><a href="homepage.html#trending">Trending</a></li>
+              <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
+              <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
+              <li><a href="homepage.html#sale">Sale</a></li>
             </ul>
           </nav>
 
@@ -161,16 +160,21 @@
         <nav class="mobile-nav" aria-label="Mobile navigation">
           <ul>
             <li><a href="category-template.html">Categories</a></li>
-            <li><a href="homepage.html">Trending</a></li>
-            <li><a href="homepage.html">New Arrivals</a></li>
-            <li><a href="homepage.html">Coming Soon</a></li>
-            <li><a href="category-template.html">Sale</a></li>
+            <li><a href="homepage.html#trending">Trending</a></li>
+            <li><a href="homepage.html#new-arrivals">New Arrivals</a></li>
+            <li><a href="homepage.html#coming-soon">Coming Soon</a></li>
+            <li><a href="homepage.html#sale">Sale</a></li>
           </ul>
         </nav>
       </div>
     </header>
 
     <main class="page-main">
+      @php
+        $wishlistBooks = $books ?? collect();
+        $wishlistCount = $wishlistCount ?? $wishlistBooks->count();
+      @endphp
+
       <div class="profile-container">
         <div class="profile-icon">
           <svg
@@ -268,7 +272,7 @@
                 </svg>
               </span>
               <span>Wishlist</span>
-              <span class="sidebar-item-count">12</span>
+              <span class="sidebar-item-count">{{ $wishlistCount }}</span>
             </a>
             <a class="profile-sidebar-item" href="profile-settings.html">
               <span class="sidebar-item-icon" aria-hidden="true"
@@ -345,59 +349,59 @@
               </h2>
 
               <div class="wishlist-grid">
-                <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
-                  <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">The Silent Echo</h3>
-                    <p class="wishlist-card-author">Elena Morris</p>
-                    <p class="wishlist-card-meta">Fantasy</p>
-                    <p class="wishlist-card-price">€22.99</p>
-                    <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </article>
+              @forelse ($wishlistBooks as $book)
+                @php
+                  $basePrice = (float) ($book->price ?? 0);
+                  $discount = (float) ($book->discount ?? 0);
+                  $discountedPrice = $discount > 0 ? ($basePrice * (1 - ($discount / 100))) : $basePrice;
+                @endphp
 
                 <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
+                  <a href="{{ route('products.show', $book) }}" aria-label="Open {{ $book->title }} details">
+                    <div
+                      class="wishlist-cover"
+                      aria-hidden="true"
+                      @if ($book->cover_image_url)
+                        style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+                      @endif
+                    ></div>
+                  </a>
                   <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">Red Horizon</h3>
-                    <p class="wishlist-card-author">Alex Reed</p>
-                    <p class="wishlist-card-meta">Sci-Fi</p>
-                    <p class="wishlist-card-price">€14.50</p>
+                    <h3 class="wishlist-card-title">{{ $book->title }}</h3>
+                    <p class="wishlist-card-author">
+                      {{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}
+                    </p>
+                    <p class="wishlist-card-meta">{{ $book->genre ?? 'General' }}</p>
+                    <p class="wishlist-card-price">{{ number_format($discountedPrice, 2, ',', '.') }}€</p>
                     <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </article>
+                      @if ((int) ($book->stock ?? 0) > 0)
+                        <form method="POST" action="{{ route('cart.add') }}">
+                          @csrf
+                          <input type="hidden" name="book_id" value="{{ $book->id }}" />
+                          <input type="hidden" name="quantity" value="1" />
+                          <button class="wishlist-cart-btn" type="submit">
+                            Add to Cart
+                          </button>
+                        </form>
+                      @else
+                        <button class="wishlist-cart-btn" type="button" disabled>
+                          Out of stock
+                        </button>
+                      @endif
 
-                <article class="wishlist-card" role="group">
-                  <div class="wishlist-cover" aria-hidden="true"></div>
-                  <div class="wishlist-card-content">
-                    <h3 class="wishlist-card-title">Sea of Glass</h3>
-                    <p class="wishlist-card-author">Liam Porter</p>
-                    <p class="wishlist-card-meta">Mystery</p>
-                    <p class="wishlist-card-price">€27.40</p>
-                    <div class="wishlist-card-actions">
-                      <button class="wishlist-cart-btn" type="button">
-                        Add to Cart
-                      </button>
-                      <button class="wishlist-remove-btn" type="button">
-                        Remove
-                      </button>
+                      <form method="POST" action="{{ route('wishlist.destroy', $book) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="wishlist-remove-btn" type="submit">
+                          Remove
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </article>
+              @empty
+                <p class="wishlist-empty">Your wishlist is empty.</p>
+              @endforelse
               </div>
             </section>
           </div>

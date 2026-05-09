@@ -188,7 +188,9 @@
           <p class="product-book-type">{{ $book->genre ?? 'General' }}</p>
           <p class="product-price">
             {{ number_format((float) $book->discounted_price, 2, ',', '.') }}€
-            <span class="product-discount-badge">-{{ (int) ($book->discount ?? 0) }}%</span>
+            @if ((int) ($book->discount ?? 0) > 0)
+              <span class="product-discount-badge">-{{ (int) ($book->discount ?? 0) }}%</span>
+            @endif
           </p>
           <div class="product-actions">
             @if (($cartQty ?? 0) > 0)

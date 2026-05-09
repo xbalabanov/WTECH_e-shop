@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -49,7 +50,7 @@ class CartController extends Controller
         ]);
     }
 
-    public function add(Request $request): RedirectResponse
+    public function add(Request $request): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
@@ -64,10 +65,10 @@ class CartController extends Controller
 
         $this->storeCart($request, $cart);
 
-        return back();
+        return $this->respondToCartMutation($request, $cart, $bookId, $cart[$bookId]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
@@ -87,10 +88,10 @@ class CartController extends Controller
 
         $this->storeCart($request, $cart);
 
-        return back();
+        return $this->respondToCartMutation($request, $cart, $bookId, $cart[$bookId] ?? 0);
     }
 
-    public function remove(Request $request): RedirectResponse
+    public function remove(Request $request): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
             'book_id' => ['required', 'integer', 'exists:books,id'],
@@ -102,14 +103,14 @@ class CartController extends Controller
 
         $this->storeCart($request, $cart);
 
-        return back();
+        return $this->respondToCartMutation($request, $cart, $bookId, 0);
     }
 
-    public function clear(Request $request): RedirectResponse
+    public function clear(Request $request): JsonResponse|RedirectResponse
     {
         $request->session()->forget('cart');
 
-        return back();
+        return $this->respondToCartMutation($request, [], null, 0);
     }
 
     /**
@@ -143,5 +144,18 @@ class CartController extends Controller
     private function storeCart(Request $request, array $cart): void
     {
         $request->session()->put('cart', $cart);
+    }
+
+    private function respondToCartMutation(Request $request, array $cart, ?int $bookId, int $quantity): JsonResponse|RedirectResponse
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'item_count' => collect($cart)->sum(fn (int $quantity) => max(0, $quantity)),
+                'book_id' => $bookId,
+                'quantity' => max(0, $quantity),
+            ]);
+        }
+
+        return back();
     }
 }
