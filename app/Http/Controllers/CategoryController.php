@@ -175,7 +175,6 @@ class CategoryController extends Controller
             'cartQuantities' => $cartQuantities,
             'wishlistBookIds' => $wishlistBookIds,
             'searchQuery' => $searchQuery,
-            'wishlistBookIds' => $wishlistBookIds,
         ]);
     }
 }

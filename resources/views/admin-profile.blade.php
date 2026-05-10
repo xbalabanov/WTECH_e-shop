@@ -123,7 +123,7 @@
         <div class="profile-info">
           <div class="profile-name-block">
             <h1 class="profile-prename">Hello,</h1>
-            <h1 class="profile-name">{{ $user->name }}</h1>
+            <h1 class="profile-name">{{ $user->full_name }}</h1>
           </div>
           <span class="admin-badge-pill">Administrator</span>
         </div>
@@ -269,8 +269,8 @@
                         class="settings-input"
                         id="full-name"
                         type="text"
-                        name="name"
-                        value="{{ old('name', $user->name) }}"
+                        name="full_name"
+                        value="{{ old('full_name', $user->full_name) }}"
                         required
                       />
                     </div>

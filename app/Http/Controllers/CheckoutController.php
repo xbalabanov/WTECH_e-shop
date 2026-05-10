@@ -121,10 +121,10 @@ class CheckoutController extends Controller
 
             if (! $user) {
                 $user = \App\Models\User::create([
-                    'name' => $validated['billing_full_name'],
+                    'full_name' => $validated['billing_full_name'],
                     'email' => $validated['billing_email'],
                     'phone' => $validated['billing_phone'],
-                    'password' => null,
+                    'password_hash' => null,
                 ]);
             }
 
@@ -166,7 +166,7 @@ class CheckoutController extends Controller
                     'placed_at' => now(),
                 ]);
 
-                // Create order items
+                // Create order items and decrement stock
                 foreach ($items as $item) {
                     OrderItem::create([
                         'order_id' => $order->id,
@@ -175,6 +175,7 @@ class CheckoutController extends Controller
                         'unit_price' => $item['unit_price'],
                         'line_total' => $item['line_total'],
                     ]);
+                    Book::where('id', $item['book_id'])->decrement('stock', $item['quantity']);
                 }
 
                 // Create payment record

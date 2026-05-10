@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cart extends Model
 {
-    const CREATED_AT = null;
-
     protected $fillable = ['user_id'];
 
     public function items(): HasMany

@@ -10,7 +10,7 @@ class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response
     {
-        abort_if(! $request->user()?->admin, 403);
+        abort_if($request->user()?->admin !== true, 403);
 
         return $next($request);
     }

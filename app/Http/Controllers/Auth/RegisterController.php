@@ -28,9 +28,9 @@ class RegisterController extends Controller
         $name = Str::of($validated['email'])->before('@')->replace(['.', '_', '-'], ' ')->title()->value();
 
         $user = User::create([
-            'name' => $name,
+            'full_name' => $name,
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password_hash' => $validated['password'],
         ]);
 
         Auth::login($user);

@@ -10,7 +10,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE users ALTER COLUMN password DROP NOT NULL");
+        DB::statement("ALTER TABLE users ALTER COLUMN password_hash DROP NOT NULL");
     }
 
     /**
@@ -18,7 +18,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("UPDATE users SET password = '' WHERE password IS NULL");
-        DB::statement("ALTER TABLE users ALTER COLUMN password SET NOT NULL");
+        DB::statement("UPDATE users SET password_hash = '' WHERE password_hash IS NULL");
+        DB::statement("ALTER TABLE users ALTER COLUMN password_hash SET NOT NULL");
     }
 };

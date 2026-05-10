@@ -44,7 +44,7 @@ class LoginController extends Controller
         $this->mergeSessionCartIntoDb($request, Auth::user());
 
         if (Auth::user()->admin) {
-            return redirect('/admin.html');
+            return redirect()->route('admin.index');
         }
 
         return redirect()->intended('/homepage.html');

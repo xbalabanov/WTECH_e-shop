@@ -431,7 +431,7 @@
                 </div>
                 @foreach ($reviews as $review)
                   <div class="admin-reviews-row">
-                    <span class="admin-review-author">{{ $review->user->name }}</span>
+                    <span class="admin-review-author">{{ $review->user->full_name }}</span>
                     <span class="admin-review-stars" aria-label="{{ $review->rating }} stars">
                       {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
                     </span>
@@ -446,7 +446,7 @@
                         onsubmit="return confirm('Delete this review?')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="admin-review-delete-btn" aria-label="Delete review by {{ $review->user->name }}">
+                        <button type="submit" class="admin-review-delete-btn" aria-label="Delete review by {{ $review->user->full_name }}">
                           Delete
                         </button>
                       </form>

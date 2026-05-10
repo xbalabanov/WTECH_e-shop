@@ -153,7 +153,7 @@
 
         <div class="reviews-list">
           @forelse ($reviews as $review)
-            <article class="review-card" aria-label="Review by {{ $review->user->name }}">
+            <article class="review-card" aria-label="Review by {{ $review->user->full_name }}">
               <div class="review-top">
                 <div class="review-avatar" aria-hidden="true">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
@@ -163,7 +163,7 @@
                   </svg>
                 </div>
                 <div class="review-meta">
-                  <p class="review-author">{{ $review->user->name }}</p>
+                  <p class="review-author">{{ $review->user->full_name }}</p>
                   <div class="review-rating" aria-label="Rating {{ $review->rating }} out of 5">
                     <span class="stars">{{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}</span>
                   </div>

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->foreignId('order_id')->unique()->constrained()->onDelete('cascade');
             $table->string('provider'); // stripe, paypal, cash
             $table->string('provider_txn_id')->nullable(); // Transaction ID from payment provider
             $table->string('method'); // card, paypal, cash_on_delivery
