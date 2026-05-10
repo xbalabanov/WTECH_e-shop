@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Address extends Model
 {
     protected $fillable = [
-        'user_id',
         'street',
         'city',
         'postal_code',

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +41,32 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
+        $this->mergeSessionCartIntoDb($request, Auth::user());
+
+        if (Auth::user()->admin) {
+            return redirect()->route('admin.index');
+        }
+
         return redirect()->intended('/homepage.html');
+    }
+
+    private function mergeSessionCartIntoDb(Request $request, User $user): void
+    {
+        $sessionCart = (array) $request->session()->get('cart', []);
+
+        if (empty($sessionCart)) {
+            return;
+        }
+
+        $dbCart = Cart::getForUser($user);
+
+        foreach ($sessionCart as $bookId => $quantity) {
+            $id           = (int) $bookId;
+            $dbCart[$id]  = min(99, ($dbCart[$id] ?? 0) + (int) $quantity);
+        }
+
+        Cart::saveForUser($user, $dbCart);
+        $request->session()->forget('cart');
     }
 
     public function destroy(Request $request): RedirectResponse

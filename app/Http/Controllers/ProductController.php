@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -10,9 +11,8 @@ class ProductController extends Controller
 {
     public function show(Request $request, Book $book): View
     {
-        $book->loadMissing(['authors', 'categories', 'publisher']);
+        $book->loadMissing(['authors', 'categories', 'publisher', 'images']);
 
-        // Fetch 5 books from the trending category
         $recommendedBooks = Book::query()
             ->with('authors')
             ->whereHas('categories', fn ($q) => $q->where('slug', 'trending'))
@@ -21,7 +21,6 @@ class ProductController extends Controller
             ->limit(5)
             ->get();
 
-        // If not enough trending books, fill with any other books
         if ($recommendedBooks->count() < 5) {
             $fallbackBooks = Book::query()
                 ->with('authors')
@@ -34,18 +33,31 @@ class ProductController extends Controller
             $recommendedBooks = $recommendedBooks->concat($fallbackBooks);
         }
 
-        $cart = collect((array) $request->session()->get('cart', []))
+        $user = $request->user();
+
+        $cartRaw = $user
+            ? Cart::getForUser($user)
+            : (array) $request->session()->get('cart', []);
+
+        $cart = collect($cartRaw)
             ->mapWithKeys(fn ($quantity, $bookId) => [(int) $bookId => max(0, (int) $quantity)]);
 
-        $isWishlisted = $request->user()
-            ? $request->user()->wishlistBooks()->where('book_id', $book->id)->exists()
+        $isWishlisted = $user
+            ? $user->wishlistBooks()->where('book_id', $book->id)->exists()
             : false;
+
+        $reviews = $book->reviews()->with('user')->latest('created_at')->get();
+        $averageRating = $reviews->avg('rating');
+        $userReview = $user ? $reviews->firstWhere('user_id', $user->id) : null;
 
         return view('product', [
             'book' => $book,
             'recommendedBooks' => $recommendedBooks,
             'cartQty' => (int) ($cart[$book->id] ?? 0),
             'isWishlisted' => $isWishlisted,
+            'reviews' => $reviews,
+            'averageRating' => $averageRating,
+            'userReview' => $userReview,
         ]);
     }
 }

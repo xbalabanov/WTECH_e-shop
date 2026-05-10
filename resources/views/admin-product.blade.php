@@ -1,17 +1,24 @@
+@php
+  $isEditing      = $book !== null;
+  $authorValues   = old('authors', $isEditing ? $book->authors->pluck('full_name')->toArray() : []);
+  if (empty($authorValues)) {
+    $authorValues = [''];
+  }
+  $selectedCategoryIds = array_map('intval', (array) old('categories', $isEditing ? $book->categories->pluck('id')->toArray() : []));
+@endphp
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Product Editor</title>
-    <link rel="stylesheet" href="CSS/style.css" />
-    <link rel="stylesheet" href="CSS/admin-product.css" />
+    <title>{{ $isEditing ? 'Edit Book' : 'Add Book' }} — Eunoia Admin</title>
+    @vite(['resources/css/style.css', 'resources/css/admin-product.css', 'resources/js/app.js', 'resources/js/admin-product.js'])
   </head>
 
   <body class="admin-product-body">
     <header class="site-header" aria-label="Admin header">
       <div class="header-inner admin-header-inner">
-        <div class="logo" aria-label="Eunoia logo">
+        <a class="logo" href="{{ route('admin.index') }}" aria-label="Eunoia logo">
           <div class="logo-icon" aria-hidden="true">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -37,10 +44,10 @@
             </svg>
           </div>
           <div class="logo-text">Eunoia</div>
-        </div>
+        </a>
 
         <div class="admin-actions" aria-label="Admin actions">
-          <button type="button" class="header-icon-btn" aria-label="Profile">
+          <a class="header-icon-btn" href="{{ route('admin.profile') }}" aria-label="Profile">
             <svg
               width="18"
               height="20"
@@ -56,38 +63,41 @@
                 stroke-linejoin="round"
               />
             </svg>
-          </button>
-          <a class="header-icon-btn" href="login.html" aria-label="Log out">
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M6.75 15.75H4.5C3.67157 15.75 3 15.0784 3 14.25V3.75C3 2.92157 3.67157 2.25 4.5 2.25H6.75"
-                stroke="#0A0A0A"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M10.5 12.75L13.5 9.75L10.5 6.75"
-                stroke="#0A0A0A"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M13.5 9.75H7.5"
-                stroke="#0A0A0A"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
           </a>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="header-icon-btn" aria-label="Log out">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6.75 15.75H4.5C3.67157 15.75 3 15.0784 3 14.25V3.75C3 2.92157 3.67157 2.25 4.5 2.25H6.75"
+                  stroke="#0A0A0A"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10.5 12.75L13.5 9.75L10.5 6.75"
+                  stroke="#0A0A0A"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M13.5 9.75H7.5"
+                  stroke="#0A0A0A"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </header>
@@ -119,13 +129,31 @@
               />
             </svg>
           </div>
-          <h1 id="editor-heading">Book Editing</h1>
-          <a class="back-to-inventory-btn" href="admin.html"
-            >Back to inventory</a
-          >
+          <h1 id="editor-heading">{{ $isEditing ? 'Book Editing' : 'Add a Book' }}</h1>
+          <a class="back-to-inventory-btn" href="{{ route('admin.index') }}">Back to inventory</a>
         </div>
 
-        <form class="editor-grid" aria-label="Book editor form">
+        @if ($errors->any())
+          <div class="form-alert form-alert-error" role="alert">
+            <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+            </ul>
+          </div>
+        @endif
+
+        <form
+          class="editor-grid"
+          method="POST"
+          action="{{ $isEditing ? route('admin.product.update', $book) : route('admin.product.store') }}"
+          enctype="multipart/form-data"
+          aria-label="Book editor form"
+          novalidate
+        >
+          @csrf
+          @if ($isEditing) @method('PUT') @endif
+
           <div class="media-section">
             <h2 class="section-label">Book Pictures:</h2>
 
@@ -133,12 +161,14 @@
               id="cover-image-input"
               class="file-input"
               type="file"
-              accept="image/*"
+              name="cover_image"
+              accept="image/jpeg,image/png,image/webp"
             />
             <input
               id="gallery-images-input"
               class="file-input"
               type="file"
+              name="gallery_images[]"
               accept="image/*"
               multiple
             />
@@ -147,17 +177,16 @@
               <div class="cover-info">
                 <p class="upload-title">Cover image</p>
                 <p class="upload-copy">JPG, PNG or WEBP up to 3MB</p>
-                <label class="pick-file-btn" for="cover-image-input"
-                  >Choose cover</label
-                >
+                <label class="pick-file-btn" for="cover-image-input">Choose cover</label>
                 <p class="selected-files" id="cover-file-name">
-                  No cover selected
+                  {{ $isEditing && $book->getRawOriginal('cover_image_url') ? 'Current: ' . $book->getRawOriginal('cover_image_url') : 'No cover selected' }}
                 </p>
               </div>
-              <div class="cover-preview" id="cover-preview" hidden>
+              <div class="cover-preview" id="cover-preview" @if(! ($isEditing && $book->cover_image_url)) hidden @endif>
                 <img
                   id="cover-preview-image"
-                  alt="Selected book cover preview"
+                  src="{{ $isEditing ? $book->cover_image_url : '' }}"
+                  alt="{{ $isEditing ? $book->title . ' cover' : 'Selected book cover preview' }}"
                 />
               </div>
             </div>
@@ -167,12 +196,8 @@
               <p class="upload-copy">
                 Drag pictures here or choose on your computer
               </p>
-              <label class="pick-file-btn" for="gallery-images-input"
-                >Choose images</label
-              >
-              <p class="selected-files" id="gallery-file-count">
-                0 images selected
-              </p>
+              <label class="pick-file-btn" for="gallery-images-input">Choose images</label>
+              <p class="selected-files" id="gallery-file-count">0 images selected</p>
 
               <div
                 class="gallery-preview"
@@ -181,34 +206,54 @@
               ></div>
             </div>
 
+            @if ($isEditing && $book->images->isNotEmpty())
+              <div class="saved-images-section">
+                <p class="upload-title">Saved images</p>
+                <div class="gallery-preview">
+                  @foreach ($book->images as $img)
+                    <div class="gallery-item gallery-item--saved">
+                      <img src="{{ asset('img/gallery/' . $img->filename) }}" alt="Book gallery image" />
+                      <button
+                        type="submit"
+                        form="delete-image-{{ $img->id }}"
+                        class="gallery-item-delete"
+                        aria-label="Delete image"
+                      >×</button>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            @endif
+
             <div class="categories-field">
               <span>Categories:</span>
               <div class="categories-list" aria-label="Book categories">
-                <label class="category-option">
-                  <input type="checkbox" name="categories[]" value="trending" />
-                  Trending
-                </label>
-                <label class="category-option">
-                  <input type="checkbox" name="categories[]" value="new-arrivals" />
-                  New Arrivals
-                </label>
-                <label class="category-option">
-                  <input type="checkbox" name="categories[]" value="coming-soon" />
-                  Coming Soon
-                </label>
-                <label class="category-option">
-                  <input type="checkbox" name="categories[]" value="sale" />
-                  Sale
-                </label>
+                @foreach ($categories as $cat)
+                  <label class="category-option">
+                    <input
+                      type="checkbox"
+                      name="categories[]"
+                      value="{{ $cat->id }}"
+                      @checked(in_array($cat->id, $selectedCategoryIds))
+                    />
+                    {{ $cat->name }}
+                  </label>
+                @endforeach
               </div>
             </div>
           </div>
 
           <div class="details-section">
             <div class="field-grid">
-              <label>
+              <label class="full">
                 <span>Book name:</span>
-                <input type="text" placeholder="Enter book name" />
+                <input
+                  type="text"
+                  name="title"
+                  value="{{ old('title', $book?->title) }}"
+                  placeholder="Enter book name"
+                  required
+                />
               </label>
 
               <label class="full author-field">
@@ -218,21 +263,23 @@
                   id="authors-list"
                   aria-label="Authors list"
                 >
-                  <div class="author-row">
-                    <input
-                      type="text"
-                      name="authors[]"
-                      placeholder="Enter author name"
-                    />
-                    <button
-                      type="button"
-                      class="author-remove-btn"
-                      aria-label="Remove author"
-                      hidden
-                    >
-                      Remove
-                    </button>
-                  </div>
+                  @foreach ($authorValues as $authorValue)
+                    <div class="author-row">
+                      <input
+                        type="text"
+                        name="authors[]"
+                        value="{{ $authorValue }}"
+                        placeholder="Enter author name"
+                      />
+                      <button
+                        type="button"
+                        class="author-remove-btn"
+                        aria-label="Remove author"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  @endforeach
                 </div>
                 <button
                   type="button"
@@ -246,69 +293,199 @@
               <label class="full">
                 <span>Description:</span>
                 <textarea
+                  name="description"
                   rows="4"
                   placeholder="Write short description"
-                ></textarea>
+                >{{ old('description', $book?->description) }}</textarea>
               </label>
 
               <label>
                 <span>Genre:</span>
-                <select>
-                  <option selected>Select genre</option>
-                  <option>Fantasy</option>
-                  <option>Thriller</option>
-                  <option>Sci-Fi</option>
+                <select name="genre">
+                  <option value="">— Select genre —</option>
+                  @foreach ($genres as $genre)
+                    <option value="{{ $genre }}" @selected(old('genre', $book?->genre) === $genre)>{{ $genre }}</option>
+                  @endforeach
                 </select>
               </label>
 
               <label>
-                <span>ISBN:</span>
-                <input type="text" placeholder="978-..." />
+                <span>ISBN (13 digits):</span>
+                <input
+                  type="text"
+                  name="isbn"
+                  value="{{ old('isbn', $book?->isbn) }}"
+                  placeholder="9780140303940"
+                  maxlength="13"
+                  pattern="[0-9]{13}"
+                />
               </label>
 
               <label>
-                <span>Price:</span>
-                <input type="number" step="0.01" placeholder="0.00" />
+                <span>Price (€):</span>
+                <input
+                  type="number"
+                  name="price"
+                  step="0.01"
+                  min="0"
+                  value="{{ old('price', $book?->price) }}"
+                  placeholder="0.00"
+                />
               </label>
 
               <label>
                 <span>Discount (%):</span>
-                <input type="number" step="1" min="0" placeholder="0" />
+                <input
+                  type="number"
+                  name="discount"
+                  step="1"
+                  min="0"
+                  max="100"
+                  value="{{ old('discount', $book?->discount ?? 0) }}"
+                  placeholder="0"
+                />
               </label>
 
               <label>
                 <span>Publication date:</span>
-                <input type="date" />
+                <input
+                  type="date"
+                  name="publication_date"
+                  value="{{ old('publication_date', $book?->publication_date?->format('Y-m-d')) }}"
+                />
               </label>
 
               <label>
                 <span>Language:</span>
-                <input type="text" placeholder="English" />
+                <input
+                  type="text"
+                  name="language"
+                  value="{{ old('language', $book?->language) }}"
+                  placeholder="English"
+                />
               </label>
 
               <label>
                 <span>Pages:</span>
-                <input type="number" step="1" min="1" placeholder="300" />
+                <input
+                  type="number"
+                  name="pages"
+                  step="1"
+                  min="1"
+                  value="{{ old('pages', $book?->pages) }}"
+                  placeholder="300"
+                />
               </label>
 
               <label>
                 <span>Publisher:</span>
-                <input type="text" placeholder="Publisher name" />
+                <input
+                  type="text"
+                  name="publisher_name"
+                  list="publishers-datalist"
+                  value="{{ old('publisher_name', $book?->publisher?->name) }}"
+                  placeholder="Publisher name"
+                />
+                <datalist id="publishers-datalist">
+                  @foreach ($publishers as $pub)
+                    <option value="{{ $pub->name }}">
+                  @endforeach
+                </datalist>
               </label>
 
               <label>
                 <span>Stock:</span>
-                <input type="number" step="1" min="0" placeholder="0" />
+                <input
+                  type="number"
+                  name="stock"
+                  step="1"
+                  min="0"
+                  value="{{ old('stock', $book?->stock ?? 0) }}"
+                  placeholder="0"
+                />
               </label>
             </div>
           </div>
 
           <div class="editor-actions">
-            <button type="button" class="save-book-btn" id="save-book-btn">
-              Save the book
+            <button type="submit" class="save-book-btn" id="save-book-btn">
+              {{ $isEditing ? 'Save changes' : 'Add the book' }}
             </button>
           </div>
         </form>
+
+        @if ($isEditing && $book->images->isNotEmpty())
+          @foreach ($book->images as $img)
+            <form
+              id="delete-image-{{ $img->id }}"
+              method="POST"
+              action="{{ route('admin.image.destroy', [$book, $img]) }}"
+              onsubmit="return confirm('Delete this image?')"
+              hidden
+            >
+              @csrf
+              @method('DELETE')
+            </form>
+          @endforeach
+        @endif
+
+        @if ($isEditing)
+          <section class="admin-reviews-section" aria-labelledby="admin-reviews-heading">
+            <div class="admin-reviews-header">
+              <h2 id="admin-reviews-heading" class="admin-reviews-title">
+                Reviews
+                <span class="admin-reviews-badge">{{ $reviews->count() }}</span>
+              </h2>
+              @if ($reviews->isNotEmpty())
+                @php $avg = $reviews->avg('rating'); @endphp
+                <span class="admin-reviews-avg">
+                  <span style="color:#ec7357;">
+                    {{ str_repeat('★', (int) round($avg)) }}{{ str_repeat('☆', 5 - (int) round($avg)) }}
+                  </span>
+                  {{ number_format($avg, 1) }} avg
+                </span>
+              @endif
+            </div>
+
+            @if ($reviews->isEmpty())
+              <p class="admin-reviews-empty">No reviews yet for this book.</p>
+            @else
+              <div class="admin-reviews-table">
+                <div class="admin-reviews-row admin-reviews-row--head" aria-hidden="true">
+                  <span>Reviewer</span>
+                  <span>Rating</span>
+                  <span>Comment</span>
+                  <span>Date</span>
+                  <span></span>
+                </div>
+                @foreach ($reviews as $review)
+                  <div class="admin-reviews-row">
+                    <span class="admin-review-author">{{ $review->user->full_name }}</span>
+                    <span class="admin-review-stars" aria-label="{{ $review->rating }} stars">
+                      {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
+                    </span>
+                    <span class="admin-review-comment">
+                      {{ $review->comment ? \Illuminate\Support\Str::limit($review->comment, 80) : '—' }}
+                    </span>
+                    <span class="admin-review-date">
+                      {{ $review->created_at?->format('d M Y') ?? '—' }}
+                    </span>
+                    <span class="admin-review-actions">
+                      <form method="POST" action="{{ route('admin.review.destroy', [$book, $review]) }}"
+                        onsubmit="return confirm('Delete this review?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-review-delete-btn" aria-label="Delete review by {{ $review->user->full_name }}">
+                          Delete
+                        </button>
+                      </form>
+                    </span>
+                  </div>
+                @endforeach
+              </div>
+            @endif
+          </section>
+        @endif
       </section>
     </main>
 
@@ -320,6 +497,5 @@
         </div>
       </div>
     </footer>
-    <script src="JS/admin-product.js"></script>
   </body>
 </html>

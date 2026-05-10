@@ -50,7 +50,7 @@
                       name="billing_full_name"
                       class="field-input @error('billing_full_name') error @enderror"
                       placeholder="John Doe"
-                      value="{{ old('billing_full_name', auth()->user()->name ?? '') }}"
+                      value="{{ old('billing_full_name', auth()->user()->full_name ?? '') }}"
                       required
                     />
                   </label>

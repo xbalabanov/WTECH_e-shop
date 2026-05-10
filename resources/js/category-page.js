@@ -124,6 +124,7 @@ const initCategoryPage = () => {
                         "#category-products-container .category-main-products-row",
                     );
                     newRows.forEach((row) => productsContainer.appendChild(row));
+                    window.bindAjaxForms?.();
 
                     const newPagerPages = doc.getElementById("category-pager-pages");
                     if (newPagerPages) {

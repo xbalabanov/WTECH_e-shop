@@ -20,15 +20,39 @@ const injectFragment = async (selector, url) => {
     }
 };
 
+const applyHeaderNavigationLinks = () => {
+    const navLinks = document.querySelectorAll("[data-header-nav]");
+
+    if (!navLinks.length) {
+        return;
+    }
+
+    const destinations = {
+        trending: "/category-template.html?category=trending",
+        "new-arrivals": "/category-template.html?category=new-arrivals",
+        "coming-soon": "/category-template.html?category=coming-soon",
+        sale: "/category-template.html?category=sale",
+    };
+
+    navLinks.forEach((link) => {
+        const key = String(link.getAttribute("data-header-nav") ?? "").trim();
+        const href = destinations[key];
+
+        if (href) {
+            link.setAttribute("href", href);
+        }
+    });
+};
+
 const injectCategoriesDropdown = async () => {
-    const dropdown = document.querySelector("[data-categories-dropdown]");
+    const dropdown = document.querySelector("[data-genres-dropdown]");
 
     if (!dropdown) {
         return;
     }
 
     try {
-        const response = await fetch("/categories-menu.json", {
+        const response = await fetch("/genres-menu.json", {
             headers: { "X-Requested-With": "XMLHttpRequest" },
         });
 
@@ -118,6 +142,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         injectFragment("[data-site-footer]", "/fragments/footer.html"),
     ]);
 
+    applyHeaderNavigationLinks();
     await injectCategoriesDropdown();
     await injectCartCount();
     hydrateHeaderSearch();

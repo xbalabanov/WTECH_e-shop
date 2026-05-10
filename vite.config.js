@@ -19,6 +19,7 @@ export default defineConfig({
                 'resources/css/profile.css',
                 'resources/css/style.css',
                 'resources/js/app.js',
+                'resources/js/admin-product.js',
             ],
             refresh: true,
         }),

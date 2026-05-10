@@ -31,7 +31,7 @@
               curated collection and find the perfect story waiting for you.
             </p>
             <div class="hero-cta">
-              <a href="#" class="btn primary"
+              <a href="{{ route('categories.index') }}" class="btn primary"
                 >Browse Collection
                 <span class="arrow">
                   <svg
@@ -58,7 +58,7 @@
                   </svg>
                 </span>
               </a>
-              <a href="#" class="btn ghost">Top Picks</a>
+              <a href="{{ route('categories.index', ['sort' => 'price-high-low']) }}" class="btn ghost">Top Picks</a>
             </div>
           </div>
 
@@ -271,11 +271,11 @@
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="trending">
         <div>
           <div class="section-header">
             <h2 class="products-heading">Trending Now</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
             @forelse ($trendingBooks->take(6) as $book)
@@ -293,7 +293,7 @@
           </div>
         </div>
       </section>
-      <section class="page-breaker">
+      <section class="page-breaker" id="sale">
         <div class="breaker-inner">
           <div class="breaker-content">
             <div class="breaker-text">
@@ -302,15 +302,15 @@
               </h3>
               <p>Grab your favorites before the deals end Sunday midnight.</p>
             </div>
-            <a class="sale-btn" href="#">Shop Sale →</a>
+            <a class="sale-btn" href="{{ route('categories.index', ['category' => 'sale']) }}">Shop Sale →</a>
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="new-arrivals">
         <div>
           <div class="section-header">
             <h2 class="products-heading">New Arrivals</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'trending']) }}">View all ›</a>
           </div>
           <div class="cards-row">
             @forelse ($newArrivalBooks->take(6) as $book)
@@ -328,11 +328,11 @@
           </div>
         </div>
       </section>
-      <section class="section-products">
+      <section class="section-products" id="coming-soon">
         <div>
           <div class="section-header">
             <h2 class="products-heading">Coming Soon</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index') }}">View all ›</a>
           </div>
           <div class="cards-row">
             @forelse ($comingSoonBooks->take(6) as $book)
@@ -399,7 +399,7 @@
         <div>
           <div class="section-header">
             <h2 class="products-heading">Recommended</h2>
-            <a class="view-all" href="#">View all ›</a>
+            <a class="view-all" href="{{ route('categories.index', ['category' => 'coming-soon']) }}">View all ›</a>
           </div>
           <div class="cards-row">
             @forelse ($recommendedBooks->take(6) as $book)

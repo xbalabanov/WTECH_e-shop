@@ -1,16 +1,21 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Book;
 use App\Models\Category;
+use App\Models\Author;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -44,8 +49,31 @@ Route::get('/categories-menu.json', function () {
         ->get(['name', 'slug']);
 });
 
+Route::get('/genres-menu.json', function () {
+    return Book::query()
+        ->whereNotNull('genre')
+        ->where('genre', '!=', '')
+        ->select('genre')
+        ->distinct()
+        ->orderBy('genre')
+        ->get()
+        ->map(function ($row) {
+            return [
+                'name' => $row->genre,
+                'slug' => $row->genre,
+            ];
+        });
+});
+
 Route::get('/cart-summary.json', function () {
-    $cart = (array) session('cart', []);
+    $user = auth()->user();
+
+    if ($user) {
+        $cart = \App\Models\Cart::getForUser($user);
+    } else {
+        $cart = (array) session('cart', []);
+    }
+
     $itemCount = collect($cart)->sum(fn ($qty) => max(0, (int) $qty));
 
     return response()->json([
@@ -74,4 +102,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
     Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::post('/product/{book}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::delete('/product/{book}/review', [ReviewController::class, 'destroy'])->name('review.destroy');
+});
+
+Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
+    Route::get('/admin.html', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/profile.html', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/product/create.html', [AdminController::class, 'createProduct'])->name('admin.product.create');
+    Route::post('/admin/product', [AdminController::class, 'storeProduct'])->name('admin.product.store');
+    Route::get('/admin/product/{book}/edit.html', [AdminController::class, 'editProduct'])->name('admin.product.edit');
+    Route::put('/admin/product/{book}', [AdminController::class, 'updateProduct'])->name('admin.product.update');
+    Route::delete('/admin/product/{book}', [AdminController::class, 'destroyProduct'])->name('admin.product.destroy');
+    Route::delete('/admin/product/{book}/image/{image}', [AdminController::class, 'destroyImage'])->name('admin.image.destroy');
+    Route::delete('/admin/product/{book}/review/{review}', [AdminController::class, 'destroyReview'])->name('admin.review.destroy');
 });

@@ -42,7 +42,7 @@
                     <span class="item-isbn">ISBN: {{ $item->book->isbn ?? 'N/A' }}</span>
                   </div>
                 </div>
-                <div class="item-price">€{{ number_format($item->price / $item->quantity, 2, ',', '') }} × {{ $item->quantity }}</div>
+                <div class="item-price">€{{ number_format($item->unit_price, 2, ',', '') }} × {{ $item->quantity }}</div>
               </div>
             @endforeach
           </div>
@@ -70,7 +70,7 @@
           <section class="info-section">
             <div class="address-box">
               <h3>Shipping Details</h3>
-              <p class="address-name">{{ auth()->user()->name }}</p>
+              <p class="address-name">{{ auth()->user()->full_name }}</p>
               <p class="address-line">{{ $order->shippingAddress->street }}</p>
               <p class="address-line">{{ $order->shippingAddress->postal_code }} {{ $order->shippingAddress->city }}</p>
               <p class="address-line">{{ $order->shippingAddress->country }}</p>
@@ -80,7 +80,7 @@
           <section class="info-section">
             <div class="address-box">
               <h3>Billing Details</h3>
-              <p class="address-name">{{ auth()->user()->name }}</p>
+              <p class="address-name">{{ auth()->user()->full_name }}</p>
               <p class="address-line">{{ $order->billingAddress->street }}</p>
               <p class="address-line">{{ $order->billingAddress->postal_code }} {{ $order->billingAddress->city }}</p>
               <p class="address-line">{{ $order->billingAddress->country }}</p>

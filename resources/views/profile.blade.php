@@ -38,7 +38,7 @@
         <div class="profile-info">
           <div class="profile-name-block">
             <h1 class="profile-prename">Hello,</h1>
-            <h1 class="profile-name">{{ auth()->user()->name }}</h1>
+            <h1 class="profile-name">{{ auth()->user()->full_name }}</h1>
           </div>
         </div>
       </div>

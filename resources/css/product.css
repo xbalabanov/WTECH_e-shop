@@ -12,14 +12,82 @@ main {
     align-items: start;
 }
 
-.product-image {
+.product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     width: 100%;
     max-width: 420px;
+}
+
+.product-gallery-main {
+    width: 100%;
     aspect-ratio: 2 / 3;
     border-radius: var(--radius-xl);
     background: var(--color-primary);
     border: 1px solid rgba(48, 82, 82, 0.2);
     box-shadow: 0 10px 25px -16px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-gallery-main-empty {
+    width: 100%;
+    height: 100%;
+}
+
+.product-gallery-thumbs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 4px 2px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(48, 82, 82, 0.3) transparent;
+}
+
+.product-gallery-thumb {
+    flex: 0 0 72px;
+    height: 96px;
+    padding: 0;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    background-color: var(--color-primary);
+    cursor: pointer;
+    opacity: 0.65;
+    overflow: hidden;
+    transition: border-color 150ms ease, opacity 150ms ease, transform 150ms ease;
+}
+
+.product-gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.product-gallery-thumb:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.product-gallery-thumb:focus-visible {
+    outline: 2px solid rgba(236, 115, 87, 0.4);
+    outline-offset: 2px;
+    opacity: 1;
+}
+
+.product-gallery-thumb.active {
+    border-color: var(--color-accent);
+    opacity: 1;
 }
 
 .main-product-section .product-details {
@@ -306,6 +374,206 @@ main {
     line-height: 1.6;
 }
 
+.reviews-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.reviews-summary {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 2px;
+}
+
+.reviews-avg-value {
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 700;
+}
+
+.reviews-count {
+    color: var(--color-light-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+}
+
+.review-delete-form {
+    margin-left: auto;
+}
+
+.review-delete-btn {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-light-text);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 150ms ease, background 150ms ease;
+}
+
+.review-delete-btn:hover {
+    color: var(--color-accent);
+    background: rgba(236, 115, 87, 0.1);
+}
+
+.reviews-empty {
+    margin: 0;
+    color: var(--color-light-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-style: italic;
+}
+
+.review-flash {
+    margin: 12px 0 0;
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+}
+
+.review-flash--success {
+    background: rgba(48, 82, 82, 0.08);
+    color: var(--color-primary);
+    border: 1px solid rgba(48, 82, 82, 0.2);
+}
+
+.review-flash--error {
+    background: rgba(236, 115, 87, 0.1);
+    color: var(--color-accent);
+    border: 1px solid rgba(236, 115, 87, 0.3);
+}
+
+.review-form {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border-strong);
+}
+
+.review-form-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* CSS-only star rating picker — inputs are in reverse DOM order (5..1) with flex row-reverse */
+.review-stars-input {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 2px;
+    align-items: center;
+    padding: 8px 4px;
+}
+
+.review-stars-input input[type="radio"] {
+    display: none;
+}
+
+.review-stars-input label {
+    color: #ccc;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 120ms ease;
+    user-select: none;
+}
+
+/* Checked state: color from checked star downward (subsequent siblings in reverse DOM = visually left) */
+.review-stars-input input[type="radio"]:checked ~ label {
+    color: #ec7357;
+}
+
+/* Hover state */
+.review-stars-input label:hover,
+.review-stars-input label:hover ~ label {
+    color: #ec7357;
+}
+
+.review-form-textarea {
+    flex: 1;
+    min-width: 200px;
+    min-height: 40px;
+    max-height: 240px;
+    padding: 10px 14px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-lg);
+    background: var(--color-background);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    resize: none;
+    overflow-y: auto;
+    transition: border-color 150ms ease;
+    outline: none;
+}
+
+.review-form-textarea:focus {
+    border-color: var(--color-primary);
+}
+
+.review-form-textarea::placeholder {
+    color: var(--color-light-text);
+    opacity: 0.7;
+}
+
+.review-form-submit {
+    padding: 10px 20px;
+    border: 0;
+    border-radius: var(--radius-lg);
+    background: var(--color-primary);
+    color: var(--color-background);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 8px;
+    transition: opacity 150ms ease;
+}
+
+.review-form-submit:hover {
+    opacity: 0.88;
+}
+
+.review-form-error {
+    margin: 8px 0 0;
+    color: var(--color-accent);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+}
+
+.review-login-prompt {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border-strong);
+    color: var(--color-light-text);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+}
+
+.review-login-prompt a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.review-login-prompt a:hover {
+    text-decoration: underline;
+}
+
 .recomended {
     max-width: 1280px;
     margin: 0 auto;
@@ -520,7 +788,7 @@ main {
         padding: 34px 24px;
     }
 
-    .product-image {
+    .product-gallery {
         max-width: 360px;
     }
 

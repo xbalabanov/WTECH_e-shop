@@ -11,6 +11,11 @@
     <div data-site-header></div>
 
     <main class="page-main">
+      @php
+        $wishlistBooks = $wishlistBooks ?? collect();
+        $wishlistCount = $wishlistCount ?? $wishlistBooks->count();
+      @endphp
+
       <div class="profile-container">
         <div class="profile-icon">
           <svg

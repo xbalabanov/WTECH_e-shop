@@ -11,12 +11,42 @@
 
     <main>
       <div class="main-product-section">
-        <div
-          class="product-image"
-          @if (!empty($book?->cover_image_url))
-            style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+        @php
+          $galleryImages = collect();
+          if ($book->cover_image_url) {
+              $galleryImages->push(['url' => $book->cover_image_url, 'label' => 'Cover image']);
+          }
+          foreach ($book->images as $img) {
+              $galleryImages->push(['url' => asset('img/gallery/' . $img->filename), 'label' => 'Gallery image']);
+          }
+          $mainImageUrl = $galleryImages->first()['url'] ?? null;
+        @endphp
+
+        <div class="product-gallery">
+          <div class="product-gallery-main">
+            @if ($mainImageUrl)
+              <img id="gallery-main" src="{{ $mainImageUrl }}" alt="{{ $book->title }} image" />
+            @else
+              <div id="gallery-main" class="product-gallery-main-empty" role="img" aria-label="No image available"></div>
+            @endif
+          </div>
+
+          @if ($galleryImages->count() > 1)
+            <div class="product-gallery-thumbs" role="list" aria-label="Image gallery">
+              @foreach ($galleryImages as $i => $image)
+                <button
+                  class="product-gallery-thumb {{ $i === 0 ? 'active' : '' }}"
+                  type="button"
+                  data-src="{{ $image['url'] }}"
+                  aria-label="{{ $image['label'] }} {{ $i + 1 }}"
+                  role="listitem"
+                >
+                  <img src="{{ $image['url'] }}" alt="{{ $image['label'] }} {{ $i + 1 }}" />
+                </button>
+              @endforeach
+            </div>
           @endif
-        ></div>
+        </div>
         <div class="product-details">
           <h1 class="product-title">{{ $book->title }}</h1>
           <p class="product-author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
@@ -130,78 +160,94 @@
       </div>
 
       <section class="reviews-section" aria-labelledby="reviews-title">
-        <h2 id="reviews-title" class="reviews-title">Reviews</h2>
+        <div class="reviews-header">
+          <h2 id="reviews-title" class="reviews-title">Reviews</h2>
+          @if ($reviews->isNotEmpty())
+            <div class="reviews-summary">
+              @php $avg = round((float) $averageRating); @endphp
+              <span class="stars" aria-label="Average rating {{ number_format((float) $averageRating, 1) }} out of 5">
+                {{ str_repeat('★', $avg) }}{{ str_repeat('☆', 5 - $avg) }}
+              </span>
+              <span class="reviews-avg-value">{{ number_format((float) $averageRating, 1) }}</span>
+              <span class="reviews-count">({{ $reviews->count() }})</span>
+            </div>
+          @endif
+        </div>
+
+        @if (session('success'))
+          <p class="review-flash review-flash--success">{{ session('success') }}</p>
+        @endif
+        @if (session('error'))
+          <p class="review-flash review-flash--error">{{ session('error') }}</p>
+        @endif
 
         <div class="reviews-list">
-          <article class="review-card" aria-label="Review by John Doe">
-            <div class="review-top">
-              <div class="review-avatar" aria-hidden="true">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-user"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </div>
-              <div class="review-meta">
-                <p class="review-author">Name</p>
-                <div class="review-rating" aria-label="Rating 4 out of 5">
-                  <span class="stars">★★★★☆</span>
+          @forelse ($reviews as $review)
+            <article class="review-card" aria-label="Review by {{ $review->user->full_name }}">
+              <div class="review-top">
+                <div class="review-avatar" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
                 </div>
-              </div>
-            </div>
-            <blockquote class="review-quote">
-              Lorem ipsum dolor sit amet consectetur. Vestibulum consectetur
-              viverra in tempus a nisl integer. Euismod adipiscing gravida enim
-              venenatis dis ultrices. Nulla lacus ac semper odio sit viverra
-              adipiscing facilisis pellentesque. Cras netus elementum urna odio
-              pharetra nunc. Tortor sollicitudin viverra in tincidunt bibendum
-              consequat leo.
-            </blockquote>
-          </article>
-
-          <article class="review-card" aria-label="Review by Jane Smith">
-            <div class="review-top">
-              <div class="review-avatar" aria-hidden="true">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-user"
-                >
-                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                  <circle cx="12" cy="7" r="4" />
-                </svg>
-              </div>
-              <div class="review-meta">
-                <p class="review-author">Name</p>
-                <div class="review-rating" aria-label="Rating 5 out of 5">
-                  <span class="stars">★★★★☆</span>
+                <div class="review-meta">
+                  <p class="review-author">{{ $review->user->full_name }}</p>
+                  <div class="review-rating" aria-label="Rating {{ $review->rating }} out of 5">
+                    <span class="stars">{{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}</span>
+                  </div>
                 </div>
+                @auth
+                  @if (auth()->id() === $review->user_id)
+                    <form method="POST" action="{{ route('review.destroy', $book) }}" class="review-delete-form">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="review-delete-btn" aria-label="Delete your review" title="Delete review">&times;</button>
+                    </form>
+                  @endif
+                @endauth
               </div>
-            </div>
-            <blockquote class="review-quote">
-              Lorem ipsum dolor sit amet consectetur. Vestibulum consectetur
-              viverra in tempus a nisl integer. Euismod adipiscing gravida enim
-              venenatis dis ultrices.
-            </blockquote>
-          </article>
+              @if ($review->comment)
+                <blockquote class="review-quote">{{ $review->comment }}</blockquote>
+              @endif
+            </article>
+          @empty
+            <p class="reviews-empty">No reviews yet. Be the first to review this book!</p>
+          @endforelse
         </div>
+
+        @auth
+          @if (! $userReview)
+            <form method="POST" action="{{ route('review.store', $book) }}" class="review-form">
+              @csrf
+              <div class="review-form-inner">
+                <div class="review-stars-input" role="group" aria-label="Select your rating">
+                  @for ($i = 5; $i >= 1; $i--)
+                    <input type="radio" name="rating" id="star-{{ $i }}" value="{{ $i }}"
+                      {{ old('rating') == $i ? 'checked' : '' }} required>
+                    <label for="star-{{ $i }}" aria-label="{{ $i }} star{{ $i > 1 ? 's' : '' }}">★</label>
+                  @endfor
+                </div>
+                <textarea
+                  name="comment"
+                  class="review-form-textarea"
+                  placeholder="Share your thoughts (optional)..."
+                  rows="1"
+                  oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"
+                >{{ old('comment') }}</textarea>
+                <button type="submit" class="review-form-submit">Post Review</button>
+              </div>
+              @error('rating')
+                <p class="review-form-error">{{ $message }}</p>
+              @enderror
+            </form>
+          @endif
+        @else
+          <p class="review-login-prompt">
+            <a href="{{ route('login', ['redirect' => request()->fullUrl()]) }}">Sign in</a> to leave a review.
+          </p>
+        @endauth
       </section>
 
       <section class="recomended" aria-labelledby="recommended-title">
@@ -384,5 +430,25 @@
         </div>
       </div>
     </footer>
+    <script>
+      (function () {
+        var main = document.getElementById('gallery-main');
+        var thumbs = document.querySelectorAll('.product-gallery-thumb');
+        if (!main || !thumbs.length) return;
+        thumbs.forEach(function (thumb) {
+          thumb.addEventListener('click', function () {
+            var src = thumb.dataset.src;
+            if (!src) return;
+            if (main.tagName === 'IMG') {
+              main.src = src;
+            } else {
+              main.style.backgroundImage = 'url("' + src + '")';
+            }
+            thumbs.forEach(function (t) { t.classList.remove('active'); });
+            thumb.classList.add('active');
+          });
+        });
+      })();
+    </script>
   </body>
 </html>

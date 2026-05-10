@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Book extends Model
 {
     protected $fillable = [
-        'author_id',
         'isbn',
         'title',
         'description',
@@ -39,11 +39,6 @@ class Book extends Model
         return $this->belongsTo(Publisher::class);
     }
 
-    public function author(): BelongsTo
-    {
-        return $this->belongsTo(Author::class, 'author_id');
-    }
-
     public function authors(): BelongsToMany
     {
         return $this->belongsToMany(Author::class, 'book_author');
@@ -57,6 +52,16 @@ class Book extends Model
     public function wishlistedByUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'wishlist_items');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(BookImage::class);
     }
 
     public function getDiscountedPriceAttribute(): float

@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('addresses', function (Blueprint $table) {
-            $table->id();
-            $table->string('street', 200);
-            $table->string('city', 300);
-            $table->string('postal_code', 20);
-            $table->string('country', 300);
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('admin')->default(false)->after('id');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('addresses');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('admin');
+        });
     }
 };
