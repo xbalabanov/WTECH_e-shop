@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
@@ -9,9 +10,9 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Models\Book;
 use App\Models\Category;
-use App\Models\Book;
 use App\Models\Author;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
@@ -93,4 +94,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
     Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+});
+
+Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
+    Route::get('/admin.html', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/admin/profile.html', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::post('/admin/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/product/create.html', [AdminController::class, 'createProduct'])->name('admin.product.create');
+    Route::post('/admin/product', [AdminController::class, 'storeProduct'])->name('admin.product.store');
+    Route::get('/admin/product/{book}/edit.html', [AdminController::class, 'editProduct'])->name('admin.product.edit');
+    Route::put('/admin/product/{book}', [AdminController::class, 'updateProduct'])->name('admin.product.update');
+    Route::delete('/admin/product/{book}', [AdminController::class, 'destroyProduct'])->name('admin.product.destroy');
 });

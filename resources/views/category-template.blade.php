@@ -485,16 +485,46 @@
                   <a class="category-pager-page" href="{{ $books->previousPageUrl() }}" aria-label="Previous page">‹</a>
                 @endif
 
-                @for ($page = 1; $page <= $books->lastPage(); $page++)
+                @php
+                  $currentPage = $books->currentPage();
+                  $lastPage = $books->lastPage();
+                  $pages = [];
+                  
+                  // Always add page 1
+                  $pages[] = 1;
+                  
+                  // Add current page and neighbors (±1)
+                  for ($i = max(2, $currentPage - 1); $i <= min($lastPage - 1, $currentPage + 1); $i++) {
+                    $pages[] = $i;
+                  }
+                  
+                  // Always add last page if more than 1
+                  if ($lastPage > 1) {
+                    $pages[] = $lastPage;
+                  }
+                  
+                  // Remove duplicates and sort
+                  $pages = array_unique(array_filter($pages));
+                  sort($pages);
+                @endphp
+
+                @php $lastRendered = 0; @endphp
+                @foreach ($pages as $page)
+                  @if ($page - $lastRendered > 1)
+                    <span class="category-pager-ellipsis">…</span>
+                  @endif
+                  
                   <a
-                    class="category-pager-page {{ $books->currentPage() === $page ? 'category-pager-page-active' : '' }}"
+                    class="category-pager-page {{ $currentPage === $page ? 'category-pager-page-active' : '' }}"
                     href="{{ $books->url($page) }}"
                     aria-label="Page {{ $page }}"
-                    @if ($books->currentPage() === $page) aria-current="page" @endif
+                    @if ($currentPage === $page) aria-current="page" @endif
                   >
                     {{ $page }}
                   </a>
-                @endfor
+                  
+                  @php $lastRendered = $page; @endphp
+                @endforeach
 
                 @if ($books->hasMorePages())
                   <a class="category-pager-page" href="{{ $books->nextPageUrl() }}" aria-label="Next page">›</a>

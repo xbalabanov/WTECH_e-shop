@@ -123,9 +123,5 @@
     });
   });
 
-  saveBookButton.addEventListener("click", function () {
-    window.location.href = "admin.html";
-  });
-
   refreshAuthorButtons();
 })();

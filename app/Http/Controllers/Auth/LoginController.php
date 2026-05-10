@@ -39,6 +39,10 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::user()->admin) {
+            return redirect('/admin.html');
+        }
+
         return redirect()->intended('/homepage.html');
     }
 
