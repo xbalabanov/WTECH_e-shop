@@ -11,26 +11,16 @@ class OrderItem extends Model
         'order_id',
         'book_id',
         'quantity',
-        'price',
+        'unit_price',
+        'line_total',
     ];
 
     protected function casts(): array
     {
         return [
-            'price' => 'decimal:2',
+            'unit_price' => 'decimal:2',
+            'line_total' => 'decimal:2',
         ];
-    }
-
-    public function getLineTotalAttribute(): float
-    {
-        return (float) ($this->attributes['price'] ?? 0);
-    }
-
-    public function getUnitPriceAttribute(): float
-    {
-        $quantity = max(1, (int) ($this->attributes['quantity'] ?? 1));
-
-        return $this->getLineTotalAttribute() / $quantity;
     }
 
     public function order(): BelongsTo

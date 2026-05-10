@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Cart;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,8 +34,8 @@ class CartController extends Controller
                 $unitPrice = (float) $book->discounted_price;
 
                 return [
-                    'book' => $book,
-                    'quantity' => $quantity,
+                    'book'       => $book,
+                    'quantity'   => $quantity,
                     'unit_price' => $unitPrice,
                     'line_total' => $unitPrice * $quantity,
                 ];
@@ -45,8 +46,8 @@ class CartController extends Controller
         $total = (float) $items->sum('line_total');
 
         return view('cart', [
-            'items' => $items,
-            'total' => $total,
+            'items'     => $items,
+            'total'     => $total,
             'itemCount' => (int) $items->sum('quantity'),
         ]);
     }
@@ -54,13 +55,13 @@ class CartController extends Controller
     public function add(Request $request): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
-            'book_id' => ['required', 'integer', 'exists:books,id'],
+            'book_id'  => ['required', 'integer', 'exists:books,id'],
             'quantity' => ['nullable', 'integer', 'min:1'],
         ]);
 
-        $bookId = (int) $validated['book_id'];
+        $bookId      = (int) $validated['book_id'];
         $quantityToAdd = (int) ($validated['quantity'] ?? 1);
-        $book = Book::query()->find($bookId);
+        $book        = Book::query()->find($bookId);
 
         if (! $book || (int) $book->stock <= 0) {
             return back();
@@ -68,8 +69,8 @@ class CartController extends Controller
 
         $quantityToAdd = min($quantityToAdd, (int) $book->stock);
 
-        $cart = $this->getCart($request);
-        $cart[$bookId] = min((int) $book->stock, ($cart[$bookId] ?? 0) + $quantityToAdd);
+        $cart              = $this->getCart($request);
+        $cart[$bookId]     = min((int) $book->stock, ($cart[$bookId] ?? 0) + $quantityToAdd);
 
         $this->storeCart($request, $cart);
 
@@ -79,13 +80,13 @@ class CartController extends Controller
     public function update(Request $request): JsonResponse|RedirectResponse
     {
         $validated = $request->validate([
-            'book_id' => ['required', 'integer', 'exists:books,id'],
+            'book_id'  => ['required', 'integer', 'exists:books,id'],
             'quantity' => ['required', 'integer', 'min:0'],
         ]);
 
-        $bookId = (int) $validated['book_id'];
+        $bookId   = (int) $validated['book_id'];
         $quantity = (int) $validated['quantity'];
-        $book = Book::query()->find($bookId);
+        $book     = Book::query()->find($bookId);
 
         if (! $book || (int) $book->stock <= 0) {
             $cart = $this->getCart($request);
@@ -96,8 +97,7 @@ class CartController extends Controller
         }
 
         $quantity = min($quantity, (int) $book->stock);
-
-        $cart = $this->getCart($request);
+        $cart     = $this->getCart($request);
 
         if ($quantity === 0) {
             unset($cart[$bookId]);
@@ -117,7 +117,7 @@ class CartController extends Controller
         ]);
 
         $bookId = (int) $validated['book_id'];
-        $cart = $this->getCart($request);
+        $cart   = $this->getCart($request);
         unset($cart[$bookId]);
 
         $this->storeCart($request, $cart);
@@ -127,7 +127,13 @@ class CartController extends Controller
 
     public function clear(Request $request): JsonResponse|RedirectResponse
     {
-        $request->session()->forget('cart');
+        $user = $request->user();
+
+        if ($user) {
+            Cart::clearForUser($user);
+        } else {
+            $request->session()->forget('cart');
+        }
 
         return $this->respondToCartMutation($request, [], null, 0);
     }
@@ -136,6 +142,36 @@ class CartController extends Controller
      * @return array<int, int>
      */
     private function getCart(Request $request): array
+    {
+        $user = $request->user();
+
+        if ($user) {
+            return Cart::getForUser($user);
+        }
+
+        return $this->parseSessionCart($request);
+    }
+
+    /**
+     * @param  array<int, int>  $cart
+     */
+    private function storeCart(Request $request, array $cart): void
+    {
+        $user = $request->user();
+
+        if ($user) {
+            Cart::saveForUser($user, $cart);
+
+            return;
+        }
+
+        $request->session()->put('cart', $cart);
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function parseSessionCart(Request $request): array
     {
         $raw = $request->session()->get('cart', []);
 
@@ -146,7 +182,7 @@ class CartController extends Controller
         $normalized = [];
 
         foreach ($raw as $bookId => $quantity) {
-            $id = (int) $bookId;
+            $id  = (int) $bookId;
             $qty = (int) $quantity;
 
             if ($id > 0 && $qty > 0) {
@@ -176,8 +212,8 @@ class CartController extends Controller
         $normalized = [];
 
         foreach ($cart as $bookId => $quantity) {
-            $id = (int) $bookId;
-            $qty = max(0, (int) $quantity);
+            $id    = (int) $bookId;
+            $qty   = max(0, (int) $quantity);
             $stock = (int) ($stocks[$id] ?? 0);
 
             if ($id > 0 && $qty > 0 && $stock > 0) {
@@ -188,21 +224,13 @@ class CartController extends Controller
         return $normalized;
     }
 
-    /**
-     * @param  array<int, int>  $cart
-     */
-    private function storeCart(Request $request, array $cart): void
-    {
-        $request->session()->put('cart', $cart);
-    }
-
     private function respondToCartMutation(Request $request, array $cart, ?int $bookId, int $quantity): JsonResponse|RedirectResponse
     {
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'item_count' => collect($cart)->sum(fn (int $quantity) => max(0, $quantity)),
-                'book_id' => $bookId,
-                'quantity' => max(0, $quantity),
+                'book_id'    => $bookId,
+                'quantity'   => max(0, $quantity),
             ]);
         }
 

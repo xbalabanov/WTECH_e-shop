@@ -6,6 +6,7 @@ use App\Models\Author;
 use App\Models\Book;
 use App\Models\Category;
 use App\Models\Publisher;
+use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -46,6 +47,7 @@ class AdminController extends Controller
             'categories' => Category::orderBy('name')->get(),
             'publishers' => Publisher::orderBy('name')->get(),
             'genres'     => $this->distinctGenres(),
+            'reviews'    => collect(),
         ]);
     }
 
@@ -94,13 +96,23 @@ class AdminController extends Controller
     public function editProduct(Book $book): View
     {
         $book->load(['authors', 'categories', 'publisher']);
+        $reviews = $book->reviews()->with('user')->latest('created_at')->get();
 
         return view('admin-product', [
             'book'       => $book,
             'categories' => Category::orderBy('name')->get(),
             'publishers' => Publisher::orderBy('name')->get(),
             'genres'     => $this->distinctGenres(),
+            'reviews'    => $reviews,
         ]);
+    }
+
+    public function destroyReview(Book $book, Review $review): RedirectResponse
+    {
+        abort_if($review->book_id !== $book->id, 404);
+        $review->delete();
+
+        return redirect()->route('admin.product.edit', $book)->with('success', 'Review deleted.');
     }
 
     public function updateProduct(Request $request, Book $book): RedirectResponse

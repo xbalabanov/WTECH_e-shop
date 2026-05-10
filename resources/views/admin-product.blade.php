@@ -399,6 +399,64 @@
             </button>
           </div>
         </form>
+
+        @if ($isEditing)
+          <section class="admin-reviews-section" aria-labelledby="admin-reviews-heading">
+            <div class="admin-reviews-header">
+              <h2 id="admin-reviews-heading" class="admin-reviews-title">
+                Reviews
+                <span class="admin-reviews-badge">{{ $reviews->count() }}</span>
+              </h2>
+              @if ($reviews->isNotEmpty())
+                @php $avg = $reviews->avg('rating'); @endphp
+                <span class="admin-reviews-avg">
+                  <span style="color:#ec7357;">
+                    {{ str_repeat('★', (int) round($avg)) }}{{ str_repeat('☆', 5 - (int) round($avg)) }}
+                  </span>
+                  {{ number_format($avg, 1) }} avg
+                </span>
+              @endif
+            </div>
+
+            @if ($reviews->isEmpty())
+              <p class="admin-reviews-empty">No reviews yet for this book.</p>
+            @else
+              <div class="admin-reviews-table">
+                <div class="admin-reviews-row admin-reviews-row--head" aria-hidden="true">
+                  <span>Reviewer</span>
+                  <span>Rating</span>
+                  <span>Comment</span>
+                  <span>Date</span>
+                  <span></span>
+                </div>
+                @foreach ($reviews as $review)
+                  <div class="admin-reviews-row">
+                    <span class="admin-review-author">{{ $review->user->name }}</span>
+                    <span class="admin-review-stars" aria-label="{{ $review->rating }} stars">
+                      {{ str_repeat('★', $review->rating) }}{{ str_repeat('☆', 5 - $review->rating) }}
+                    </span>
+                    <span class="admin-review-comment">
+                      {{ $review->comment ? \Illuminate\Support\Str::limit($review->comment, 80) : '—' }}
+                    </span>
+                    <span class="admin-review-date">
+                      {{ $review->created_at?->format('d M Y') ?? '—' }}
+                    </span>
+                    <span class="admin-review-actions">
+                      <form method="POST" action="{{ route('admin.review.destroy', [$book, $review]) }}"
+                        onsubmit="return confirm('Delete this review?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="admin-review-delete-btn" aria-label="Delete review by {{ $review->user->name }}">
+                          Delete
+                        </button>
+                      </form>
+                    </span>
+                  </div>
+                @endforeach
+              </div>
+            @endif
+          </section>
+        @endif
       </section>
     </main>
 

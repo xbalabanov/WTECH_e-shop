@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileSettingsController;
@@ -65,7 +66,14 @@ Route::get('/genres-menu.json', function () {
 });
 
 Route::get('/cart-summary.json', function () {
-    $cart = (array) session('cart', []);
+    $user = auth()->user();
+
+    if ($user) {
+        $cart = \App\Models\Cart::getForUser($user);
+    } else {
+        $cart = (array) session('cart', []);
+    }
+
     $itemCount = collect($cart)->sum(fn ($qty) => max(0, (int) $qty));
 
     return response()->json([
@@ -94,6 +102,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile-settings.html', [ProfileSettingsController::class, 'update'])->name('profile.settings.update');
     Route::post('/wishlist/{book}', [WishlistController::class, 'store'])->name('wishlist.store');
     Route::delete('/wishlist/{book}', [WishlistController::class, 'destroy'])->name('wishlist.destroy');
+    Route::post('/product/{book}/review', [ReviewController::class, 'store'])->name('review.store');
+    Route::delete('/product/{book}/review', [ReviewController::class, 'destroy'])->name('review.destroy');
 });
 
 Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
@@ -105,4 +115,5 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::get('/admin/product/{book}/edit.html', [AdminController::class, 'editProduct'])->name('admin.product.edit');
     Route::put('/admin/product/{book}', [AdminController::class, 'updateProduct'])->name('admin.product.update');
     Route::delete('/admin/product/{book}', [AdminController::class, 'destroyProduct'])->name('admin.product.destroy');
+    Route::delete('/admin/product/{book}/review/{review}', [AdminController::class, 'destroyReview'])->name('admin.review.destroy');
 });

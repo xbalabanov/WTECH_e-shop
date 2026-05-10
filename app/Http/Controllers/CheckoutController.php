@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Book;
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Payment;
@@ -17,8 +18,7 @@ class CheckoutController extends Controller
 {
     public function show(Request $request)
     {
-        // Get cart from session
-        $cart = (array) session('cart', []);
+        $cart = $this->resolveCart($request);
 
         if (empty($cart)) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty');
@@ -83,8 +83,7 @@ class CheckoutController extends Controller
             'payment_method' => 'required|in:card,paypal,cash_on_delivery',
         ]);
 
-        // Get cart from session
-        $cart = (array) session('cart', []);
+        $cart = $this->resolveCart($request);
 
         if (empty($cart)) {
             return back()->with('error', 'Your cart is empty');
@@ -137,7 +136,6 @@ class CheckoutController extends Controller
             $order = DB::transaction(function () use ($validated, $items, $subtotal, $shippingFee, $total, $useDeliveryForBilling, $user) {
                 // Create shipping address first. When requested, billing will reuse this address.
                 $shippingAddress = Address::create([
-                    'user_id' => $user->id,
                     'street' => $validated['shipping_street'],
                     'city' => $validated['shipping_city'],
                     'postal_code' => $validated['shipping_postal_code'],
@@ -148,7 +146,6 @@ class CheckoutController extends Controller
                     $billingAddress = $shippingAddress;
                 } else {
                     $billingAddress = Address::create([
-                        'user_id' => $user->id,
                         'street' => $validated['billing_street'],
                         'city' => $validated['billing_city'],
                         'postal_code' => $validated['billing_postal_code'],
@@ -175,7 +172,8 @@ class CheckoutController extends Controller
                         'order_id' => $order->id,
                         'book_id' => $item['book_id'],
                         'quantity' => $item['quantity'],
-                        'price' => $item['line_total'],
+                        'unit_price' => $item['unit_price'],
+                        'line_total' => $item['line_total'],
                     ]);
                 }
 
@@ -199,7 +197,10 @@ class CheckoutController extends Controller
                 return $order;
             });
 
-            // Clear cart
+            // Clear cart from whichever store the user has
+            if (auth()->user()) {
+                Cart::clearForUser(auth()->user());
+            }
             session()->forget('cart');
 
             // Redirect to order details
@@ -207,5 +208,19 @@ class CheckoutController extends Controller
         } catch (\Exception $e) {
             return back()->with('error', 'Failed to place order: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function resolveCart(Request $request): array
+    {
+        $user = $request->user();
+
+        if ($user) {
+            return Cart::getForUser($user);
+        }
+
+        return (array) $request->session()->get('cart', []);
     }
 }
