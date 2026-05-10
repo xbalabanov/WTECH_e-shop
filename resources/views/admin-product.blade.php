@@ -168,6 +168,7 @@
               id="gallery-images-input"
               class="file-input"
               type="file"
+              name="gallery_images[]"
               accept="image/*"
               multiple
             />
@@ -204,6 +205,25 @@
                 aria-label="Other image previews"
               ></div>
             </div>
+
+            @if ($isEditing && $book->images->isNotEmpty())
+              <div class="saved-images-section">
+                <p class="upload-title">Saved images</p>
+                <div class="gallery-preview">
+                  @foreach ($book->images as $img)
+                    <div class="gallery-item gallery-item--saved">
+                      <img src="{{ asset('img/gallery/' . $img->filename) }}" alt="Book gallery image" />
+                      <button
+                        type="submit"
+                        form="delete-image-{{ $img->id }}"
+                        class="gallery-item-delete"
+                        aria-label="Delete image"
+                      >×</button>
+                    </div>
+                  @endforeach
+                </div>
+              </div>
+            @endif
 
             <div class="categories-field">
               <span>Categories:</span>
@@ -281,18 +301,12 @@
 
               <label>
                 <span>Genre:</span>
-                <input
-                  type="text"
-                  name="genre"
-                  list="genres-datalist"
-                  value="{{ old('genre', $book?->genre) }}"
-                  placeholder="e.g. Fantasy"
-                />
-                <datalist id="genres-datalist">
+                <select name="genre">
+                  <option value="">— Select genre —</option>
                   @foreach ($genres as $genre)
-                    <option value="{{ $genre }}">
+                    <option value="{{ $genre }}" @selected(old('genre', $book?->genre) === $genre)>{{ $genre }}</option>
                   @endforeach
-                </datalist>
+                </select>
               </label>
 
               <label>
@@ -399,6 +413,21 @@
             </button>
           </div>
         </form>
+
+        @if ($isEditing && $book->images->isNotEmpty())
+          @foreach ($book->images as $img)
+            <form
+              id="delete-image-{{ $img->id }}"
+              method="POST"
+              action="{{ route('admin.image.destroy', [$book, $img]) }}"
+              onsubmit="return confirm('Delete this image?')"
+              hidden
+            >
+              @csrf
+              @method('DELETE')
+            </form>
+          @endforeach
+        @endif
 
         @if ($isEditing)
           <section class="admin-reviews-section" aria-labelledby="admin-reviews-heading">

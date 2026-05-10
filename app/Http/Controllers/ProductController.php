@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function show(Request $request, Book $book): View
     {
-        $book->loadMissing(['authors', 'categories', 'publisher']);
+        $book->loadMissing(['authors', 'categories', 'publisher', 'images']);
 
         $recommendedBooks = Book::query()
             ->with('authors')

@@ -115,5 +115,6 @@ Route::middleware(['auth', EnsureUserIsAdmin::class])->group(function () {
     Route::get('/admin/product/{book}/edit.html', [AdminController::class, 'editProduct'])->name('admin.product.edit');
     Route::put('/admin/product/{book}', [AdminController::class, 'updateProduct'])->name('admin.product.update');
     Route::delete('/admin/product/{book}', [AdminController::class, 'destroyProduct'])->name('admin.product.destroy');
+    Route::delete('/admin/product/{book}/image/{image}', [AdminController::class, 'destroyImage'])->name('admin.image.destroy');
     Route::delete('/admin/product/{book}/review/{review}', [AdminController::class, 'destroyReview'])->name('admin.review.destroy');
 });

@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\BookImage;
 use App\Models\Category;
 use App\Models\Publisher;
 use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
@@ -54,22 +55,24 @@ class AdminController extends Controller
     public function storeProduct(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'title'            => ['required', 'string', 'max:500'],
-            'isbn'             => ['required', 'regex:/^[0-9]{13}$/', 'unique:books,isbn'],
-            'description'      => ['nullable', 'string'],
-            'genre'            => ['nullable', 'string', 'max:100'],
-            'price'            => ['required', 'numeric', 'min:0'],
-            'discount'         => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'publication_date' => ['nullable', 'date'],
-            'language'         => ['nullable', 'string', 'max:100'],
-            'pages'            => ['nullable', 'integer', 'min:1'],
-            'publisher_name'   => ['nullable', 'string', 'max:255'],
-            'stock'            => ['nullable', 'integer', 'min:0'],
-            'authors'          => ['required', 'array', 'min:1'],
-            'authors.*'        => ['required', 'string', 'max:255'],
-            'categories'       => ['nullable', 'array'],
-            'categories.*'     => ['integer', 'exists:categories,id'],
-            'cover_image'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+            'title'              => ['required', 'string', 'max:500'],
+            'isbn'               => ['required', 'regex:/^[0-9]{13}$/', 'unique:books,isbn'],
+            'description'        => ['nullable', 'string'],
+            'genre'              => ['nullable', 'string', 'max:100'],
+            'price'              => ['required', 'numeric', 'min:0'],
+            'discount'           => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'publication_date'   => ['nullable', 'date'],
+            'language'           => ['nullable', 'string', 'max:100'],
+            'pages'              => ['nullable', 'integer', 'min:1'],
+            'publisher_name'     => ['nullable', 'string', 'max:255'],
+            'stock'              => ['nullable', 'integer', 'min:0'],
+            'authors'            => ['required', 'array', 'min:1'],
+            'authors.*'          => ['required', 'string', 'max:255'],
+            'categories'         => ['nullable', 'array'],
+            'categories.*'       => ['integer', 'exists:categories,id'],
+            'cover_image'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+            'gallery_images'     => ['nullable', 'array'],
+            'gallery_images.*'   => ['image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         ]);
 
         $book = Book::create([
@@ -89,13 +92,14 @@ class AdminController extends Controller
 
         $book->authors()->sync($this->resolveAuthorIds($data['authors']));
         $book->categories()->sync($data['categories'] ?? []);
+        $this->storeGalleryImages($request, $book);
 
         return redirect()->route('admin.index')->with('success', 'Book added successfully.');
     }
 
     public function editProduct(Book $book): View
     {
-        $book->load(['authors', 'categories', 'publisher']);
+        $book->load(['authors', 'categories', 'publisher', 'images']);
         $reviews = $book->reviews()->with('user')->latest('created_at')->get();
 
         return view('admin-product', [
@@ -107,34 +111,33 @@ class AdminController extends Controller
         ]);
     }
 
-    public function destroyReview(Book $book, Review $review): RedirectResponse
-    {
-        abort_if($review->book_id !== $book->id, 404);
-        $review->delete();
-
-        return redirect()->route('admin.product.edit', $book)->with('success', 'Review deleted.');
-    }
-
     public function updateProduct(Request $request, Book $book): RedirectResponse
     {
         $data = $request->validate([
-            'title'            => ['required', 'string', 'max:500'],
-            'isbn'             => ['required', 'regex:/^[0-9]{13}$/', Rule::unique('books', 'isbn')->ignore($book->id)],
-            'description'      => ['nullable', 'string'],
-            'genre'            => ['nullable', 'string', 'max:100'],
-            'price'            => ['required', 'numeric', 'min:0'],
-            'discount'         => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'publication_date' => ['nullable', 'date'],
-            'language'         => ['nullable', 'string', 'max:100'],
-            'pages'            => ['nullable', 'integer', 'min:1'],
-            'publisher_name'   => ['nullable', 'string', 'max:255'],
-            'stock'            => ['nullable', 'integer', 'min:0'],
-            'authors'          => ['required', 'array', 'min:1'],
-            'authors.*'        => ['required', 'string', 'max:255'],
-            'categories'       => ['nullable', 'array'],
-            'categories.*'     => ['integer', 'exists:categories,id'],
-            'cover_image'      => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+            'title'              => ['required', 'string', 'max:500'],
+            'isbn'               => ['required', 'regex:/^[0-9]{13}$/', Rule::unique('books', 'isbn')->ignore($book->id)],
+            'description'        => ['nullable', 'string'],
+            'genre'              => ['nullable', 'string', 'max:100'],
+            'price'              => ['required', 'numeric', 'min:0'],
+            'discount'           => ['nullable', 'numeric', 'min:0', 'max:100'],
+            'publication_date'   => ['nullable', 'date'],
+            'language'           => ['nullable', 'string', 'max:100'],
+            'pages'              => ['nullable', 'integer', 'min:1'],
+            'publisher_name'     => ['nullable', 'string', 'max:255'],
+            'stock'              => ['nullable', 'integer', 'min:0'],
+            'authors'            => ['required', 'array', 'min:1'],
+            'authors.*'          => ['required', 'string', 'max:255'],
+            'categories'         => ['nullable', 'array'],
+            'categories.*'       => ['integer', 'exists:categories,id'],
+            'cover_image'        => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+            'gallery_images'     => ['nullable', 'array'],
+            'gallery_images.*'   => ['image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
         ]);
+
+        $newCoverFilename = $this->storeCoverImage($request, $data['isbn']);
+        if ($newCoverFilename) {
+            $this->deleteCoverFile($book);
+        }
 
         $book->update([
             'isbn'             => $data['isbn'],
@@ -148,13 +151,45 @@ class AdminController extends Controller
             'pages'            => $data['pages'] ?? null,
             'publisher_id'     => $this->resolvePublisher($data['publisher_name'] ?? null),
             'stock'            => $data['stock'] ?? 0,
-            'cover_image_url'  => $this->storeCoverImage($request, $data['isbn']) ?? $book->getRawOriginal('cover_image_url'),
+            'cover_image_url'  => $newCoverFilename ?? $book->getRawOriginal('cover_image_url'),
         ]);
 
         $book->authors()->sync($this->resolveAuthorIds($data['authors']));
         $book->categories()->sync($data['categories'] ?? []);
+        $this->storeGalleryImages($request, $book);
 
-        return redirect()->route('admin.index')->with('success', 'Book updated successfully.');
+        return redirect()->route('admin.product.edit', $book)->with('success', 'Book updated successfully.');
+    }
+
+    public function destroyProduct(Book $book): RedirectResponse
+    {
+        $this->deleteCoverFile($book);
+
+        foreach ($book->images as $image) {
+            $this->deleteGalleryFile($image->filename);
+        }
+
+        $book->delete();
+
+        return redirect()->route('admin.index')->with('success', 'Book deleted.');
+    }
+
+    public function destroyImage(Book $book, BookImage $image): RedirectResponse
+    {
+        abort_if($image->book_id !== $book->id, 404);
+
+        $this->deleteGalleryFile($image->filename);
+        $image->delete();
+
+        return redirect()->route('admin.product.edit', $book)->with('success', 'Image deleted.');
+    }
+
+    public function destroyReview(Book $book, Review $review): RedirectResponse
+    {
+        abort_if($review->book_id !== $book->id, 404);
+        $review->delete();
+
+        return redirect()->route('admin.product.edit', $book)->with('success', 'Review deleted.');
     }
 
     public function profile(Request $request): View
@@ -199,11 +234,45 @@ class AdminController extends Controller
         return redirect()->route('admin.profile')->with('status', 'Profile updated successfully.');
     }
 
-    public function destroyProduct(Book $book): RedirectResponse
+    private function storeGalleryImages(Request $request, Book $book): void
     {
-        $book->delete();
+        if (! $request->hasFile('gallery_images')) {
+            return;
+        }
 
-        return redirect()->route('admin.index')->with('success', 'Book deleted.');
+        $dir = public_path('img/gallery');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        foreach ($request->file('gallery_images') as $file) {
+            $filename = $book->isbn . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($dir, $filename);
+            BookImage::create([
+                'book_id'  => $book->id,
+                'filename' => $filename,
+            ]);
+        }
+    }
+
+    private function deleteCoverFile(Book $book): void
+    {
+        $raw = $book->getRawOriginal('cover_image_url');
+        if (blank($raw) || Str::startsWith($raw, ['http://', 'https://'])) {
+            return;
+        }
+        $path = public_path('img/' . ltrim($raw, '/'));
+        if (file_exists($path)) {
+            unlink($path);
+        }
+    }
+
+    private function deleteGalleryFile(string $filename): void
+    {
+        $path = public_path('img/gallery/' . $filename);
+        if (file_exists($path)) {
+            unlink($path);
+        }
     }
 
     private function resolvePublisher(?string $name): ?int

@@ -12,7 +12,7 @@
 
     <main class="page-main">
       @php
-        $wishlistBooks = $books ?? collect();
+        $wishlistBooks = $wishlistBooks ?? collect();
         $wishlistCount = $wishlistCount ?? $wishlistBooks->count();
       @endphp
 

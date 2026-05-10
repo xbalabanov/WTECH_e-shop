@@ -59,6 +59,11 @@ class Book extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(BookImage::class);
+    }
+
     public function getDiscountedPriceAttribute(): float
     {
         return max(0, (float) $this->price - ((float) $this->price * ((float) $this->discount / 100)));

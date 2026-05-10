@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\Cart;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -139,12 +140,17 @@ class CategoryController extends Controller
             ->paginate(8)
             ->withQueryString();
 
-        $cartQuantities = collect((array) $request->session()->get('cart', []))
+        $user = $request->user();
+        $cartRaw = $user
+            ? Cart::getForUser($user)
+            : (array) $request->session()->get('cart', []);
+
+        $cartQuantities = collect($cartRaw)
             ->mapWithKeys(fn ($quantity, $bookId) => [(int) $bookId => max(0, (int) $quantity)])
             ->all();
 
-        $wishlistBookIds = $request->user()
-            ? $request->user()->wishlistBooks()->pluck('book_id')->toArray()
+        $wishlistBookIds = $user
+            ? $user->wishlistBooks()->pluck('book_id')->toArray()
             : [];
 
         return view('category-template', [

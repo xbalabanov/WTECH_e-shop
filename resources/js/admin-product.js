@@ -26,7 +26,21 @@
     return;
   }
 
-  function resetGallery() {
+  var galleryFiles = [];
+
+  function fileKey(file) {
+    return file.name + "|" + file.size + "|" + file.lastModified;
+  }
+
+  function syncGalleryInput() {
+    var dt = new DataTransfer();
+    galleryFiles.forEach(function (f) {
+      dt.items.add(f);
+    });
+    galleryInput.files = dt.files;
+  }
+
+  function renderGallery() {
     var existingItems = galleryPreview.querySelectorAll(".gallery-item");
     existingItems.forEach(function (item) {
       var image = item.querySelector("img");
@@ -35,6 +49,52 @@
       }
       item.remove();
     });
+
+    galleryFileCount.textContent =
+      galleryFiles.length +
+      " image" +
+      (galleryFiles.length === 1 ? "" : "s") +
+      " selected";
+
+    galleryFiles.forEach(function (file, index) {
+      var item = document.createElement("div");
+      item.className = "gallery-item gallery-item--preview";
+
+      var image = document.createElement("img");
+      var objectUrl = URL.createObjectURL(file);
+      image.src = objectUrl;
+      image.alt = file.name;
+      image.dataset.objectUrl = objectUrl;
+
+      var removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "gallery-item-delete";
+      removeBtn.setAttribute("aria-label", "Remove " + file.name);
+      removeBtn.textContent = "×";
+      removeBtn.dataset.index = String(index);
+
+      item.appendChild(image);
+      item.appendChild(removeBtn);
+      galleryPreview.appendChild(item);
+    });
+  }
+
+  function addGalleryFiles(incoming) {
+    var existing = {};
+    galleryFiles.forEach(function (f) {
+      existing[fileKey(f)] = true;
+    });
+
+    incoming.forEach(function (file) {
+      if (!file.type || file.type.indexOf("image/") !== 0) return;
+      var key = fileKey(file);
+      if (existing[key]) return;
+      existing[key] = true;
+      galleryFiles.push(file);
+    });
+
+    syncGalleryInput();
+    renderGallery();
   }
 
   function refreshAuthorButtons() {
@@ -101,27 +161,53 @@
   });
 
   galleryInput.addEventListener("change", function (event) {
-    var files = Array.from(event.target.files || []);
-    resetGallery();
-    galleryFileCount.textContent =
-      files.length + " image" + (files.length === 1 ? "" : "s") + " selected";
-
-    if (files.length === 0) return;
-
-    files.forEach(function (file) {
-      var item = document.createElement("div");
-      item.className = "gallery-item";
-
-      var image = document.createElement("img");
-      var objectUrl = URL.createObjectURL(file);
-      image.src = objectUrl;
-      image.alt = file.name;
-      image.dataset.objectUrl = objectUrl;
-
-      item.appendChild(image);
-      galleryPreview.appendChild(item);
-    });
+    var picked = Array.from(event.target.files || []);
+    if (picked.length === 0) return;
+    addGalleryFiles(picked);
   });
+
+  galleryPreview.addEventListener("click", function (event) {
+    var target = event.target;
+    if (!target.classList || !target.classList.contains("gallery-item-delete")) {
+      return;
+    }
+    var index = parseInt(target.dataset.index, 10);
+    if (isNaN(index) || index < 0 || index >= galleryFiles.length) return;
+    galleryFiles.splice(index, 1);
+    syncGalleryInput();
+    renderGallery();
+  });
+
+  var galleryDropZone = galleryInput.closest(".gallery-upload") ||
+    galleryPreview.parentElement;
+
+  if (galleryDropZone) {
+    ["dragenter", "dragover"].forEach(function (evt) {
+      galleryDropZone.addEventListener(evt, function (event) {
+        if (!event.dataTransfer) return;
+        var hasFiles = Array.from(event.dataTransfer.types || []).indexOf("Files") !== -1;
+        if (!hasFiles) return;
+        event.preventDefault();
+        galleryDropZone.classList.add("is-dragover");
+      });
+    });
+
+    ["dragleave", "dragend"].forEach(function (evt) {
+      galleryDropZone.addEventListener(evt, function (event) {
+        if (event.target !== galleryDropZone) return;
+        galleryDropZone.classList.remove("is-dragover");
+      });
+    });
+
+    galleryDropZone.addEventListener("drop", function (event) {
+      if (!event.dataTransfer) return;
+      var dropped = Array.from(event.dataTransfer.files || []);
+      if (dropped.length === 0) return;
+      event.preventDefault();
+      galleryDropZone.classList.remove("is-dragover");
+      addGalleryFiles(dropped);
+    });
+  }
 
   refreshAuthorButtons();
 })();

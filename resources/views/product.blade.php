@@ -11,12 +11,42 @@
 
     <main>
       <div class="main-product-section">
-        <div
-          class="product-image"
-          @if (!empty($book?->cover_image_url))
-            style="background-image: url('{{ $book->cover_image_url }}'); background-size: cover; background-position: center;"
+        @php
+          $galleryImages = collect();
+          if ($book->cover_image_url) {
+              $galleryImages->push(['url' => $book->cover_image_url, 'label' => 'Cover image']);
+          }
+          foreach ($book->images as $img) {
+              $galleryImages->push(['url' => asset('img/gallery/' . $img->filename), 'label' => 'Gallery image']);
+          }
+          $mainImageUrl = $galleryImages->first()['url'] ?? null;
+        @endphp
+
+        <div class="product-gallery">
+          <div class="product-gallery-main">
+            @if ($mainImageUrl)
+              <img id="gallery-main" src="{{ $mainImageUrl }}" alt="{{ $book->title }} image" />
+            @else
+              <div id="gallery-main" class="product-gallery-main-empty" role="img" aria-label="No image available"></div>
+            @endif
+          </div>
+
+          @if ($galleryImages->count() > 1)
+            <div class="product-gallery-thumbs" role="list" aria-label="Image gallery">
+              @foreach ($galleryImages as $i => $image)
+                <button
+                  class="product-gallery-thumb {{ $i === 0 ? 'active' : '' }}"
+                  type="button"
+                  data-src="{{ $image['url'] }}"
+                  aria-label="{{ $image['label'] }} {{ $i + 1 }}"
+                  role="listitem"
+                >
+                  <img src="{{ $image['url'] }}" alt="{{ $image['label'] }} {{ $i + 1 }}" />
+                </button>
+              @endforeach
+            </div>
           @endif
-        ></div>
+        </div>
         <div class="product-details">
           <h1 class="product-title">{{ $book->title }}</h1>
           <p class="product-author">{{ $book->authors?->pluck('full_name')->join(', ') ?: 'Unknown author' }}</p>
@@ -400,5 +430,25 @@
         </div>
       </div>
     </footer>
+    <script>
+      (function () {
+        var main = document.getElementById('gallery-main');
+        var thumbs = document.querySelectorAll('.product-gallery-thumb');
+        if (!main || !thumbs.length) return;
+        thumbs.forEach(function (thumb) {
+          thumb.addEventListener('click', function () {
+            var src = thumb.dataset.src;
+            if (!src) return;
+            if (main.tagName === 'IMG') {
+              main.src = src;
+            } else {
+              main.style.backgroundImage = 'url("' + src + '")';
+            }
+            thumbs.forEach(function (t) { t.classList.remove('active'); });
+            thumb.classList.add('active');
+          });
+        });
+      })();
+    </script>
   </body>
 </html>
